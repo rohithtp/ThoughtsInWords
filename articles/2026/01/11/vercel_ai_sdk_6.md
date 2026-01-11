@@ -33,3 +33,6 @@ The SDK now has stable support for **MCP**, an open standard for connecting AI m
 ### 5. Migration & Compatibility
 
 Despite being a version 6 (V6) release, the team has minimized breaking changes. Most existing V5 code should remain compatible, as many of the internal updates focus on the underlying language model specification rather than changing the public API.
+
+
+Reference: [ai-sdk-6](https://vercel.com/blog/ai-sdk-6)
