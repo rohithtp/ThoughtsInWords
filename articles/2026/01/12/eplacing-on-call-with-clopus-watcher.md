@@ -20,3 +20,6 @@ The core premise is that while software development is highly creative and compl
 
 * **Memory and Logging:** It utilizes **SQLite** for short-term memory (storing findings and incident history) and **Qdrant** for long-term memory. It maintains an audit trail of all actions taken for human review.
 * **Philosophy:** The author argues that AI will eventually make "24/7 on-call" roles obsolete by leveraging the systematic nature of incident response. It is part of a larger project series (Clopus-01 and Clopus-02) where Gavrilov experiments with "vibe coding" and fully autonomous AI agents.
+
+### Reference 
+-[clopus-watcher-an-autonomous-monitoring](https://denislavgavrilov.com/p/clopus-watcher-an-autonomous-monitoring)
