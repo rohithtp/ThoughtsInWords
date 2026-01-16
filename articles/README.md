@@ -19,7 +19,7 @@ articles/
     │   │   ├── unlicense_vs_cc0_comparison.md
     │   │   └── vercel_ai_sdk_6.md
     │   ├── 12/
-    │   │   ├── AWG_Pollution_Defense_Report_2026.md
+    │   │   ├── awg-pollution-defense-report-2026.md
     │   │   └── replacing-on-call-with-clopus-watcher.md
     │   ├── 13/
     │   │   ├── htmx-manifesto-summary.md
