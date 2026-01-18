@@ -1,72 +1,107 @@
 ---
-title: "PodPDF Usage and Setup Guide: A Checklist Approach"
+title: "PodPDF: Open-Source Markdown to PDF with Bun"
 date: 2026-01-18
-tags: [pdf, tools, podpdf, workflow]
+tags: [bun, pdf, open-source, markdown, tools]
 ---
 
-# PodPDF Usage and Setup Guide
+# PodPDF: Free & Open Source PDF Generator
 
-PodPDF is a powerful tool designed to generate professional PDFs from HTML, Markdown, and images. Whether you are a developer looking for an API solution or a business user needing a quick drag-and-drop tool, PodPDF offers a streamlined workflow.
+PodPDF is a lightweight, open-source utility powered by **Bun** to convert Markdown files into professional PDFs. Unlike paid SaaS solutions, PodPDF runs locally on your machine, ensuring **zero cost**, total privacy, and lightning-fast performance.
 
-This guide provides a simple checklist-based approach to setting up and using PodPDF for your first document.
+This guide provides a checklist of steps to build and use the PodPDF script locally.
 
 ## 🚀 Setup Checklist
 
-Before determining *how* to generate your PDF, ensure you have the basics ready.
+Get your environment ready for PodPDF.
 
-- [ ] **Create an Account**: Sign up at [podpdf.com](https://podpdf.com).
-- [ ] **Get API Key**: Navigate to your dashboard and copy your API Key.
-    - *Required for implementing the API in your applications.*
-- [ ] **Select Environment**: Determine if you are using:
-    - [ ] **REST API**: For integrating PDF generation into your apps (Node.js, Python, etc.).
-    - [ ] **Web Dashboard**: for manual, visual drag-and-drop creation.
+- [ ] **Install Bun**: Ensure Bun is installed on your system.
+- [ ] **Initialize Project**:
+    - [ ] Create a folder: `mkdir podpdf && cd podpdf`
+    - [ ] Initialize Bun: `bun init -y`
+- [ ] **Install Dependencies**:
+    - [ ] `bun add puppeteer` (Headless browser for PDF generation)
+    - [ ] `bun add markdown-it` (Markdown parser)
+    - [ ] `bun add -d @types/markdown-it` (Types for TypeScript)
 
-## 📝 Usage Checklist
+## �️ Implementation Checklist
 
-Once set up, follow this flow to generate a simple PDF.
+Create the `podpdf.ts` script to handle the conversion.
+
+### The Script (`podpdf.ts`)
+
+- [ ] **Import Libraries**: Import `puppeteer` and `markdown-it`.
+- [ ] **Read Arguments**: Capture input and output filenames from `process.argv`.
+- [ ] **Render HTML**: Convert Markdown to HTML and inject basic CSS styles.
+- [ ] **Print PDF**: Use Puppeteer to `printToPDF`.
+
+```typescript
+import puppeteer from "puppeteer";
+import MarkdownIt from "markdown-it";
+
+const md = new MarkdownIt();
+const inputFile = process.argv[2];
+const outputFile = process.argv[3] || "output.pdf";
+
+if (!inputFile) {
+  console.error("Usage: bun podpdf.ts <input.md> [output.pdf]");
+  process.exit(1);
+}
+
+try {
+  // 1. Read Markdown
+  const markdown = await Bun.file(inputFile).text();
+
+  // 2. Convert to HTML with basic styling
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: 'Helvetica', sans-serif; padding: 40px; line-height: 1.6; }
+          h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
+          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+          th { background-color: #f4f4f4; }
+          code { background: #f4f4f4; padding: 2px 5px; border-radius: 4px; }
+        </style>
+      </head>
+      <body>
+        ${md.render(markdown)}
+      </body>
+    </html>
+  `;
+
+  // 3. Generate PDF
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.setContent(html, { waitUntil: "networkidle0" });
+  await page.pdf({ path: outputFile, format: "A4", printBackground: true });
+
+  await browser.close();
+  console.log(`✅ PDF created: ${outputFile}`);
+
+} catch (error) {
+  console.error("Error generating PDF:", error);
+}
+```
+
+## � Usage Checklist
+
+Once your script is ready, follow this flow to generate a PDF.
 
 ### 1. Prepare Your Content
-- [ ] **Choose Format**:
-    - HTML (Great for styling and layouts)
-    - Markdown (Great for text-heavy documents)
-    - Image (Great for converting assets)
-- [ ] **Verify Assets**: Ensure any images or links referenced in your HTML/Markdown are publicly accessible or embedded as base64.
+- [ ] Create a Markdown file (e.g., `invoice.md`).
+- [ ] Use standard Markdown syntax (headers, lists, tables).
+- [ ] Verify standard assets (local images should be relative paths).
 
-### 2. Generate the PDF
-Choose your method below:
-
-#### Option A: Using the Web Dashboard (No Code)
-- [ ] Log in to the PodPDF dashboard.
-- [ ] Select **"New Job"**.
-- [ ] Paste your Markdown/HTML or upload your file.
-- [ ] Click **Generate** to preview.
-- [ ] Download the result.
-
-#### Option B: Using the API (For Developers)
-- [ ] **Endpoint**: `POST https://api.podpdf.com/v1/pdf`
-- [ ] **Headers**:
-    - `Authorization: Bearer YOUR_API_KEY`
-    - `Content-Type: application/json`
-- [ ] **Body**:
-    ```json
-    {
-      "template": "<h1>Hello PodPDF</h1><p>This is a test.</p>",
-      "type": "html"
-    }
-    ```
-- [ ] Send request and handle the standard output stream (the PDF file).
+### 2. Run the Converter
+- [ ] Execute `bun podpdf.ts invoice.md invoice.pdf`
+- [ ] Check the directory for the output file.
 
 ## 💡 Quick Example: Simple Invoice
 
-Here is a conceptual example of how to structure a usage request for a simple invoice checklist.
+Create a file named `invoice.md` with the following content to test your setup.
 
-**Checklist:**
-1. [ ] Define Company Header (Logo, Address).
-2. [ ] List Items (Table with Item, Qty, Price).
-3. [ ] calculate Totals.
-4. [ ] Send to PodPDF.
-
-**Markdown Payload Example:**
 ```markdown
 # Invoice #001
 
@@ -81,4 +116,9 @@ Here is a conceptual example of how to structure a usage request for a simple in
 **Total: $1700**
 ```
 
-By following this checklist, you can consistently produce high-quality PDFs with minimal friction.
+Run:
+```bash
+bun podpdf.ts invoice.md invoice.pdf
+```
+
+By following this guide, you have a completely **free**, **open-source**, and **customizable** PDF generator using the power of Bun.
