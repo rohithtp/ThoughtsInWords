@@ -75,3 +75,4 @@ articles/
 - [`2026/01/16/heros_journey_tech_quest.md`](2026/01/16/heros_journey_tech_quest.md) - Article on the Hero's Journey framework in tech
 - [`2026/01/17/neovim-guide.md`](2026/01/17/neovim-guide.md) - Article on why Neovim is the future of text editing
 - [`2026/01/18/podpdf-usage-guide.md`](2026/01/18/podpdf-usage-guide.md) - Guide to setting up an open-source Markdown to PDF converter using Bun and Puppeteer
+- [`2026/01/19/xaml-studio-open-source-summary.md`](2026/01/19/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
