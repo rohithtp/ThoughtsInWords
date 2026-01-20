@@ -39,6 +39,8 @@ articles/
     │   ├── 19/
     │   │   ├── jj-usage-and-git-comparison.md
     │   │   └── xaml-studio-open-source-summary.md
+    │   ├── 20/
+    │   │   └── ripple_framework_summary.md
     ├── 02/                # Month (February)
     │   └── 15/            # Placeholder for future articles
     └── 03/                # Month (March)
@@ -80,3 +82,4 @@ articles/
 - [`2026/01/18/podpdf-usage-guide.md`](2026/01/18/podpdf-usage-guide.md) - Guide to setting up an open-source Markdown to PDF converter using Bun and Puppeteer
 - [`2026/01/19/jj-usage-and-git-comparison.md`](2026/01/19/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
 - [`2026/01/19/xaml-studio-open-source-summary.md`](2026/01/19/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
+- [`2026/01/20/ripple_framework_summary.md`](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
