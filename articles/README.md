@@ -83,3 +83,4 @@ articles/
 - [`2026/01/19/jj-usage-and-git-comparison.md`](2026/01/19/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
 - [`2026/01/19/xaml-studio-open-source-summary.md`](2026/01/19/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
 - [`2026/01/20/ripple_framework_summary.md`](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
+- [`2026/01/21/debug-windows-git-pull-issues.md`](2026/01/21/debug-windows-git-pull-issues.md) - How to debug Windows git pull issues
