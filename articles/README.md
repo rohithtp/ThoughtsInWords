@@ -1,86 +1,71 @@
 # ThoughtsInWords
 
-A personal repository for organizing and archiving written thoughts, reflections, and articles organized chronologically by date.
+A personal repository for organizing and archiving written thoughts, reflections, and articles.
 
 ## Purpose
 
-ThoughtsInWords is a structured space for capturing daily thoughts, ideas, articles, and reflections. Each piece of writing is organized by the date it was created, making it easy to look back and review your thoughts across time.
+ThoughtsInWords is a structured space for capturing daily thoughts, ideas, articles, and reflections.
 
-## Folder Structure
+## Organization
+
+Articles are organized by **topic** (tags) rather than chronologically. This aligns with a "digital garden" approach where content is grouped by context.
 
 ```
 articles/
-├── README.md              # This file
-└── 2026/                  # Year directory
-    ├── 01/                # Month (January)
-    │   ├── 11/            # Day folder
-    │   │   ├── markdown_editors_for_scribd_upload.md
-    │   │   ├── self_healing_test_scripts_mocha_chai.md
-    │   │   ├── unlicense_vs_cc0_comparison.md
-    │   │   └── vercel_ai_sdk_6.md
-    │   ├── 12/
-    │   │   ├── awg-pollution-defense-report-2026.md
-    │   │   └── replacing-on-call-with-clopus-watcher.md
-    │   ├── 13/
-    │   │   ├── htmx-manifesto-summary.md
-    │   │   └── taskade-open-source-alternatives.md
-    │   ├── 14/
-    │   │   ├── git-worktree-vs-branches.md
-    │   │   ├── purple-design-aesthetic-trends-2026.md
-    │   │   └── vendor-lock-in-fable.md
-    │   ├── 15/
-    │   │   └── balancing-reuse-vs-functional-steps.md
-    │   ├── 16/
-    │   │   └── heros_journey_tech_quest.md
-    │   ├── 17/
-    │   │   └── neovim-guide.md
-    │   └── 18/
-    │       └── podpdf-usage-guide.md
-    │   ├── 19/
-    │   │   ├── jj-usage-and-git-comparison.md
-    │   │   └── xaml-studio-open-source-summary.md
-    │   ├── 20/
-    │   │   └── ripple_framework_summary.md
-    ├── 02/                # Month (February)
-    │   └── 15/            # Placeholder for future articles
-    └── 03/                # Month (March)
-        └── 01/            # Placeholder for future articles
+├── README.md           # This file
+├── ai/                 # Artificial Intelligence & ML
+├── design/             # UI/UX & Design trends
+├── devops/             # Infrastructure, Git, CI/CD
+├── environment/        # Climate & Environmental reports
+├── frontend/           # Web development & frameworks
+├── licensing/          # Open source licensing
+├── philosophy/         # Tech philosophy & fables
+├── testing/            # QA & Testing strategies
+└── tools/              # Productivity & Developer tools
 ```
 
 ## Getting Started
 
-1. Navigate to the date folder for today: `articles/YYYY/MM/DD/`
-2. Create markdown files for your thoughts (e.g., `morning-thoughts.md`, `reflection.md`)
-3. Commit your work to preserve your thoughts over time
+1. Navigate to the relevant tag folder (e.g., `articles/devops/`).
+2. Create a new markdown file: `my-topic.md`.
+3. Link it in the index below.
 
-## Naming Convention
+## Article Index
 
-- Use descriptive, kebab-case filenames: `my-article-title.md`
-- For multiple articles on the same day, use descriptive names:
-  - `morning-reflection.md`
-  - `evening-thoughts.md`
-  - `ideas.md`
+### AI
+- [`ai/vercel_ai_sdk_6.md`](ai/vercel_ai_sdk_6.md) - Overview of Vercel AI SDK 6 features
 
-## Article Index (2026)
+### Design
+- [`design/purple-design-aesthetic-trends-2026.md`](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
 
-### January
+### DevOps & Infrastructure
+- [`devops/replacing-on-call-with-clopus-watcher.md`](devops/replacing-on-call-with-clopus-watcher.md) - Article on system monitoring
+- [`devops/git-worktree-vs-branches.md`](devops/git-worktree-vs-branches.md) - Article on Git workflow strategies
+- [`devops/jj-usage-and-git-comparison.md`](devops/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
+- [`devops/debug-windows-git-pull-issues.md`](devops/debug-windows-git-pull-issues.md) - How to debug Windows git pull issues
+- [`devops/vclusters-evolution-and-changes.md`](devops/vclusters-evolution-and-changes.md) - Evolution and changes in Kubernetes vClusters (2024-2026)
 
-- [`2026/01/11/markdown_editors_for_scribd_upload.md`](2026/01/11/markdown_editors_for_scribd_upload.md) - Article about markdown editors
-- [`2026/01/11/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
-- [`2026/01/11/unlicense_vs_cc0_comparison.md`](2026/01/11/unlicense_vs_cc0_comparison.md) - Comparison of The Unlicense and CC0
-- [`2026/01/11/vercel_ai_sdk_6.md`](2026/01/11/vercel_ai_sdk_6.md) - Overview of Vercel AI SDK 6 features
-- [`2026/01/12/awg-pollution-defense-report-2026.md`](2026/01/12/awg-pollution-defense-report-2026.md) - Report on Atmospheric Water Generation and pollution defense
-- [`2026/01/12/replacing-on-call-with-clopus-watcher.md`](2026/01/12/replacing-on-call-with-clopus-watcher.md) - Article on system monitoring
-- [`2026/01/13/htmx-manifesto-summary.md`](2026/01/13/htmx-manifesto-summary.md) - Summary of the htmx manifesto
-- [`2026/01/13/taskade-open-source-alternatives.md`](2026/01/13/taskade-open-source-alternatives.md) - Comparison of open source alternatives to Taskade
-- [`2026/01/14/git-worktree-vs-branches.md`](2026/01/14/git-worktree-vs-branches.md) - Article on Git workflow strategies
-- [`2026/01/14/purple-design-aesthetic-trends-2026.md`](2026/01/14/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
-- [`2026/01/14/vendor-lock-in-fable.md`](2026/01/14/vendor-lock-in-fable.md) - A fable about vendor lock-in
-- [`2026/01/15/balancing-reuse-vs-functional-steps.md`](2026/01/15/balancing-reuse-vs-functional-steps.md) - Debate on code reuse vs functional steps in testing
-- [`2026/01/16/heros_journey_tech_quest.md`](2026/01/16/heros_journey_tech_quest.md) - Article on the Hero's Journey framework in tech
-- [`2026/01/17/neovim-guide.md`](2026/01/17/neovim-guide.md) - Article on why Neovim is the future of text editing
-- [`2026/01/18/podpdf-usage-guide.md`](2026/01/18/podpdf-usage-guide.md) - Guide to setting up an open-source Markdown to PDF converter using Bun and Puppeteer
-- [`2026/01/19/jj-usage-and-git-comparison.md`](2026/01/19/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
-- [`2026/01/19/xaml-studio-open-source-summary.md`](2026/01/19/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
-- [`2026/01/20/ripple_framework_summary.md`](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
-- [`2026/01/21/debug-windows-git-pull-issues.md`](2026/01/21/debug-windows-git-pull-issues.md) - How to debug Windows git pull issues
+### Environment
+- [`environment/awg-pollution-defense-report-2026.md`](environment/awg-pollution-defense-report-2026.md) - Report on Atmospheric Water Generation and pollution defense
+
+### Frontend
+- [`frontend/htmx-manifesto-summary.md`](frontend/htmx-manifesto-summary.md) - Summary of the htmx manifesto
+- [`frontend/xaml-studio-open-source-summary.md`](frontend/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
+- [`frontend/ripple_framework_summary.md`](frontend/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
+
+### Licensing
+- [`licensing/unlicense_vs_cc0_comparison.md`](licensing/unlicense_vs_cc0_comparison.md) - Comparison of The Unlicense and CC0
+
+### Philosophy
+- [`philosophy/vendor-lock-in-fable.md`](philosophy/vendor-lock-in-fable.md) - A fable about vendor lock-in
+- [`philosophy/heros_journey_tech_quest.md`](philosophy/heros_journey_tech_quest.md) - Article on the Hero's Journey framework in tech
+
+### Testing
+- [`testing/self_healing_test_scripts_mocha_chai.md`](testing/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
+- [`testing/balancing-reuse-vs-functional-steps.md`](testing/balancing-reuse-vs-functional-steps.md) - Debate on code reuse vs functional steps in testing
+
+### Tools
+- [`tools/markdown_editors_for_scribd_upload.md`](tools/markdown_editors_for_scribd_upload.md) - Article about markdown editors
+- [`tools/taskade-open-source-alternatives.md`](tools/taskade-open-source-alternatives.md) - Comparison of open source alternatives to Taskade
+- [`tools/neovim-guide.md`](tools/neovim-guide.md) - Article on why Neovim is the future of text editing
+- [`tools/podpdf-usage-guide.md`](tools/podpdf-usage-guide.md) - Guide to setting up an open-source Markdown to PDF converter using Bun and Puppeteer
