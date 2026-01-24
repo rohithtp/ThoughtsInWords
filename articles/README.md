@@ -24,6 +24,15 @@ articles/
 └── tools/              # Productivity & Developer tools
 ```
 
+## Digital Garden Approach
+
+Unlike a traditional blog where posts are static and ordered by date, ThoughtsInWords follows the **Digital Garden** philosophy:
+
+*   **Growth over time**: Articles are not "finished" upon publication. They are seeds that grow as new information is learned and added.
+*   **Contextual Organization**: Content is linked and grouped by topic (tags) rather than purely by timestamps, making it easier to explore related ideas.
+*   **Evolution**: Some notes may start as rough thoughts (seedlings) and evolve into comprehensive guides (evergreens).
+*   **Interconnectivity**: Heavy use of internal linking connects disparate ideas, fostering a network of knowledge rather than a stream of updates.
+
 ## Getting Started
 
 1. Navigate to the relevant tag folder (e.g., `articles/devops/`).
