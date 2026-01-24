@@ -44,6 +44,7 @@ articles/
 - [`devops/jj-usage-and-git-comparison.md`](devops/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
 - [`devops/debug-windows-git-pull-issues.md`](devops/debug-windows-git-pull-issues.md) - How to debug Windows git pull issues
 - [`devops/vclusters-evolution-and-changes.md`](devops/vclusters-evolution-and-changes.md) - Evolution and changes in Kubernetes vClusters (2024-2026)
+- [`devops/openapi-spec-v3-2-0-highlights.md`](devops/openapi-spec-v3-2-0-highlights.md) - Highlights of OpenAPI Specification v3.2.0 features
 
 ### Environment
 - [`environment/awg-pollution-defense-report-2026.md`](environment/awg-pollution-defense-report-2026.md) - Report on Atmospheric Water Generation and pollution defense
