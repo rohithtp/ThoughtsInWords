@@ -52,6 +52,7 @@ articles/
 - [`frontend/htmx-manifesto-summary.md`](frontend/htmx-manifesto-summary.md) - Summary of the htmx manifesto
 - [`frontend/xaml-studio-open-source-summary.md`](frontend/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
 - [`frontend/ripple_framework_summary.md`](frontend/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
+- [`frontend/migrating-dom-to-zig.md`](frontend/migrating-dom-to-zig.md) - Summary of Lightpanda's migration from LibDOM to a custom Zig DOM
 
 ### Licensing
 - [`licensing/unlicense_vs_cc0_comparison.md`](licensing/unlicense_vs_cc0_comparison.md) - Comparison of The Unlicense and CC0
