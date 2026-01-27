@@ -81,6 +81,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`tools/taskade-open-source-alternatives.md`](2026/01/13/taskade-open-source-alternatives.md) - Comparison of open source alternatives to Taskade
 - [`tools/neovim-guide.md`](2026/01/17/neovim-guide.md) - Article on why Neovim is the future of text editing
 - [`tools/podpdf-usage-guide.md`](2026/01/18/podpdf-usage-guide.md) - Guide to setting up an open-source Markdown to PDF converter using Bun and Puppeteer
+- [`tools/notepad-progression-and-alternatives.md`](tools/notepad-progression-and-alternatives.md) - Alternatives and Progression of NotePad in Windows Environment
 
 ### Travel
 - [`travel/irctc_prediction_apps_2026.md`](2026/01/26/irctc_prediction_apps_2026.md) - Top IRCTC Ticket Prediction Apps & Features in 2026
