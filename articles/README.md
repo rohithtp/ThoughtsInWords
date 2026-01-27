@@ -71,6 +71,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 ### Philosophy
 - [`philosophy/vendor-lock-in-fable.md`](2026/01/14/vendor-lock-in-fable.md) - A fable about vendor lock-in
 - [`philosophy/heros_journey_tech_quest.md`](2026/01/16/heros_journey_tech_quest.md) - Article on the Hero's Journey framework in tech
+- [`philosophy/egoless-programming.md`](philosophy/egoless-programming.md) - Summary of Egoless Programming philosophy
 
 ### Testing
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
