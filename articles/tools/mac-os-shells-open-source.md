@@ -8,7 +8,7 @@ The terminal is the heart of any developer's workflow, and on macOS, the experie
 
 Since macOS Catalina, Apple has replaced Bash with Zsh as the default login shell. Zsh is highly compatible with Bash but adds significant improvements in interactive use.
 
-*   **Pros:**
+-   **Pros:**
     -   **Plugin Ecosystem:** The "Oh My Zsh" framework makes managing configuration, themes, and plugins incredibly easy.
     -   **Spelling Correction:** It can auto-correct minor spelling mistakes in commands.
     -   **Better Globbing:** Recursive globbing (e.g., `**/*.js`) is built-in and powerful.
