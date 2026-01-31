@@ -88,4 +88,5 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`tools/mac-os-shells-open-source.md`](tools/mac-os-shells-open-source.md) - Mac OS Shells: A Dive into Open Source Power
 
 ### Travel
+- [`travel/glowmads-and-wellness-retreats.md`](travel/glowmads-and-wellness-retreats.md) - Glowmads & Wellness Retreats: The New Era of Travel
 - [`travel/irctc_prediction_apps_2026.md`](2026/01/26/irctc_prediction_apps_2026.md) - Top IRCTC Ticket Prediction Apps & Features in 2026
