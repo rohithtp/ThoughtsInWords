@@ -73,6 +73,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`philosophy/heros_journey_tech_quest.md`](2026/01/16/heros_journey_tech_quest.md) - Article on the Hero's Journey framework in tech
 - [`philosophy/egoless-programming.md`](philosophy/egoless-programming.md) - Summary of Egoless Programming philosophy
 - [`philosophy/random-acts-of-kindness.md`](philosophy/random-acts-of-kindness.md) - Summary of Random Acts of Kindness
+- [`philosophy/ageless-programming.md`](philosophy/ageless-programming.md) - Ageless Programming: Timeless Software Design
 
 ### Testing
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
