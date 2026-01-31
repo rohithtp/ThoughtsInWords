@@ -44,6 +44,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 ### AI
 - [`ai/vercel_ai_sdk_6.md`](ai/vercel_ai_sdk_6.md) - Overview of Vercel AI SDK 6 features
 - [`ai/human_in_the_loop.md`](2026/01/26/human_in_the_loop.md) - Overview of Human in the Loop (HITL) AI
+- [`ai/ai-in-hiring-the-arms-race.md`](ai/ai-in-hiring-the-arms-race.md) - AI in Hiring: The Arms Race
 
 ### Design
 - [`design/purple-design-aesthetic-trends-2026.md`](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
