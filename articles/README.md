@@ -57,6 +57,9 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/vclusters-evolution-and-changes.md`](2026/01/23/vclusters-evolution-and-changes.md) - Evolution and changes in Kubernetes vClusters (2024-2026)
 - [`devops/openapi-spec-v3-2-0-highlights.md`](devops/openapi-spec-v3-2-0-highlights.md) - Highlights of OpenAPI Specification v3.2.0 features
 
+### Distributed Systems
+- [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
+
 ### Environment
 - [`environment/awg-pollution-defense-report-2026.md`](2026/01/12/awg-pollution-defense-report-2026.md) - Report on Atmospheric Water Generation and pollution defense
 
