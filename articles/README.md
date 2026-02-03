@@ -79,6 +79,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`philosophy/egoless-programming.md`](philosophy/egoless-programming.md) - Summary of Egoless Programming philosophy
 - [`philosophy/random-acts-of-kindness.md`](philosophy/random-acts-of-kindness.md) - Summary of Random Acts of Kindness
 - [`philosophy/ageless-programming.md`](philosophy/ageless-programming.md) - Ageless Programming: Timeless Software Design
+- [`philosophy/navigating-layoff-strategic-guide.md`](philosophy/navigating-layoff-strategic-guide.md) - Navigating Layoff: A Strategic Guide
 
 ### Testing
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
