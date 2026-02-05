@@ -81,6 +81,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`philosophy/ageless-programming.md`](philosophy/ageless-programming.md) - Ageless Programming: Timeless Software Design
 - [`philosophy/navigating-layoff-strategic-guide.md`](philosophy/navigating-layoff-strategic-guide.md) - Navigating Layoff: A Strategic Guide
 - [`philosophy/file-over-app-manifesto.md`](philosophy/file-over-app-manifesto.md) - File Over App: A Manifesto for Digital Longevity
+- [`philosophy/mid-career-pivot.md`](philosophy/mid-career-pivot.md) - Mid-Career Pivot: From Old Hand to New Bee
 
 ### Testing
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
