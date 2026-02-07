@@ -26,3 +26,37 @@ The sea is unpredictable. A rigid plan will fail when the weather turns. Nautica
 
 ## Conclusion
 Adopting a nautical mindset for task organization encourages us to respect the elements (external factors), confide in our crew (team or tools), and keep our eyes on the horizon. It turns the chaos of "work" into a disciplined voyage of exploration.
+
+## Use Case: The Voyage Log Template
+
+Here is a practical template you can copy and use to organize your daily or weekly "voyage".
+
+### 🟢 The Daily Watch Log
+
+**Date:** `YYYY-MM-DD`
+**Current Coordinates (Goal):** `[Insert today's main objective]`
+**Weather Conditions (Context):** `[Mental state, external blockers, energy levels]`
+
+#### 🧭 Navigator's Chart (Planning)
+*Determine the course before taking the helm.*
+- [ ] Review current heading (weekly goals)
+- [ ] Plot obstacles (meetings, inevitable distractions)
+- [ ] **The "North Star" Task** (The one thing that must move forward today):
+    - [ ] `[Task Name]`
+
+#### ⚓ Captain's Orders (Priorities)
+*High-level decisions and focus areas.*
+- [ ] **Priority 1:** `[Task]`
+- [ ] **Priority 2:** `[Task]`
+- [ ] **Priority 3:** `[Task]`
+
+#### 🪜 Crew's Manifest (Execution List)
+*The hands-on work. Batten down the hatches and get it done.*
+- [ ] `[Routine Task]`
+- [ ] `[Routine Task]`
+- [ ] `[Ad-hoc Task]`
+
+#### 🔭 Evening Watch (Review)
+- [ ] Log distance traveled (What was completed?)
+- [ ] Check ship integrity (Did I burn out? What broke?)
+- [ ] Note wind direction for tomorrow (Adjust plan for next day)
