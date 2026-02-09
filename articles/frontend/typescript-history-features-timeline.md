@@ -30,6 +30,14 @@ TypeScript's development began at Microsoft in 2010, led by Anders Hejlsberg, th
 
 *   **March 2023 (v5.0)**: Major performance improvements, decorators standard, and smaller bundle size.
 
+*   **2025 (v5.9 & v6.0)**: Recent updates focused on ESM (ECMAScript Module) compatibility for Node.js and a "minimal" `tsc --init` for cleaner project setups.
+
+### The Future (2026 & Beyond)
+
+**Current State (2026): TypeScript 7.0 (Project Corsa)**
+
+The team is currently porting the compiler to native code for massive performance gains, moving away from a purely JavaScript-based compiler to leverage better memory usage and parallelism.
+
 ## Key Features
 
 TypeScript enhances JavaScript with several powerful features that improve developer productivity and code quality.
