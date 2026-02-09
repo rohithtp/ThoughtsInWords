@@ -70,6 +70,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`frontend/xaml-studio-open-source-summary.md`](2026/01/19/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
 - [`frontend/ripple_framework_summary.md`](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
 - [`frontend/migrating-dom-to-zig.md`](frontend/migrating-dom-to-zig.md) - Summary of Lightpanda's migration from LibDOM to a custom Zig DOM
+- [`frontend/typescript-history-features-timeline.md`](frontend/typescript-history-features-timeline.md) - TypeScript History, Features, and Timeline
 
 ### Licensing
 - [`licensing/unlicense_vs_cc0_comparison.md`](2026/01/11/unlicense_vs_cc0_comparison.md) - Comparison of The Unlicense and CC0
