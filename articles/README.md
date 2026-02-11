@@ -85,6 +85,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`philosophy/file-over-app-manifesto.md`](philosophy/file-over-app-manifesto.md) - File Over App: A Manifesto for Digital Longevity
 - [`philosophy/mid-career-pivot.md`](philosophy/mid-career-pivot.md) - Mid-Career Pivot: From Old Hand to New Bee
 - [`philosophy/nautical-task-organization.md`](philosophy/nautical-task-organization.md) - Nautical Task Organization for Exploration
+- [`philosophy/critical-thinking-managing-emotions.md`](philosophy/critical-thinking-managing-emotions.md) - Critical Thinking: Managing Emotions for Objective Results
 
 ### Testing
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
