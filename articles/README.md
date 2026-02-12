@@ -86,6 +86,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`philosophy/mid-career-pivot.md`](philosophy/mid-career-pivot.md) - Mid-Career Pivot: From Old Hand to New Bee
 - [`philosophy/nautical-task-organization.md`](philosophy/nautical-task-organization.md) - Nautical Task Organization for Exploration
 - [`philosophy/critical-thinking-managing-emotions.md`](philosophy/critical-thinking-managing-emotions.md) - Critical Thinking: Managing Emotions for Objective Results
+- [`philosophy/critical-thinking-emotional-multitudes.md`](philosophy/critical-thinking-emotional-multitudes.md) - Critical Thinking: Navigating Emotional Multitudes
 - [`philosophy/postmortem-emotional-retrospective.md`](philosophy/postmortem-emotional-retrospective.md) - Postmortem: An Emotional Retrospective
 
 ### Testing
