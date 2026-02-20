@@ -6,9 +6,17 @@
 
 ## Summary
 
-APIs (Application Programming Interfaces) are the connective tissue of modern software. They allow discrete systems — cloud platforms, databases, AI models, and third-party services — to speak a common language. As AI becomes embedded in every layer of the stack, the expectations of what an API must do have shifted dramatically. Platforms are no longer just data routers; they are intelligent intermediaries capable of reasoning, streaming, tool-calling, and self-adapting.
+APIs (Application Programming Interfaces) are the connective tissue of modern software. They allow discrete systems to speak a common language. These systems include:
+- Cloud platforms
+- Databases
+- AI models
+- Third-party services
 
-This article explores how API capabilities have evolved in the context of modern platforms and AI-native applications, and what design principles matter most as that evolution continues.
+As AI becomes embedded in every layer of the stack, the expectations of what an API must do have shifted dramatically. 
+
+Platforms are no longer just data routers. Today, they are intelligent intermediaries capable of reasoning, streaming, tool-calling, and self-adapting.
+
+This article explores how API capabilities have evolved in the context of modern platforms and AI-native applications. It also highlights what design principles matter most as that evolution continues.
 
 ---
 
@@ -16,16 +24,16 @@ This article explores how API capabilities have evolved in the context of modern
 
 ### What Is an API Capability?
 
-An API capability is a defined function or behavior that an API exposes to consumers. Traditional REST APIs exposed CRUD operations. Modern platform APIs go much further:
+An API capability is a defined function or behavior that an API exposes to consumers. Traditional REST APIs exposed basic CRUD operations. Modern platform APIs go much further:
 
-- **Streaming**: Return data incrementally (server-sent events, chunked transfer, WebSockets)
-- **Tool Use / Function Calling**: Allow an AI model to invoke external functions mid-generation
-- **Multimodal Input**: Accept text, images, audio, video, or code in a single request
-- **Embeddings & Semantic Search**: Return vector representations for similarity operations
-- **Structured Output**: Guarantee JSON-schema-conformant responses from LLMs
-- **Rate Limiting & Quotas**: Granular control over token, request, and compute budgets
-- **Fine-tuning Endpoints**: Allow models to be adapted to domain-specific datasets
-- **Batching & Async Job APIs**: Process large workloads without synchronous timeouts
+- **Streaming**: Return data incrementally (server-sent events, chunked transfer, WebSockets).
+- **Tool Use / Function Calling**: Allow an AI model to invoke external functions mid-generation.
+- **Multimodal Input**: Accept text, images, audio, video, or code in a single request.
+- **Embeddings & Semantic Search**: Return vector representations for similarity operations.
+- **Structured Output**: Guarantee JSON-schema-conformant responses from LLMs.
+- **Rate Limiting & Quotas**: Granular control over token, request, and compute budgets.
+- **Fine-tuning Endpoints**: Allow models to be adapted to domain-specific datasets.
+- **Batching & Async Job APIs**: Process large workloads without synchronous timeouts.
 
 ---
 
@@ -35,18 +43,18 @@ An API capability is a defined function or behavior that an API exposes to consu
 
 Major cloud platforms (AWS, GCP, Azure) have evolved their APIs to support AI workloads natively:
 
-- **Managed Inference**: Deploy and query models via a single endpoint (e.g., AWS Bedrock, GCP Vertex AI, Azure OpenAI Service)
-- **Serverless AI**: Invoke AI tasks without managing infrastructure (e.g., Lambda + Bedrock)
-- **Observability APIs**: Emit structured telemetry — traces, logs, metrics — from ML pipelines
-- **IAM-integrated Auth**: API keys tied to role-based access control for fine-grained security
+- **Managed Inference**: Deploy and query models via a single endpoint (e.g., AWS Bedrock, GCP Vertex AI, Azure OpenAI Service).
+- **Serverless AI**: Invoke AI tasks without managing infrastructure (e.g., Lambda + Bedrock).
+- **Observability APIs**: Emit structured telemetry — traces, logs, metrics — from ML pipelines.
+- **IAM-integrated Auth**: API keys tied to role-based access control for fine-grained security.
 
 ### SaaS Platforms
 
 SaaS products increasingly expose AI capabilities through their own APIs:
 
-- **Copilot-style extensions**: GitHub Copilot Extensions API, Notion AI API, Figma Plugin API
-- **AI Actions**: Platforms like Zapier, Make, and n8n expose trigger-and-action APIs that AI agents can call
-- **Semantic APIs**: Salesforce Einstein, HubSpot AI, and similar products extend domain objects with AI-enriched fields
+- **Copilot-style extensions**: GitHub Copilot Extensions API, Notion AI API, Figma Plugin API.
+- **AI Actions**: Platforms like Zapier, Make, and n8n expose trigger-and-action APIs that AI agents can call.
+- **Semantic APIs**: Salesforce Einstein, HubSpot AI, and similar products extend domain objects with AI-enriched fields.
 
 ---
 
@@ -71,10 +79,10 @@ Services like OpenAI, Anthropic, Google Gemini, and Mistral expose APIs that are
 
 Beyond single inference calls, platforms now support multi-step, agentic workflows through API:
 
-- **Threads & Runs** (OpenAI Assistants API): Persistent conversation state with file attachments
-- **Computer Use** (Anthropic Claude): APIs where the model can control desktop environments
-- **Code Interpreter**: Execute code as part of an AI reasoning chain
-- **Long Context Windows**: Process entire codebases or documents in a single context (up to 2M tokens in Gemini 1.5 Pro)
+- **Threads & Runs** (OpenAI Assistants API): Persistent conversation state with file attachments.
+- **Computer Use** (Anthropic Claude): APIs where the model can control desktop environments.
+- **Code Interpreter**: Execute code as part of an AI reasoning chain.
+- **Long Context Windows**: Process entire codebases or documents in a single context (up to 2M tokens in Gemini 1.5 Pro).
 
 ---
 
@@ -90,7 +98,7 @@ AI agents may retry a call on failure. Every state-mutating endpoint should be i
 
 ### 3. Predictable Rate Limiting
 
-Token-per-minute and request-per-minute limits must be clearly communicated, preferably in response headers (`x-ratelimit-remaining-tokens`). Agents need to self-throttle gracefully.
+Token-per-minute and request-per-minute limits must be clearly communicated. This is preferably done in response headers (e.g. `x-ratelimit-remaining-tokens`). Agents need these tokens to self-throttle gracefully.
 
 ### 4. Semantic Versioning & Deprecation Notices
 
@@ -98,7 +106,7 @@ Because AI applications are often embedded in automated pipelines, breaking chan
 
 ### 5. Structured Errors
 
-Error responses must be machine-readable. Vague `500 Internal Server Error` messages are unacceptable in AI contexts where the calling agent must decide its next action based on the failure type.
+Error responses must be machine-readable. Vague `500 Internal Server Error` messages are unacceptable. AI contexts require the calling agent to decide its next action based on the exact failure type.
 
 ### 6. Observability-First Design
 
@@ -118,7 +126,7 @@ The OpenAPI Specification is being repurposed as an AI tool manifest. Platforms 
 
 ### API-as-Agent-Orchestrator
 
-Some platforms now position the API layer itself as an orchestrator — routing requests to different AI models, tools, or backends based on the intent inferred from the incoming request. This is seen in systems like LangGraph, AWS Bedrock Agents, and Vertex AI Agent Builder.
+Some platforms now position the API layer itself as an orchestrator. They route requests to different AI models, tools, or backends based on the intent inferred from the incoming request. This is seen in systems like LangGraph, AWS Bedrock Agents, and Vertex AI Agent Builder.
 
 ---
 
@@ -134,9 +142,11 @@ Some platforms now position the API layer itself as an orchestrator — routing 
 
 ## Conclusion
 
-API capabilities are the foundation on which AI-powered platforms are built. As the demands of agentic, multimodal, and real-time AI applications grow, the design bar for APIs rises with them. The best platform APIs today are composable, observable, idempotent, and expressive enough to serve not just human developers, but AI agents calling them autonomously.
+API capabilities are the foundation on which AI-powered platforms are built. As the demands of agentic, multimodal, and real-time AI applications grow, the design bar for APIs rises with them. 
 
-The next frontier is APIs that are not just consumed by AI, but designed *for* AI — with machine-readable schemas, semantic error messages, built-in context management, and cost transparency baked in from day one.
+The best platform APIs today are composable, observable, idempotent. They must be expressive enough to serve not just human developers, but AI agents calling them autonomously.
+
+The next frontier is APIs that are not just consumed by AI, but designed *for* AI. They will feature machine-readable schemas, semantic error messages, built-in context management, and cost transparency baked in from day one.
 
 ---
 

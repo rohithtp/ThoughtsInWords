@@ -49,7 +49,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`ai/generative-ui-for-agents.md`](ai/generative-ui-for-agents.md) - Generative UI for Agents
 - [`ai/ai-microservices-architecture-explained.md`](ai/ai-microservices-architecture-explained.md) - AI Microservices Architecture Explained
 - [`ai/api-capabilities-platforms-and-ai.md`](ai/api-capabilities-platforms-and-ai.md) - API Capabilities for Platforms and AI
-- [`ai/api-capabilities-platforms-ai.md`](ai/api-capabilities-platforms-ai.md) - API Capabilities for Platforms and AI (draft)
+- [`ai/shadow-ai.md`](ai/shadow-ai.md) - Shadow AI: The Hidden Risk Inside Your Organization
 
 ### Design
 - [`design/purple-design-aesthetic-trends-2026.md`](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
