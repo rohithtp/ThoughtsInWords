@@ -42,11 +42,14 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 ## Article Index
 
 ### AI
+
 - [`ai/vercel_ai_sdk_6.md`](ai/vercel_ai_sdk_6.md) - Overview of Vercel AI SDK 6 features
 - [`ai/human_in_the_loop.md`](2026/01/26/human_in_the_loop.md) - Overview of Human in the Loop (HITL) AI
 - [`ai/ai-in-hiring-the-arms-race.md`](ai/ai-in-hiring-the-arms-race.md) - AI in Hiring: The Arms Race
 - [`ai/generative-ui-for-agents.md`](ai/generative-ui-for-agents.md) - Generative UI for Agents
 - [`ai/ai-microservices-architecture-explained.md`](ai/ai-microservices-architecture-explained.md) - AI Microservices Architecture Explained
+- [`ai/api-capabilities-platforms-and-ai.md`](ai/api-capabilities-platforms-and-ai.md) - API Capabilities for Platforms and AI
+- [`ai/api-capabilities-platforms-ai.md`](ai/api-capabilities-platforms-ai.md) - API Capabilities for Platforms and AI (draft)
 
 ### Design
 - [`design/purple-design-aesthetic-trends-2026.md`](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
