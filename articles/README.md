@@ -52,6 +52,8 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`ai/shadow-ai.md`](ai/shadow-ai.md) - Shadow AI: The Hidden Risk Inside Your Organization
 
 ### Design
+
+- [`design/evolution-of-ui-interactions-and-aesthetics.md`](design/evolution-of-ui-interactions-and-aesthetics.md) - The Evolution of UI Interactions and Aesthetics
 - [`design/purple-design-aesthetic-trends-2026.md`](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
 
 ### DevOps & Infrastructure
