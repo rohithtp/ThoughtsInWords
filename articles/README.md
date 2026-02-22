@@ -63,6 +63,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/debug-windows-git-pull-issues.md`](2026/01/21/debug-windows-git-pull-issues.md) - How to debug Windows git pull issues
 - [`devops/vclusters-evolution-and-changes.md`](2026/01/23/vclusters-evolution-and-changes.md) - Evolution and changes in Kubernetes vClusters (2024-2026)
 - [`devops/openapi-spec-v3-2-0-highlights.md`](devops/openapi-spec-v3-2-0-highlights.md) - Highlights of OpenAPI Specification v3.2.0 features
+- [`devops/api-history-and-future.md`](devops/api-history-and-future.md) - API History and Future: From System Calls to AI-Native Meshes
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
