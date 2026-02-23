@@ -65,6 +65,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/openapi-spec-v3-2-0-highlights.md`](devops/openapi-spec-v3-2-0-highlights.md) - Highlights of OpenAPI Specification v3.2.0 features
 - [`devops/api-history-and-future.md`](devops/api-history-and-future.md) - API History and Future: From System Calls to AI-Native Meshes
 - [`devops/openfeature-api-spec.md`](devops/openfeature-api-spec.md) - OpenFeature API Specification: A Vendor-Agnostic Standard for Feature Flags
+- [`devops/api-health-and-nfr.md`](devops/api-health-and-nfr.md) - API Health and Future Capabilities: Non-Functional Requirements for APIs
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
