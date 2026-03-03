@@ -104,6 +104,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`philosophy/job-sidequests-vs-hobbies.md`](philosophy/job-sidequests-vs-hobbies.md) - Job Sidequests vs. Hobbies: The Art of XP Management
 - [`philosophy/wake-up-naturally.md`](philosophy/wake-up-naturally.md) - Wake Up Naturally Without Alarms
 - [`philosophy/organizing-thoughts-different-approaches.md`](philosophy/organizing-thoughts-different-approaches.md) - Organizing Thoughts: Different Approaches to Clarity and Structure
+- [`philosophy/chasing-the-phantom-in-information-development.md`](philosophy/chasing-the-phantom-in-information-development.md) - Chasing the Phantom in Information Development
 
 ### Testing
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
