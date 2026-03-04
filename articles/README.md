@@ -106,6 +106,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`philosophy/organizing-thoughts-different-approaches.md`](philosophy/organizing-thoughts-different-approaches.md) - Organizing Thoughts: Different Approaches to Clarity and Structure
 - [`philosophy/chasing-the-phantom-in-information-development.md`](philosophy/chasing-the-phantom-in-information-development.md) - Chasing the Phantom in Information Development
 - [`philosophy/chasing-different-phantoms-in-information-development.md`](philosophy/chasing-different-phantoms-in-information-development.md) - Chasing Different Phantoms in Information Development: A Taxonomy
+- [`philosophy/phantoms-in-development-and-debugging.md`](philosophy/phantoms-in-development-and-debugging.md) - Phantoms in Development and Debugging: A Guide to Elusive Problems in Information Development
 
 ### Testing
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
