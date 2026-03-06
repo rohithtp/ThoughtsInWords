@@ -60,6 +60,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`design/varying-goals-and-actualities-in-design.md`](design/varying-goals-and-actualities-in-design.md) - Varying Goals and Actualities in Design: The Gap Between Intent and Delivery
 
 ### DevOps & Infrastructure
+
 - [`devops/replacing-on-call-with-clopus-watcher.md`](devops/replacing-on-call-with-clopus-watcher.md) - Article on system monitoring
 - [`devops/git-worktree-vs-branches.md`](devops/git-worktree-vs-branches.md) - Article on Git workflow strategies
 - [`devops/jj-usage-and-git-comparison.md`](2026/01/19/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
@@ -72,6 +73,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/evolving-platforms-and-future-landscapes.md`](devops/evolving-platforms-and-future-landscapes.md) - Evolving Platforms and Future Landscapes: From Monoliths to AI-Native IDPs
 - [`devops/understanding-headless-delivery-models.md`](devops/understanding-headless-delivery-models.md) - Understanding Headless Delivery Models: API-First Architecture for Multi-Channel Delivery
 - [`devops/holy-grail-resource-bundle-standardization.md`](devops/holy-grail-resource-bundle-standardization.md) - Holy Grail: A Journey in Standardization of Strategies for Resource Bundle Consumption
+- [`devops/telemetry-capturing-the-usage.md`](devops/telemetry-capturing-the-usage.md) - Telemetry: Capturing the Usage
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
