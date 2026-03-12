@@ -51,6 +51,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`ai/api-capabilities-platforms-and-ai.md`](ai/api-capabilities-platforms-and-ai.md) - API Capabilities for Platforms and AI
 - [`ai/shadow-ai.md`](ai/shadow-ai.md) - Shadow AI: The Hidden Risk Inside Your Organization
 - [`ai/tools-in-ai-mcp-and-future.md`](ai/tools-in-ai-mcp-and-future.md) - Tools in AI: The Rise of MCP and the Future of Agentic Systems
+- [`ai/ever-changing-roles-tools-and-ai.md`](ai/ever-changing-roles-tools-and-ai.md) - Ever-Changing Roles: Navigating Shifts with Tools and AI
 
 ### Design
 
