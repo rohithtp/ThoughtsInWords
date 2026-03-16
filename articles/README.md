@@ -76,6 +76,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/understanding-headless-delivery-models.md`](devops/understanding-headless-delivery-models.md) - Understanding Headless Delivery Models: API-First Architecture for Multi-Channel Delivery
 - [`devops/holy-grail-resource-bundle-standardization.md`](devops/holy-grail-resource-bundle-standardization.md) - Holy Grail: A Journey in Standardization of Strategies for Resource Bundle Consumption
 - [`devops/telemetry-capturing-the-usage.md`](devops/telemetry-capturing-the-usage.md) - Telemetry: Capturing the Usage
+- [`devops/policy-brain-abac-and-future.md`](devops/policy-brain-abac-and-future.md) - Policy Brain: ABAC and the Future of Authorization
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
