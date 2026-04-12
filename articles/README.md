@@ -126,6 +126,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`tools/notepad-progression-and-alternatives.md`](tools/notepad-progression-and-alternatives.md) - Alternatives and Progression of NotePad in Windows Environment
 - [`tools/decoupling-modern-code-editor.md`](tools/decoupling-modern-code-editor.md) - From Source to Sandbox: Decoupling the Modern Open-Source Code Editor
 - [`tools/mac-os-shells-open-source.md`](tools/mac-os-shells-open-source.md) - Mac OS Shells: A Dive into Open Source Power
+- [`tools/google-password-manager-sync-strategy.md`](tools/google-password-manager-sync-strategy.md) - The GPM Anchor: Using Google Password Manager as a Cross-Device Sync Bridge
 
 ### Travel
 - [`travel/glowmads-and-wellness-retreats.md`](travel/glowmads-and-wellness-retreats.md) - Glowmads & Wellness Retreats: The New Era of Travel
