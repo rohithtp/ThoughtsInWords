@@ -63,6 +63,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 ### DevOps & Infrastructure
 
+- [`devops/third-party-providers.md`](devops/third-party-providers.md) - Understanding Third, Second, and First Party Providers: A Single Page Summary
 - [`devops/scaling_from_0_to_million.md`](devops/scaling_from_0_to_million.md) - Comprehensive guide to scaling from 0 to a million users
 - [`devops/replacing-on-call-with-clopus-watcher.md`](devops/replacing-on-call-with-clopus-watcher.md) - Article on system monitoring
 - [`devops/git-worktree-vs-branches.md`](devops/git-worktree-vs-branches.md) - Article on Git workflow strategies
