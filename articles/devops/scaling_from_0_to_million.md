@@ -59,6 +59,16 @@
 1. Start with simple key-value caching
 2. Use consistent hashing for distribution
 3. Monitor cache hit/miss rates
+4. Avoid single point of failure: Design your cache tier to avoid any single point of failure by using multiple cache instances, load balancing, and replication strategies.
+5. Choose eviction policies wisely:
+    - **LRU (Least Recently Used):** Good for general-purpose caching where access patterns vary widely
+    - **LFU (Least Frequently Used):** Better for workloads with some request locality
+    - **FIFO:** Simple to implement but less effective in most real-world scenarios 
+    - **Custom Policies:** Implement business logic-specific eviction when standard policies don't meet needs
+6. Select the right algorithm for your workload:
+    - **Consistent Hashing:** Handles node joins/leaves gracefully with minimal key remapping
+    - **Random Placement:** Simpler to implement but less efficient for cache locality
+    - **Weighted Distribution:** Allocate slots based on server capacity
 
 ---
 
