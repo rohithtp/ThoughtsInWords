@@ -63,6 +63,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 ### DevOps & Infrastructure
 
+- [`devops/scaling_from_0_to_million.md`](devops/scaling_from_0_to_million.md) - Comprehensive guide to scaling from 0 to a million users
 - [`devops/replacing-on-call-with-clopus-watcher.md`](devops/replacing-on-call-with-clopus-watcher.md) - Article on system monitoring
 - [`devops/git-worktree-vs-branches.md`](devops/git-worktree-vs-branches.md) - Article on Git workflow strategies
 - [`devops/jj-usage-and-git-comparison.md`](2026/01/19/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
