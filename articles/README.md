@@ -120,6 +120,10 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
 - [`testing/balancing-reuse-vs-functional-steps.md`](2026/01/15/balancing-reuse-vs-functional-steps.md) - Debate on code reuse vs functional steps in testing
 
+## Cloud Native
+
+- [`cloud-native/cloud-native-applications.md`](cloud-native/cloud-native-applications.md) - Comprehensive guide to cloud-native application design, resilience patterns, and migration strategies for monolithic systems
+
 ### Tools
 - [`tools/markdown_editors_for_scribd_upload.md`](2026/01/11/markdown_editors_for_scribd_upload.md) - Article about markdown editors
 - [`tools/taskade-open-source-alternatives.md`](2026/01/13/taskade-open-source-alternatives.md) - Comparison of open source alternatives to Taskade
