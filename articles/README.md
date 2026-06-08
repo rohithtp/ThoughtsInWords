@@ -79,6 +79,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/holy-grail-resource-bundle-standardization.md`](devops/holy-grail-resource-bundle-standardization.md) - Holy Grail: A Journey in Standardization of Strategies for Resource Bundle Consumption
 - [`devops/telemetry-capturing-the-usage.md`](devops/telemetry-capturing-the-usage.md) - Telemetry: Capturing the Usage
 - [`devops/policy-brain-abac-and-future.md`](devops/policy-brain-abac-and-future.md) - Policy Brain: ABAC and the Future of Authorization
+- [`devops/understanding-oauth2.md`](devops/understanding-oauth2.md) - Understanding OAuth 2.0
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
@@ -137,3 +138,4 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 ### Travel
 - [`travel/glowmads-and-wellness-retreats.md`](travel/glowmads-and-wellness-retreats.md) - Glowmads & Wellness Retreats: The New Era of Travel
 - [`travel/irctc_prediction_apps_2026.md`](2026/01/26/irctc_prediction_apps_2026.md) - Top IRCTC Ticket Prediction Apps & Features in 2026
+- [`travel/Singapore_Tourist_Business_Visa_Guide_for_Indian_Citizens_2026.md`](travel/Singapore_Tourist_Business_Visa_Guide_for_Indian_Citizens_2026.md) - Singapore Tourist & Business Visa Guide for Indian Citizens (2026)
