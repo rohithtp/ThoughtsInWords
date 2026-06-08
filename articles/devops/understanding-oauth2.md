@@ -27,6 +27,26 @@ OAuth 2.0 is an authorization framework that allows a client (app) to obtain lim
 - **Device Code:** Used for devices without browsers or with limited input, where the user completes authorization on another device. <citation src="2"></citation>
 - **Refresh Token Grant:** Exchanges a refresh token for a new access token when the current access token expires. <citation src="1"></citation>
 
+### Authorization Code Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant U as Resource Owner (User)
+    participant C as Client (App)
+    participant A as Authorization Server
+    participant R as Resource Server
+
+    U->>C: Access Application
+    C->>U: Redirect to Authorization Server
+    U->>A: Authenticate and Authorize
+    A-->>U: Redirect to Client with Auth Code
+    U->>C: Follow Redirect with Auth Code
+    C->>A: Exchange Auth Code for Access Token
+    A-->>C: Access Token (+ Refresh Token)
+    C->>R: Request Resource with Access Token
+    R-->>C: Protected Resource
+```
+
 ### Deprecated Flows
 
 - **Implicit:** Tokens are returned in URL fragments.
@@ -57,6 +77,6 @@ Use RFC 6749 for the protocol details, `oauth.net` for practical guidance and ex
 
 ## References
 
-1. RFC 6749
-2. oauth.net
-5. Modern Security BCPs
+1. [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
+2. [oauth.net](https://oauth.net/2/)
+5. [Modern Security BCPs](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics)

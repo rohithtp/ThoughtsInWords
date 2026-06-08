@@ -23,6 +23,7 @@ When the user asks to "simplify article", "make readable", or "clean up format" 
         - Long, complex paragraphs (break them down if possible, but be careful not to change the meaning).
     - **CRITICAL**: Check for a "References" section or any inline links/citations.
         - **You MUST NOT delete any references, footnotes, or links.**
+        - Ensure links are present and refer to working locations if possible.
         - Ensure the "References" section remains at the bottom of the file if it exists.
         - If you simplify text, ensure the anchor links or citations remain attached to the relevant information.
 
@@ -32,6 +33,7 @@ When the user asks to "simplify article", "make readable", or "clean up format" 
         - A clear Title (`# Title`).
         - Logical Sections (`## Section`).
         - Bullet points for lists.
+        - A Mermaid flow diagram to visualize complex structures, processes, or workflows if required.
     - Ensure there is a newline before and after headers and lists.
 
 4.  **Verify**
