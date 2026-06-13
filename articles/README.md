@@ -83,6 +83,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
+- [`distributed-systems/lightweight-apache-kafka-alternatives.md`](distributed-systems/lightweight-apache-kafka-alternatives.md) - Lightweight Apache Kafka Alternatives
 
 ### Environment
 - [`environment/awg-pollution-defense-report-2026.md`](2026/01/12/awg-pollution-defense-report-2026.md) - Report on Atmospheric Water Generation and pollution defense
@@ -134,6 +135,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`tools/decoupling-modern-code-editor.md`](tools/decoupling-modern-code-editor.md) - From Source to Sandbox: Decoupling the Modern Open-Source Code Editor
 - [`tools/mac-os-shells-open-source.md`](tools/mac-os-shells-open-source.md) - Mac OS Shells: A Dive into Open Source Power
 - [`tools/google-password-manager-sync-strategy.md`](tools/google-password-manager-sync-strategy.md) - The GPM Anchor: Using Google Password Manager as a Cross-Device Sync Bridge
+- [`tools/wezterm-choice.md`](tools/wezterm-choice.md) - Why I Chose WezTerm over Alacritty and Kitty
 
 ### Travel
 - [`travel/glowmads-and-wellness-retreats.md`](travel/glowmads-and-wellness-retreats.md) - Glowmads & Wellness Retreats: The New Era of Travel
