@@ -12,16 +12,19 @@ Articles are organized by **topic** (tags) rather than chronologically. This ali
 
 ```
 articles/
-├── README.md           # This file
-├── ai/                 # Artificial Intelligence & ML
-├── design/             # UI/UX & Design trends
-├── devops/             # Infrastructure, Git, CI/CD
-├── environment/        # Climate & Environmental reports
-├── frontend/           # Web development & frameworks
-├── licensing/          # Open source licensing
-├── philosophy/         # Tech philosophy & fables
-├── testing/            # QA & Testing strategies
-└── tools/              # Productivity & Developer tools
+├── README.md              # This file
+├── ai/                    # Artificial Intelligence & ML
+├── cloud-native/          # Cloud-native architecture & patterns
+├── design/                # UI/UX & Design trends
+├── devops/                # Infrastructure, Git, CI/CD
+├── distributed-systems/   # Distributed systems & messaging
+├── environment/           # Climate & Environmental reports
+├── frontend/              # Web development & frameworks
+├── licensing/             # Open source licensing
+├── philosophy/            # Tech philosophy & fables
+├── testing/               # QA & Testing strategies
+├── tools/                 # Productivity & Developer tools
+└── travel/                # Travel guides & experiences
 ```
 
 ## Digital Garden Approach
@@ -80,6 +83,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/telemetry-capturing-the-usage.md`](devops/telemetry-capturing-the-usage.md) - Telemetry: Capturing the Usage
 - [`devops/policy-brain-abac-and-future.md`](devops/policy-brain-abac-and-future.md) - Policy Brain: ABAC and the Future of Authorization
 - [`devops/understanding-oauth2.md`](devops/understanding-oauth2.md) - Understanding OAuth 2.0
+- [`devops/oidc-changes-oauth2-to-oauth21.md`](devops/oidc-changes-oauth2-to-oauth21.md) - OIDC Changes in the OAuth 2.0 to 2.1 Transition
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
@@ -122,7 +126,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`testing/self_healing_test_scripts_mocha_chai.md`](2026/01/11/self_healing_test_scripts_mocha_chai.md) - Guide to implementing self-healing tests with Mocha/Chai
 - [`testing/balancing-reuse-vs-functional-steps.md`](2026/01/15/balancing-reuse-vs-functional-steps.md) - Debate on code reuse vs functional steps in testing
 
-## Cloud Native
+### Cloud Native
 
 - [`cloud-native/cloud-native-applications.md`](cloud-native/cloud-native-applications.md) - Comprehensive guide to cloud-native application design, resilience patterns, and migration strategies for monolithic systems
 
