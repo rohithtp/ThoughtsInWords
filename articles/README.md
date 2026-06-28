@@ -84,6 +84,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [`devops/policy-brain-abac-and-future.md`](devops/policy-brain-abac-and-future.md) - Policy Brain: ABAC and the Future of Authorization
 - [`devops/understanding-oauth2.md`](devops/understanding-oauth2.md) - Understanding OAuth 2.0
 - [`devops/oidc-changes-oauth2-to-oauth21.md`](devops/oidc-changes-oauth2-to-oauth21.md) - OIDC Changes in the OAuth 2.0 to 2.1 Transition
+- [`devops/oidc-protocol-introduction-and-history.md`](devops/oidc-protocol-introduction-and-history.md) - OpenID Connect (OIDC): Introduction, Walkthrough, and History
 
 ### Distributed Systems
 - [`distributed-systems/anatomy-of-distributed-lock.md`](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
