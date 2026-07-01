@@ -83,6 +83,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [design/architecture-of-disposable-core.md](design/architecture-of-disposable-core.md) - The Architecture of the "Disposable" Core: Designing for Graceful Obsolescence
 - [design/augmented-reality-and-applications.md](design/augmented-reality-and-applications.md) - Augmented Reality and Applications: From Healthcare to Entertainment
 - [design/evolution-of-ui-interactions-and-aesthetics.md](design/evolution-of-ui-interactions-and-aesthetics.md) - The Evolution of UI Interactions and Aesthetics
+- [design/national-sso-requirements.md](design/national-sso-requirements.md) - National-Scale SSO Requirements: A Checklist for a Billion Users
 - [design/purple-design-aesthetic-trends-2026.md](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
 - [design/varying-goals-and-actualities-in-design.md](design/varying-goals-and-actualities-in-design.md) - Varying Goals and Actualities in Design: The Gap Between Intent and Delivery
 
