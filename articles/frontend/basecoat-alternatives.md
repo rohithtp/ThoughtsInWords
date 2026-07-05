@@ -4,6 +4,8 @@
 
 If you are looking for alternatives to [Basecoat](https://basecoatui.com/) that capture the modern, tailwind-styled look without locking you into React, several excellent framework-agnostic or HTML-first component libraries and kits are available.
 
+*(Note: Basecoat itself is a premium, monetized library offering paid access to its full suite of components and templates.)*
+
 ## Pure CSS Plugins (Zero JS Overhead)
 
 These plugins focus on providing styling without any JavaScript dependencies.
