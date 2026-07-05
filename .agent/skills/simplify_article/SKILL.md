@@ -21,6 +21,7 @@ When the user asks to "simplify article", "make readable", or "clean up format" 
         - Cluttered lists (ensure items are on separate lines).
         - Poor spacing (add blank lines between sections).
         - Long, complex paragraphs (break them down if possible, but be careful not to change the meaning).
+    - **Monetization Check**: Identify if any tools, libraries, or frameworks mentioned have monetized components or premium tiers (Pro versions). If missing, add a brief note about their monetization status.
     - **CRITICAL**: Check for a "References" section or any inline links/citations.
         - **You MUST NOT delete any references, footnotes, or links.**
         - Ensure links are present and refer to working locations if possible.
