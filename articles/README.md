@@ -192,6 +192,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [2026/01/17/neovim-guide.md](2026/01/17/neovim-guide.md) - Article on why Neovim is the future of text editing
 - [2026/01/18/podpdf-usage-guide.md](2026/01/18/podpdf-usage-guide.md) - Guide to setting up an open-source Markdown to PDF converter using Bun and Puppeteer
 - [tools/decoupling-modern-code-editor.md](tools/decoupling-modern-code-editor.md) - From Source to Sandbox: Decoupling the Modern Open-Source Code Editor
+- [tools/go-1-26-changes.md](tools/go-1-26-changes.md) - Go 1.26: Key Changes and Features
 - [tools/google-password-manager-sync-strategy.md](tools/google-password-manager-sync-strategy.md) - The GPM Anchor: Using Google Password Manager as a Cross-Device Sync Bridge
 - [tools/mac-os-shells-open-source.md](tools/mac-os-shells-open-source.md) - Mac OS Shells: A Dive into Open Source Power
 - [tools/notepad-progression-and-alternatives.md](tools/notepad-progression-and-alternatives.md) - Alternatives and Progression of NotePad in Windows Environment
