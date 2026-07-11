@@ -76,7 +76,9 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 ### Cloud Native
 
+- [cloud-native/air-gapped-environment-development-deployment.md](cloud-native/air-gapped-environment-development-deployment.md) - Air-Gapped Environment Development and Deployment: Data Isolation Behind the Wall
 - [cloud-native/cloud-native-applications.md](cloud-native/cloud-native-applications.md) - Comprehensive guide to cloud-native application design, resilience patterns, and migration strategies for monolithic systems
+- [cloud-native/data-isolation-multi-tenant-multi-stage.md](cloud-native/data-isolation-multi-tenant-multi-stage.md) - Data Isolation Strategies: Keeping Multi-Tenant and Multi-Stage Data in a Data Silo
 
 ### Design
 
