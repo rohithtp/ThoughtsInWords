@@ -141,6 +141,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [2026/01/20/ripple_framework_summary.md](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
 - [frontend/basecoat-alternatives.md](frontend/basecoat-alternatives.md) - Basecoat Alternatives: Framework-Agnostic Component Libraries
 - [frontend/migrating-dom-to-zig.md](frontend/migrating-dom-to-zig.md) - Summary of Lightpanda's migration from LibDOM to a custom Zig DOM
+- [frontend/slint-and-nodejs.md](frontend/slint-and-nodejs.md) - Slint and Node.js: Building Native UIs with JavaScript
 - [frontend/typescript-history-features-timeline.md](frontend/typescript-history-features-timeline.md) - TypeScript History, Features, and Timeline
 
 ### Licensing
