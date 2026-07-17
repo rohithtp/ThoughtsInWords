@@ -143,6 +143,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [2026/01/20/ripple_framework_summary.md](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
 - [frontend/basecoat-alternatives.md](frontend/basecoat-alternatives.md) - Basecoat Alternatives: Framework-Agnostic Component Libraries
 - [frontend/cross-platform-mobile-frameworks-comparison.md](frontend/cross-platform-mobile-frameworks-comparison.md) - Cross-Platform Mobile Frameworks: An Open-Source Comparison
+- [frontend/expo-dev-builds-for-vc-wallets.md](frontend/expo-dev-builds-for-vc-wallets.md) - Expo and Verifiable Credential Wallets: Why Dev Builds Replace Expo Go
 - [frontend/migrating-dom-to-zig.md](frontend/migrating-dom-to-zig.md) - Summary of Lightpanda's migration from LibDOM to a custom Zig DOM
 - [frontend/open-source-react-native-vc-wallets.md](frontend/open-source-react-native-vc-wallets.md) - Open-Source React Native Wallets for Verifiable Credentials
 - [frontend/slint-and-nodejs.md](frontend/slint-and-nodejs.md) - Slint and Node.js: Building Native UIs with JavaScript
