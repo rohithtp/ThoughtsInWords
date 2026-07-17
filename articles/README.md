@@ -144,6 +144,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [frontend/basecoat-alternatives.md](frontend/basecoat-alternatives.md) - Basecoat Alternatives: Framework-Agnostic Component Libraries
 - [frontend/cross-platform-mobile-frameworks-comparison.md](frontend/cross-platform-mobile-frameworks-comparison.md) - Cross-Platform Mobile Frameworks: An Open-Source Comparison
 - [frontend/migrating-dom-to-zig.md](frontend/migrating-dom-to-zig.md) - Summary of Lightpanda's migration from LibDOM to a custom Zig DOM
+- [frontend/open-source-react-native-vc-wallets.md](frontend/open-source-react-native-vc-wallets.md) - Open-Source React Native Wallets for Verifiable Credentials
 - [frontend/slint-and-nodejs.md](frontend/slint-and-nodejs.md) - Slint and Node.js: Building Native UIs with JavaScript
 - [frontend/typescript-history-features-timeline.md](frontend/typescript-history-features-timeline.md) - TypeScript History, Features, and Timeline
 
