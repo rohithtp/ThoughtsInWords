@@ -71,6 +71,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [ai/ai-in-hiring-the-arms-race.md](ai/ai-in-hiring-the-arms-race.md) - AI in Hiring: The Arms Race
 - [ai/ai-microservices-architecture-explained.md](ai/ai-microservices-architecture-explained.md) - AI Microservices Architecture Explained
 - [ai/estimating-gpu-for-ai-requirements.md](ai/estimating-gpu-for-ai-requirements.md) - Estimating GPU for AI Requirements: VRAM Formulas, Quantization, and Hardware Selection
+- [ai/cpu-to-gpu-transition-strategy.md](ai/cpu-to-gpu-transition-strategy.md) - Transitioning from CPU to GPU: A Scalable Deployment Strategy
 - [ai/api-capabilities-platforms-and-ai.md](ai/api-capabilities-platforms-and-ai.md) - API Capabilities for Platforms and AI
 - [ai/ever-changing-roles-tools-and-ai.md](ai/ever-changing-roles-tools-and-ai.md) - Ever-Changing Roles: Navigating Shifts with Tools and AI
 - [ai/llm-mindreading.md](ai/llm-mindreading.md) - LLM Mindreading: Decoding Brains and Theory of Mind
