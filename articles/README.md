@@ -60,6 +60,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 #### Agents & Tooling
 
+- [ai/antigravity-with-stitch.md](ai/antigravity-with-stitch.md) - Antigravity with Stitch: The AI-Powered Development Workflow
 - [ai/generative-ui-for-agents.md](ai/generative-ui-for-agents.md) - Generative UI for Agents
 - [ai/mcp-future-and-alternatives.md](ai/mcp-future-and-alternatives.md) - MCP: The Future of the Model Context Protocol and Its Alternatives
 - [ai/tools-in-ai-mcp-and-future.md](ai/tools-in-ai-mcp-and-future.md) - Tools in AI: The Rise of MCP and the Future of Agentic Systems
