@@ -120,6 +120,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [2026/01/19/jj-usage-and-git-comparison.md](2026/01/19/jj-usage-and-git-comparison.md) - Guide to JJ usage and comparison with Git
 - [2026/01/21/debug-windows-git-pull-issues.md](2026/01/21/debug-windows-git-pull-issues.md) - How to debug Windows git pull issues
 - [devops/git-worktree-vs-branches.md](devops/git-worktree-vs-branches.md) - Article on Git workflow strategies
+- [devops/monorepo-polyrepo-single-developer.md](devops/monorepo-polyrepo-single-developer.md) - Monorepo vs Polyrepo: Heterogeneous Projects and the Single Developer Journey
 
 #### Observability & Operations
 
