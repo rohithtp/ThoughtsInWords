@@ -158,7 +158,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [frontend/slint-and-nodejs.md](frontend/slint-and-nodejs.md) - Slint and Node.js: Building Native UIs with JavaScript
 - [frontend/static-site-search-open-source.md](frontend/static-site-search-open-source.md) - Adding Search to Your Static Site: Open Source & Free Libraries
 - [frontend/typescript-history-features-timeline.md](frontend/typescript-history-features-timeline.md) - TypeScript History, Features, and Timeline
-
+- [frontend/preventing-mitm-react-django.md](frontend/preventing-mitm-react-django.md) - Preventing Man-in-the-Middle (MITM) attacks in a decoupled React + Django architecture
 ### Licensing
 
 - [2026/01/11/unlicense_vs_cc0_comparison.md](2026/01/11/unlicense_vs_cc0_comparison.md) - Comparison of The Unlicense and CC0
