@@ -205,6 +205,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 ### Tools
 
+- [tools/burp-proxy-alternatives.md](tools/burp-proxy-alternatives.md) - Burp Proxy Alternatives: Open Source and Free Libraries
 - [2026/01/11/markdown_editors_for_scribd_upload.md](2026/01/11/markdown_editors_for_scribd_upload.md) - Article about markdown editors
 - [2026/01/13/taskade-open-source-alternatives.md](2026/01/13/taskade-open-source-alternatives.md) - Comparison of open source alternatives to Taskade
 - [2026/01/17/neovim-guide.md](2026/01/17/neovim-guide.md) - Article on why Neovim is the future of text editing
