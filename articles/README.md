@@ -152,9 +152,11 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [frontend/cross-platform-mobile-frameworks-comparison.md](frontend/cross-platform-mobile-frameworks-comparison.md) - Cross-Platform Mobile Frameworks: An Open-Source Comparison
 - [frontend/expo-dev-builds-for-vc-wallets.md](frontend/expo-dev-builds-for-vc-wallets.md) - Expo and Verifiable Credential Wallets: Why Dev Builds Replace Expo Go
 - [frontend/expo-video-voice-production-builds.md](frontend/expo-video-voice-production-builds.md) - Building Production-Grade Video and Voice Systems with Expo Development Builds
+- [frontend/github-pages-markdown-search.md](frontend/github-pages-markdown-search.md) - Adding Search to a Markdown-Backed GitHub Pages Site: Open Source & Free Libraries
 - [frontend/migrating-dom-to-zig.md](frontend/migrating-dom-to-zig.md) - Summary of Lightpanda's migration from LibDOM to a custom Zig DOM
 - [frontend/open-source-react-native-vc-wallets.md](frontend/open-source-react-native-vc-wallets.md) - Open-Source React Native Wallets for Verifiable Credentials
 - [frontend/slint-and-nodejs.md](frontend/slint-and-nodejs.md) - Slint and Node.js: Building Native UIs with JavaScript
+- [frontend/static-site-search-open-source.md](frontend/static-site-search-open-source.md) - Adding Search to Your Static Site: Open Source & Free Libraries
 - [frontend/typescript-history-features-timeline.md](frontend/typescript-history-features-timeline.md) - TypeScript History, Features, and Timeline
 
 ### Licensing
