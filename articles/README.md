@@ -138,6 +138,8 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 - [distributed-systems/anatomy-of-distributed-lock.md](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
 - [distributed-systems/lightweight-apache-kafka-alternatives.md](distributed-systems/lightweight-apache-kafka-alternatives.md) - Lightweight Apache Kafka Alternatives
+- [distributed-systems/mitm-in-heterogeneous-distributed-applications.md](distributed-systems/mitm-in-heterogeneous-distributed-applications.md) - Mitigating Man-in-the-Middle (MITM) Attacks in Heterogeneous Distributed Applications (React + Python)
+
 
 ### Environment
 
