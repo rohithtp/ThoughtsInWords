@@ -22,13 +22,17 @@ When the user asks to "organize readme", "fix links", or "update index":
     *   **Update the link** in `articles/README.md` to point to the correct, existing file path.
     *   **Do not move the file** unless explicitly instructed; prefer updating the link to match reality.
 
-3.  **Add Unlisted Files**:
+3.  **Add Unlisted Files & Manage `[NEW]` Tag**:
     *   Identify files found in the scan that are NOT listed in `articles/README.md`.
-    *   For each unlisted file:
-        *   Determine the appropriate category from the parent folder name or by analyzing the file content.
-        *   If the file is in a date-based folder (e.g., `2026/01/19/`), infer the category from the content or filename, or add it to a "New/Uncategorized" section if unsure.
-        *   Add a list entry to the corresponding section in `articles/README.md`:
-            `- [relative/path/to/file.md](relative/path/to/file.md) - Description or Title`
+    *   If unlisted files are found and being added:
+        *   **Remove Existing Tags**: Strip any existing `[NEW]` tags from all entries in `articles/README.md` so that only the newest entry carries the tag.
+        *   For each unlisted file:
+            *   Determine the appropriate category from the parent folder name or by analyzing the file content.
+            *   If the file is in a date-based folder (e.g., `2026/01/19/`), infer the category from the content or filename, or add it to a "New/Uncategorized" section if unsure.
+            *   Add a list entry to the corresponding section in `articles/README.md` with the `[NEW]` tag:
+                `- [relative/path/to/file.md](relative/path/to/file.md) - Description or Title [NEW]`
+            *   *(Note: If multiple unlisted files are added at once, apply the `[NEW]` tag only to the latest one).*
+    *   If no new files are added, ensure that at most one `[NEW]` tag remains in `articles/README.md` (clean up any duplicate or stale tags).
 
 4.  **Formatting**:
     *   Ensure the `articles/README.md` maintains a clean, categorized structure.

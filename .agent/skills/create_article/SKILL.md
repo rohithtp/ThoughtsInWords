@@ -32,11 +32,12 @@ When the user asks to "create a new article" or "add a summary of [URL]":
     *   Determine the file path: `articles/[category]/[slug-title].md`.
     *   Use `write_to_file` to create the file.
 
-4.  **Update Index**:
+4.  **Update Index & Manage `[NEW]` Tag**:
     *   Open `articles/README.md`.
-    *   Find the appropriate category header (e.g., `### Frontend`).
-    *   Append a link to the new article in the list:
-        `- [[category]/[slug-title].md]([category]/[slug-title].md) - Brief description`
+    *   **Remove Existing Tags**: Remove any existing `[NEW]` tags across all entries in `articles/README.md` so that only the newly published article carries the tag.
+    *   **Find Category Header**: Locate the appropriate category header (e.g., `### Frontend`).
+    *   **Append New Entry**: Append the link to the new article with the `[NEW]` tag:
+        `- [[category]/[slug-title].md]([category]/[slug-title].md) - Brief description [NEW]`
 
 ## Example
 
@@ -45,4 +46,6 @@ When the user asks to "create a new article" or "add a summary of [URL]":
 **Action:**
 1.  Read URL.
 2.  Write `articles/frontend/react-compiler-overview.md`.
-3.  Add entry to `articles/README.md` under `### Frontend`.
+3.  Remove any existing `[NEW]` tags in `articles/README.md`.
+4.  Add entry to `articles/README.md` under `### Frontend` with `[NEW]` tag:
+    `- [frontend/react-compiler-overview.md](frontend/react-compiler-overview.md) - Overview of React compiler features [NEW]`
