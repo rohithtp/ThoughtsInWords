@@ -143,6 +143,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 
 ### Environment
 
+- [environment/dynamo-effect-planetary-magnetic-engines.md](environment/dynamo-effect-planetary-magnetic-engines.md) - The Dynamo Effect: How Celestial Engines Generate Magnetic Shields and Shape Planetary Habitability
 - [2026/01/12/awg-pollution-defense-report-2026.md](2026/01/12/awg-pollution-defense-report-2026.md) - Report on Atmospheric Water Generation and pollution defense
 
 ### Frontend
@@ -186,6 +187,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [philosophy/nautical-task-organization.md](philosophy/nautical-task-organization.md) - Nautical Task Organization for Exploration
 - [philosophy/organizing-thoughts-different-approaches.md](philosophy/organizing-thoughts-different-approaches.md) - Organizing Thoughts: Different Approaches to Clarity and Structure
 - [philosophy/phantoms-in-development-and-debugging.md](philosophy/phantoms-in-development-and-debugging.md) - Phantoms in Development and Debugging: A Guide to Elusive Problems in Information Development
+- [philosophy/the-domino-effect-mechanics-systems-behavior.md](philosophy/the-domino-effect-mechanics-systems-behavior.md) - The Domino Effect: From Physical Mechanics to Systems Architecture and Human Behavior
 
 #### Personal & Wellness
 
