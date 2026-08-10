@@ -96,6 +96,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [design/national-sso-requirements.md](design/national-sso-requirements.md) - National-Scale SSO Requirements: A Checklist for a Billion Users
 - [design/purple-design-aesthetic-trends-2026.md](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
 - [design/varying-goals-and-actualities-in-design.md](design/varying-goals-and-actualities-in-design.md) - Varying Goals and Actualities in Design: The Gap Between Intent and Delivery
+- [design/rbac-vs-modular-role-focused-applications.md](design/rbac-vs-modular-role-focused-applications.md) - Role-Based Access Control (RBAC) vs. Modular Role-Focused Applications [NEW]
 
 ### DevOps & Infrastructure
 
@@ -139,7 +140,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [distributed-systems/anatomy-of-distributed-lock.md](distributed-systems/anatomy-of-distributed-lock.md) - The Anatomy of a Distributed Lock and How it differs from Physical Clocks
 - [distributed-systems/lightweight-apache-kafka-alternatives.md](distributed-systems/lightweight-apache-kafka-alternatives.md) - Lightweight Apache Kafka Alternatives
 - [distributed-systems/mitm-in-heterogeneous-distributed-applications.md](distributed-systems/mitm-in-heterogeneous-distributed-applications.md) - Mitigating Man-in-the-Middle (MITM) Attacks in Heterogeneous Distributed Applications (React + Python)
-- [distributed-systems/saga-pattern-distributed-transactions.md](distributed-systems/saga-pattern-distributed-transactions.md) - The Saga Pattern: Managing Distributed Transactions and Eventual Consistency in Microservices [NEW]
+- [distributed-systems/saga-pattern-distributed-transactions.md](distributed-systems/saga-pattern-distributed-transactions.md) - The Saga Pattern: Managing Distributed Transactions and Eventual Consistency in Microservices
 
 
 ### Environment
