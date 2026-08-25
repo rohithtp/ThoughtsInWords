@@ -1,6 +1,10 @@
 # ThoughtsInWords
 
-A personal repository for organizing and archiving written thoughts, reflections, and articles.
+A personal repository for organizing and archiving written thoughts, reflections, and articles by [Rohith T P](https://rohithtp.github.io/rohithtp-cv/).
+
+## Author
+
+* **Rohith T P**: [CV / Personal Site](https://rohithtp.github.io/rohithtp-cv/)
 
 ## Purpose
 
