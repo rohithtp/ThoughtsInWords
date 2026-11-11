@@ -1,6 +1,7 @@
 # Airgapped Production Font Deployment Guide
 
-**Date:** November 11, 2026
+**Date:** November 11, 2026  
+**Companion Analysis:** [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](./airgapped-font-cdn-anti-pattern.md)
 
 ## Summary
 
@@ -328,6 +329,7 @@ When implementing self-hosted fonts in enterprise and regulated stacks, review l
 
 ## References
 
+- [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](./airgapped-font-cdn-anti-pattern.md) — Architectural evaluation of the 9/10 risk anti-pattern and compliance impacts.
 - [Google Fonts Repository & Directory](https://fonts.google.com/)
 - [Google Static Asset Endpoint](http://gstatic.com/)
 - [Nginx Official Documentation](https://docs.nginx.com/)

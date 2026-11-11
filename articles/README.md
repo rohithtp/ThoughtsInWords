@@ -157,7 +157,8 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [2026/01/13/htmx-manifesto-summary.md](2026/01/13/htmx-manifesto-summary.md) - Summary of the htmx manifesto
 - [2026/01/19/xaml-studio-open-source-summary.md](2026/01/19/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
 - [2026/01/20/ripple_framework_summary.md](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
-- [frontend/airgapped-production-font-deployment.md](frontend/airgapped-production-font-deployment.md) - Airgapped Production Font Deployment Guide: Auditing, Migrating, and Isolating Google Fonts in React [NEW]
+- [frontend/airgapped-font-cdn-anti-pattern.md](frontend/airgapped-font-cdn-anti-pattern.md) - Architectural Risk Assessment: Public Font CDNs in Airgapped Environments [NEW]
+- [frontend/airgapped-production-font-deployment.md](frontend/airgapped-production-font-deployment.md) - Airgapped Production Font Deployment Guide: Auditing, Migrating, and Isolating Google Fonts in React
 - [frontend/basecoat-alternatives.md](frontend/basecoat-alternatives.md) - Basecoat Alternatives: Framework-Agnostic Component Libraries
 - [frontend/cross-platform-mobile-frameworks-comparison.md](frontend/cross-platform-mobile-frameworks-comparison.md) - Cross-Platform Mobile Frameworks: An Open-Source Comparison
 - [frontend/expo-dev-builds-for-vc-wallets.md](frontend/expo-dev-builds-for-vc-wallets.md) - Expo and Verifiable Credential Wallets: Why Dev Builds Replace Expo Go
