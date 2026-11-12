@@ -135,6 +135,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 #### Platform & Scaling
 
 - [2026/01/23/vclusters-evolution-and-changes.md](2026/01/23/vclusters-evolution-and-changes.md) - Evolution and changes in Kubernetes vClusters (2024-2026)
+- [devops/docker-compose-to-kubernetes-guide.md](devops/docker-compose-to-kubernetes-guide.md) - From One Machine to Many: The Complete Guide to Learning Docker Compose and Kubernetes [NEW]
 - [devops/evolving-platforms-and-future-landscapes.md](devops/evolving-platforms-and-future-landscapes.md) - Evolving Platforms and Future Landscapes: From Monoliths to AI-Native IDPs
 - [devops/scaling_from_0_to_million.md](devops/scaling_from_0_to_million.md) - Comprehensive guide to scaling from 0 to a million users
 - [devops/third-party-providers.md](devops/third-party-providers.md) - Understanding Third, Second, and First Party Providers: A Single Page Summary
@@ -157,7 +158,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [2026/01/13/htmx-manifesto-summary.md](2026/01/13/htmx-manifesto-summary.md) - Summary of the htmx manifesto
 - [2026/01/19/xaml-studio-open-source-summary.md](2026/01/19/xaml-studio-open-source-summary.md) - Summary of open-source XAML Studio
 - [2026/01/20/ripple_framework_summary.md](2026/01/20/ripple_framework_summary.md) - Summary of the Ripple TypeScript UI Framework
-- [frontend/airgapped-font-cdn-anti-pattern.md](frontend/airgapped-font-cdn-anti-pattern.md) - Architectural Risk Assessment: Public Font CDNs in Airgapped Environments [NEW]
+- [frontend/airgapped-font-cdn-anti-pattern.md](frontend/airgapped-font-cdn-anti-pattern.md) - Architectural Risk Assessment: Public Font CDNs in Airgapped Environments
 - [frontend/airgapped-production-font-deployment.md](frontend/airgapped-production-font-deployment.md) - Airgapped Production Font Deployment Guide: Auditing, Migrating, and Isolating Google Fonts in React
 - [frontend/basecoat-alternatives.md](frontend/basecoat-alternatives.md) - Basecoat Alternatives: Framework-Agnostic Component Libraries
 - [frontend/cross-platform-mobile-frameworks-comparison.md](frontend/cross-platform-mobile-frameworks-comparison.md) - Cross-Platform Mobile Frameworks: An Open-Source Comparison
