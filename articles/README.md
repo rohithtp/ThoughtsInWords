@@ -101,6 +101,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [design/purple-design-aesthetic-trends-2026.md](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
 - [design/varying-goals-and-actualities-in-design.md](design/varying-goals-and-actualities-in-design.md) - Varying Goals and Actualities in Design: The Gap Between Intent and Delivery
 - [design/rbac-vs-modular-role-focused-applications.md](design/rbac-vs-modular-role-focused-applications.md) - Role-Based Access Control (RBAC) vs. Modular Role-Focused Applications
+- [design/silent-architecture-of-utility-modules.md](design/silent-architecture-of-utility-modules.md) - The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems [NEW]
 
 ### DevOps & Infrastructure
 
@@ -135,7 +136,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 #### Platform & Scaling
 
 - [2026/01/23/vclusters-evolution-and-changes.md](2026/01/23/vclusters-evolution-and-changes.md) - Evolution and changes in Kubernetes vClusters (2024-2026)
-- [devops/docker-compose-to-kubernetes-guide.md](devops/docker-compose-to-kubernetes-guide.md) - From One Machine to Many: The Complete Guide to Learning Docker Compose and Kubernetes [NEW]
+- [devops/docker-compose-to-kubernetes-guide.md](devops/docker-compose-to-kubernetes-guide.md) - From One Machine to Many: The Complete Guide to Learning Docker Compose and Kubernetes
 - [devops/evolving-platforms-and-future-landscapes.md](devops/evolving-platforms-and-future-landscapes.md) - Evolving Platforms and Future Landscapes: From Monoliths to AI-Native IDPs
 - [devops/scaling_from_0_to_million.md](devops/scaling_from_0_to_million.md) - Comprehensive guide to scaling from 0 to a million users
 - [devops/third-party-providers.md](devops/third-party-providers.md) - Understanding Third, Second, and First Party Providers: A Single Page Summary
