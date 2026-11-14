@@ -45,4 +45,5 @@ Critical thinking is not the subtraction of emotion, but the multiplication of p
 
 - [Critical Thinking: Managing Emotions for Objective Results](critical-thinking-managing-emotions.md) — practical techniques for cognitive reappraisal and bias control.
 - [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](the-slow-navigator-framework.md) — operational guardrails for decision-making under hesitation or panic.
+- [The Split Inside the Human Mind](the-split-inside-the-human-mind.md) — why self-awareness seals off pain into restless overthinking, and how naming the underlying feeling restores clarity.
 - [Postmortem: An Emotional Retrospective](postmortem-emotional-retrospective.md) — examining emotional residue after high-stakes outcomes.

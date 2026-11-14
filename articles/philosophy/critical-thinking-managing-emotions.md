@@ -74,4 +74,5 @@ We become not just better thinkers, but more effective decision-makers who can n
 
 - [Critical Thinking: Navigating Emotional Multitudes](critical-thinking-emotional-multitudes.md) — understanding the visceral, subconscious, and relational layers of emotion.
 - [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](the-slow-navigator-framework.md) — concrete checkpoints to resist impulsive swerves and analysis paralysis.
+- [The Split Inside the Human Mind](the-split-inside-the-human-mind.md) — why self-awareness seals off pain into restless overthinking, and how naming the underlying feeling restores clarity.
 - [Postmortem: An Emotional Retrospective](postmortem-emotional-retrospective.md) — applying objective reflection to emotionally charged project reviews.

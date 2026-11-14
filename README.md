@@ -43,8 +43,8 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 
 ## Explore the Digital Garden
 
-* **[Browse Full Article Index (109 Articles)](./articles/README.md)**
-* **Latest Addition:** [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](./articles/philosophy/the-slow-navigator-framework.md) `[NEW]`
+* **[Browse Full Article Index (110 Articles)](./articles/README.md)**
+* **Latest Addition:** [The Split Inside the Human Mind](./articles/philosophy/the-split-inside-the-human-mind.md) `[NEW]`
 
 ### Browse by Topic
 
@@ -58,7 +58,7 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 | [Environment](./articles/README.md#environment) | 2 | Atmospheric water generation and planetary magnetospheres |
 | [Frontend](./articles/README.md#frontend) | 16 | React, Expo, static search, air-gapped fonts, TypeScript, UI frameworks |
 | [Licensing](./articles/README.md#licensing) | 1 | Unlicense vs. CC0 open-source licensing |
-| [Philosophy](./articles/README.md#philosophy) | 20 | Career growth, critical thinking, information development, programming philosophy |
+| [Philosophy](./articles/README.md#philosophy) | 21 | Career growth, critical thinking, information development, programming philosophy |
 | [Testing](./articles/README.md#testing) | 2 | Self-healing tests and reuse vs. functional steps |
 | [Tools](./articles/README.md#tools) | 11 | Editors, shells, terminals, Go 1.26, proxy & productivity tools |
 | [Travel](./articles/README.md#travel) | 3 | Travel guides, wellness retreats, visa & rail booking tools |
