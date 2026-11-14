@@ -101,7 +101,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [design/purple-design-aesthetic-trends-2026.md](design/purple-design-aesthetic-trends-2026.md) - Analysis of purple design trends in 2026
 - [design/varying-goals-and-actualities-in-design.md](design/varying-goals-and-actualities-in-design.md) - Varying Goals and Actualities in Design: The Gap Between Intent and Delivery
 - [design/rbac-vs-modular-role-focused-applications.md](design/rbac-vs-modular-role-focused-applications.md) - Role-Based Access Control (RBAC) vs. Modular Role-Focused Applications
-- [design/silent-architecture-of-utility-modules.md](design/silent-architecture-of-utility-modules.md) - The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems [NEW]
+- [design/silent-architecture-of-utility-modules.md](design/silent-architecture-of-utility-modules.md) - The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems
 
 ### DevOps & Infrastructure
 
@@ -189,6 +189,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 - [philosophy/critical-thinking-emotional-multitudes.md](philosophy/critical-thinking-emotional-multitudes.md) - Critical Thinking: Navigating Emotional Multitudes
 - [philosophy/critical-thinking-managing-emotions.md](philosophy/critical-thinking-managing-emotions.md) - Critical Thinking: Managing Emotions for Objective Results
 - [philosophy/postmortem-emotional-retrospective.md](philosophy/postmortem-emotional-retrospective.md) - Postmortem: An Emotional Retrospective
+- [philosophy/the-slow-navigator-framework.md](philosophy/the-slow-navigator-framework.md) - The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage [NEW]
 
 #### Information & Thought
 
