@@ -58,3 +58,10 @@ With GitHub Actions, you can also run Node scripts to parse your Markdown files 
 2. **If you want to keep things simple and avoid GitHub Actions:** Use Liquid templates to generate a JSON endpoint and index it on the client side using **Lunr.js**. 
 
 By leveraging these open-source tools, your Markdown-backed GitHub Pages site can provide a premium, instantaneous search experience without relying on expensive third-party SaaS providers.
+
+---
+
+## Related Articles
+
+- [Adding Search to Your Static Site: Open Source & Free Libraries](static-site-search-open-source.md) — deeper comparison of Pagefind, Fuse.js, Lunr.js, FlexSearch, and Orama.
+- [File Over App: A Manifesto for Digital Longevity](../philosophy/file-over-app-manifesto.md) — why plain Markdown files remain durable across platforms and tools.

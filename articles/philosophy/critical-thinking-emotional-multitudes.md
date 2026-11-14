@@ -38,3 +38,11 @@ This integration leads to "Wisdom"—the highest form of critical thinking. Wisd
 ## Conclusion
 
 Critical thinking is not the subtraction of emotion, but the multiplication of perspective. By navigating the emotional multitudes—the visceral, the subconscious, and the relational—we move beyond simple logic gates into the realm of deep, nuanced understanding. We become better thinkers not by becoming less human, but by becoming more fully aware of our humanity.
+
+---
+
+## Related Articles
+
+- [Critical Thinking: Managing Emotions for Objective Results](critical-thinking-managing-emotions.md) — practical techniques for cognitive reappraisal and bias control.
+- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](the-slow-navigator-framework.md) — operational guardrails for decision-making under hesitation or panic.
+- [Postmortem: An Emotional Retrospective](postmortem-emotional-retrospective.md) — examining emotional residue after high-stakes outcomes.

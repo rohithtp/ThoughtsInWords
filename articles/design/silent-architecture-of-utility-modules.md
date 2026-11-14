@@ -117,3 +117,11 @@ Before approving or merging a utility module pull request, verify:
 
 Small utility helpers often fly under the radar of architectural scrutiny, yet they form the load-bearing substrate of our systems. When the smallest, seemingly trivial component is compromised or implemented carelessly, it ceases to be mere plumbing—it becomes the horseshoe nail of the architecture, an overlooked tipping point capable of triggering catastrophic cascade failures across distributed services. By treating utility modules with the same defensive rigor, immutability guarantees, and strict boundary separation as large distributed systems, engineering teams can eliminate subtle bugs and security liabilities before they compound across the organization.
 
+---
+
+## Related Articles
+
+- [The Architecture of the "Disposable" Core](architecture-of-disposable-core.md) — designing clean boundaries so core modules can be swapped cleanly.
+- [Ageless Programming: Timeless Software Design](../philosophy/ageless-programming.md) — enduring principles of high cohesion, low coupling, and clarity.
+- [Role-Based Access Control (RBAC) vs. Modular Role-Focused Applications](rbac-vs-modular-role-focused-applications.md) — preventing shared helpers from turning into hidden coupling across role-focused apps.
+

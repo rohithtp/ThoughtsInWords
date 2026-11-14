@@ -184,3 +184,12 @@ The road between intent and execution will always be shrouded in fog and punctua
 
 By acting as the **Slow Navigator**—relying on hard guards rather than fleeting willpower—you ensure that when the dust settles, you aren't stranded in a roadside ditch or idling on an empty shoulder. You are parked at your destination.
 
+---
+
+## Related Articles
+
+- [Critical Thinking: Managing Emotions for Objective Results](critical-thinking-managing-emotions.md) — cognitive reappraisal and the Stop-Breathe-Reflect-Choose method for staying grounded.
+- [Critical Thinking: Navigating Emotional Multitudes](critical-thinking-emotional-multitudes.md) — integrating emotional signals with analytical clarity.
+- [Phantoms in Development and Debugging](phantoms-in-development-and-debugging.md) — confronting phantom alarms and elusive issues without reactive teardown.
+- [Chasing Different Phantoms in Information Development](chasing-different-phantoms-in-information-development.md) — why chasing perfection can stall delivery if left unguarded.
+

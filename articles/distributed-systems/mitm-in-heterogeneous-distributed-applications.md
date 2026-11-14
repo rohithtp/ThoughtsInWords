@@ -393,3 +393,11 @@ await initializeSslPinning({
 In a modern distributed application where a React frontend sits heterogeneously across networks from a Python backend, **HTTPS alone is not a panacea**. Transport Layer Security secures only individual point-to-point connections; it does not protect against compromised intermediaries, misconfigured internal networks, or intercepted client tokens.
 
 By combining **strict transport hygiene (HSTS/CAA)**, **sender-constrained identity (BFF / DPoP)**, **end-to-end cryptographic payload signing**, and **internal zero-trust mTLS**, engineering teams can build resilient distributed architectures capable of withstanding sophisticated Man-in-the-Middle attacks across all network boundaries.
+
+---
+
+## Related Articles
+
+- [Preventing MITM Attacks in React + Django](../frontend/preventing-mitm-react-django.md) — focused implementation checklist for decoupled React and Django deployments.
+- [Air-Gapped Environment Development and Deployment: Data Isolation Behind the Wall](../cloud-native/air-gapped-environment-development-deployment.md) — internal PKI, certificate authority management, and boundary controls.
+- [OIDC Changes in the OAuth 2.0 to 2.1 Transition](../devops/oidc-changes-oauth2-to-oauth21.md) — sender-constrained tokens (DPoP) and modern OAuth security baselines.

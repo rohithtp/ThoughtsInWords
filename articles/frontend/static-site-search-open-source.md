@@ -61,3 +61,10 @@ Orama (formerly Lyra) is a fast, in-memory, typo-tolerant full-text search engin
 ## Conclusion
 
 Adding search to a static site no longer requires compromising on speed or paying for expensive third-party services. With tools like Pagefind and Orama pushing the boundaries of what is possible in the browser and at the edge, the open-source ecosystem provides everything you need to build a premium search experience.
+
+---
+
+## Related Articles
+
+- [Adding Search to a Markdown-Backed GitHub Pages Site](github-pages-markdown-search.md) — applying Liquid templates, GitHub Actions, and Pagefind specifically to Markdown repositories.
+- [File Over App: A Manifesto for Digital Longevity](../philosophy/file-over-app-manifesto.md) — keeping knowledge bases portable in plain Markdown without SaaS lock-in.

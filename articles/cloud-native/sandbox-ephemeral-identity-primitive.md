@@ -48,3 +48,12 @@ Platform providers use microVMs and Wasm sandboxes to run multi-tenant serverles
 ## Conclusion
 
 The combination of sandboxing and ephemeral identities forms a powerful security posture for modern applications. As we move towards more dynamic, automated, and AI-driven systems, adopting these primitives will be essential for balancing agility with robust security, ensuring that workloads can execute freely without compromising the broader infrastructure.
+
+---
+
+## Related Articles
+
+- [Vercel Sandbox: An Ephemeral Compute Primitive](vercel-sandbox.md) — a concrete microVM execution primitive for untrusted and AI-generated code.
+- [Data Isolation Strategies: Keeping Multi-Tenant and Multi-Stage Data in a Data Silo](data-isolation-multi-tenant-multi-stage.md) — enforcing multi-tenant boundaries across compute and storage.
+- [OIDC Changes in the OAuth 2.0 to 2.1 Transition](../devops/oidc-changes-oauth2-to-oauth21.md) — short-lived OIDC federation standards powering workload identity.
+- [Policy Brain: ABAC and the Future of Authorization](../devops/policy-brain-abac-and-future.md) — evaluating dynamic workload attributes in zero-trust architectures.

@@ -327,6 +327,14 @@ When implementing self-hosted fonts in enterprise and regulated stacks, review l
 
 ---
 
+## Related Articles
+
+- [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](airgapped-font-cdn-anti-pattern.md) — why external font CDNs create compliance and availability failures.
+- [Air-Gapped Environment Development and Deployment: Data Isolation Behind the Wall](../cloud-native/air-gapped-environment-development-deployment.md) — internal registries, artifact promotion, and disconnected CI/CD pipelines.
+- [Preventing MITM Attacks in React + Django](preventing-mitm-react-django.md) — hardening frontend asset integrity and Content Security Policy headers.
+
+---
+
 ## References
 
 - [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](./airgapped-font-cdn-anti-pattern.md) — Architectural evaluation of the 9/10 risk anti-pattern and compliance impacts.

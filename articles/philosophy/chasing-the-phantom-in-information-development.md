@@ -120,6 +120,15 @@ That is not failure. That is craft.
 
 ---
 
+## Related Articles
+
+- [Chasing Different Phantoms in Information Development](chasing-different-phantoms-in-information-development.md) — taxonomy of information phantoms across accuracy, audience, and structure.
+- [Phantoms in Development and Debugging](phantoms-in-development-and-debugging.md) — how elusive problems manifest in debugging and system observability.
+- [Organizing Thoughts: Different Approaches](organizing-thoughts-different-approaches.md) — mental models for structuring knowledge and documentation.
+- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](the-slow-navigator-framework.md) — avoiding perfectionism stalls while shipping evolving work.
+
+---
+
 ## References
 
 - [Docs as Code](https://www.writethedocs.org/guide/docs-as-code/) - Write the Docs

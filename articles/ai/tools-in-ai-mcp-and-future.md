@@ -207,6 +207,15 @@ The age of agentic AI is not coming. It is here. The tools are the interface.
 
 ---
 
+## Related Articles
+
+- [MCP: The Future of the Model Context Protocol and Its Alternatives](mcp-future-and-alternatives.md) — comparing MCP against A2A, native function calling, and competing tool ecosystems.
+- [Human in the Loop (HITL) AI](human-in-the-loop.md) — keeping human judgment and approval checkpoints in autonomous tool workflows.
+- [Generative UI for Agents](generative-ui-for-agents.md) — moving from text-only tool responses to adaptive user interfaces.
+- [API Capabilities for Platforms and AI](api-capabilities-platforms-and-ai.md) — designing platform APIs that serve both human developers and AI agents.
+
+---
+
 ## References
 
 - [Model Context Protocol — Official Documentation](https://modelcontextprotocol.io/)

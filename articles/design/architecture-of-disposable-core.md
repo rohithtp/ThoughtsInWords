@@ -52,3 +52,11 @@ Obsolescence should be gradual. Continuously refactoring and isolating legacy co
 ## Conclusion
 
 Designing for graceful obsolescence is a shift in mindset. It acknowledges that the code we write today is temporary. By building "disposable" cores, we ensure that our systems can evolve and adapt to the unpredictable future of technology, turning what used to be a painful rewrite into a routine upgrade.
+
+---
+
+## Related Articles
+
+- [The Silent Architecture of Utility Modules](silent-architecture-of-utility-modules.md) — keeping small, shared helper boundaries clean so changes don't trigger cascades.
+- [Ageless Programming: Timeless Software Design](../philosophy/ageless-programming.md) — balancing modular boundaries with stable, boring foundations.
+- [Role-Based Access Control (RBAC) vs. Modular Role-Focused Applications](rbac-vs-modular-role-focused-applications.md) — isolating role workflows into independently replaceable applications.

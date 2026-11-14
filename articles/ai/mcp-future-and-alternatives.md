@@ -160,6 +160,15 @@ The teams that benefit most are those building tool servers *once* and deploying
 
 ---
 
+## Related Articles
+
+- [Tools in AI: The Rise of MCP and the Future of Agentic Systems](tools-in-ai-mcp-and-future.md) — evolution from simple function calling to composable agentic protocols.
+- [Antigravity with Stitch: The AI-Powered Development Workflow](antigravity-with-stitch.md) — MCP-driven design-to-code handoff in practice.
+- [How to Connect Google Stitch to Your Workflow](how-to-connect-google-stitch.md) — configuring Stitch's MCP server inside an agentic IDE.
+- [Generative UI for Agents](generative-ui-for-agents.md) — dynamic UI surfaces powered by agentic tool calls.
+
+---
+
 ## References
 
 - [Model Context Protocol — Official Documentation](https://modelcontextprotocol.io)

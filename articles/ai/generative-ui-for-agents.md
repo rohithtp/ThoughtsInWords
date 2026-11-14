@@ -39,3 +39,12 @@ Generative UI is the process where an AI system generates user interface element
 ## Conclusion
 
 Generative UI is the missing link for truly agentic workflows. By decoupling the interface from static code and allowing the intelligence of the model to drive the presentation layer, we unlock a new level of flexibility and efficiency in human-computer interaction.
+
+---
+
+## Related Articles
+
+- [Vercel AI SDK 6 Overview](vercel-ai-sdk-6.md) — streaming structured data and generative UI primitives in TypeScript.
+- [Tools in AI: The Rise of MCP and the Future of Agentic Systems](tools-in-ai-mcp-and-future.md) — how tool ecosystems supply the structured capabilities behind generated interfaces.
+- [Human in the Loop (HITL) AI](human-in-the-loop.md) — interactive clarification and approval patterns in agent UIs.
+- [Antigravity with Stitch: The AI-Powered Development Workflow](antigravity-with-stitch.md) — bridging AI-generated UI designs directly into code.

@@ -75,6 +75,13 @@ Both are discouraged and removed in OAuth 2.1 due to security risks. <citation s
 
 Use RFC 6749 for the protocol details, `oauth.net` for practical guidance and extensions (like PKCE, device flow, and OAuth 2.1 updates), and adhere to current security BCPs (Best Current Practices) when implementing. <citation src="1,2,5"></citation>
 
+## Related Articles
+
+- [OpenID Connect (OIDC): Introduction, Walkthrough, and History](oidc-protocol-introduction-and-history.md) — how OIDC layers authentication and ID Tokens on top of OAuth 2.0.
+- [OIDC Changes in the OAuth 2.0 to 2.1 Transition](oidc-changes-oauth2-to-oauth21.md) — PKCE mandates, removal of implicit/ROPC flows, and sender-constrained tokens.
+- [Policy Brain: ABAC and the Future of Authorization](policy-brain-abac-and-future.md) — moving from token scopes to fine-grained, context-aware authorization.
+- [National-Scale SSO Requirements: A Checklist for a Billion Users](../design/national-sso-requirements.md) — applying federated auth standards at population scale.
+
 ## References
 
 1. [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)

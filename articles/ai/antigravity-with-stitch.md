@@ -20,3 +20,11 @@ The magic happens when these two tools are connected using the Model Context Pro
 ## Why It Matters
 
 This combination is frequently discussed as a game-changing approach to building full-stack applications. It significantly reduces the manual effort required to translate visual designs into code, enabling rapid prototyping and accelerating the development lifecycle.
+
+---
+
+## Related Articles
+
+- [How to Connect Google Stitch to Your Workflow: A Step-by-Step Guide](how-to-connect-google-stitch.md) — step-by-step setup for connecting Stitch via Figma or MCP.
+- [MCP: The Future of the Model Context Protocol and Its Alternatives](mcp-future-and-alternatives.md) — the protocol connecting Stitch design context to Antigravity agents.
+- [Generative UI for Agents](generative-ui-for-agents.md) — how AI models synthesize dynamic user interfaces on demand.

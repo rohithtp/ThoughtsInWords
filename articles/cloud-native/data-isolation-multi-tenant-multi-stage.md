@@ -251,3 +251,12 @@ Manual tenant provisioning is an operational bottleneck that doesn't scale. Auto
 ## Conclusion
 
 Data isolation in a multi-tenant, multi-stage world is not a single architectural decision — it's a **system of layered boundaries**. Start by choosing your tenant isolation model based on regulatory and commercial constraints. Layer multi-stage isolation on top with IaC parity, strict data promotion policies, and ephemeral environments. Then wrap the whole thing in defense-in-depth: per-tenant encryption, workload governance, and automated lifecycle management. The platforms that get this right don't just avoid breaches — they turn isolation into a competitive advantage, offering enterprise tenants the confidence to trust them with their most sensitive data.
+
+---
+
+## Related Articles
+
+- [Air-Gapped Environment Development and Deployment: Data Isolation Behind the Wall](air-gapped-environment-development-deployment.md) — extending isolation boundaries to fully disconnected networks.
+- [Sandbox and Ephemeral Identity Primitives](sandbox-ephemeral-identity-primitive.md) — short-lived execution and identity boundaries for multi-tenant workloads.
+- [Vercel Sandbox: An Ephemeral Compute Primitive](vercel-sandbox.md) — microVM isolation for untrusted code execution.
+- [National-Scale SSO Requirements: A Checklist for a Billion Users](../design/national-sso-requirements.md) — enforcing tenant and citizen boundaries at identity scale.

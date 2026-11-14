@@ -51,3 +51,12 @@ Proactive monitoring is required to detect anomalies, performance degradation, o
 
 ## Conclusion
 Building a national-scale SSO is not just a software engineering challenge; it is a critical infrastructure project. By adhering to these principles of scalability, security, and inclusivity, governments and large-scale enterprises can provide a resilient digital identity foundation for their citizens.
+
+---
+
+## Related Articles
+
+- [OpenID Connect (OIDC): Introduction, Walkthrough, and History](../devops/oidc-protocol-introduction-and-history.md) — the core identity federation protocol behind modern SSO.
+- [OIDC Changes in the OAuth 2.0 to 2.1 Transition](../devops/oidc-changes-oauth2-to-oauth21.md) — modern security baselines including mandatory PKCE and FAPI profiles.
+- [Role-Based Access Control (RBAC) vs. Modular Role-Focused Applications](rbac-vs-modular-role-focused-applications.md) — structuring downstream applications around verified identity roles.
+- [Data Isolation Strategies: Keeping Multi-Tenant and Multi-Stage Data in a Data Silo](../cloud-native/data-isolation-multi-tenant-multi-stage.md) — isolating citizen and tenant data behind identity boundaries.

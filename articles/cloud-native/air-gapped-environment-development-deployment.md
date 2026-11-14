@@ -445,3 +445,12 @@ The same rule from connected environments applies with even more force:
 ## Conclusion
 
 Air-gapped development and deployment is not about building a wall and hoping for the best. It's about **engineering the boundary** — making every byte that crosses it auditable, verifiable, and reconstructable — while building a **self-sustaining internal ecosystem** that gives developers and operators the same capabilities they'd have in a connected world. The shift in mindset from "preventing connection" to "managing the boundary" is what separates functional air-gapped environments from ones where engineers spend more time fighting the infrastructure than shipping software. Combine this with rigorous multi-tenant isolation (per-tenant encryption, namespace segmentation, internal PKI) and disciplined multi-stage promotion (immutable artifacts, automated gates, synthetic data), and you have a data silo architecture that's both fortress-grade secure and operationally viable.
+
+---
+
+## Related Articles
+
+- [Data Isolation Strategies: Keeping Multi-Tenant and Multi-Stage Data in a Data Silo](data-isolation-multi-tenant-multi-stage.md) — layered boundaries across tenants and deployment stages.
+- [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](../frontend/airgapped-font-cdn-anti-pattern.md) — why external asset dependencies break air-gapped frontends.
+- [Airgapped Production Font Deployment Guide](../frontend/airgapped-production-font-deployment.md) — practical frontend build and Nginx isolation patterns for disconnected networks.
+- [Mitigating Man-in-the-Middle (MITM) Attacks in Heterogeneous Distributed Applications](../distributed-systems/mitm-in-heterogeneous-distributed-applications.md) — internal PKI, mTLS, and boundary verification.

@@ -179,6 +179,15 @@ The future of authorization is intelligent, continuous, and adaptive. Policies w
 
 ---
 
+## Related Articles
+
+- [Role-Based Access Control (RBAC) vs. Modular Role-Focused Applications](../design/rbac-vs-modular-role-focused-applications.md) — architectural boundaries for separating user roles at the application layer.
+- [Understanding OAuth 2.0](understanding-oauth2.md) — delegated authorization and access tokens.
+- [OpenID Connect (OIDC): Introduction, Walkthrough, and History](oidc-protocol-introduction-and-history.md) — standardizing identity claims consumed by policy engines.
+- [Sandbox and Ephemeral Identity Primitives](../cloud-native/sandbox-ephemeral-identity-primitive.md) — dynamic, attribute-bound credentials for ephemeral workloads.
+
+---
+
 ## References
 
 - [Open Policy Agent (OPA)](https://www.openpolicyagent.org/)

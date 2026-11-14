@@ -270,6 +270,8 @@ The OIDC ecosystem continues to evolve:
 
 - [Understanding OAuth 2.0](understanding-oauth2.md) — the authorization framework OIDC is built on.
 - [OIDC Changes in the OAuth 2.0 to 2.1 Transition](oidc-changes-oauth2-to-oauth21.md) — what changed between OAuth 2.0 and 2.1, and how it affects OIDC.
+- [Policy Brain: ABAC and the Future of Authorization](policy-brain-abac-and-future.md) — fine-grained policy evaluation beyond authentication claims.
+- [National-Scale SSO Requirements: A Checklist for a Billion Users](../design/national-sso-requirements.md) — designing federated identity systems for massive scale.
 
 ## References
 

@@ -25,3 +25,11 @@ HITL works through an iterative process where human input continuously refines t
 ## Conclusion
 
 While introducing humans into the loop can be resource-intensive compared to fully automated systems, the resulting synergy creates AI systems that are more robust, trustworthy, and capable. As AI continues to evolve, HITL remains a critical paradigm for deploying responsible and high-performing intelligent systems.
+
+---
+
+## Related Articles
+
+- [Tools in AI: The Rise of MCP and the Future of Agentic Systems](tools-in-ai-mcp-and-future.md) — designing tool boundaries and execution loops for autonomous agents.
+- [Generative UI for Agents](generative-ui-for-agents.md) — interactive interfaces for human clarification and review.
+- [Shadow AI: The Hidden Risk Inside Your Organization](shadow-ai.md) — governance risks when AI workflows operate without oversight.

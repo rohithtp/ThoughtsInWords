@@ -1,44 +1,130 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-README_FILE="articles/README.md"
-MISSING_FILES=0
+python3 - <<'PY'
+import glob
+import os
+import re
+import sys
 
-echo "Checking links in $README_FILE..."
+errors = []
 
-# Extract links using grep and sed
-# Pattern matches standard markdown links [text](path)
-# We assume paths are relative to the root or relative to the README. 
-# based on the README content: `articles/ai/vercel_ai_sdk_6.md`, these are relative to workspace root if running from root, 
-# OR relative to README if they are `ai/vercel...`?
-# Let's check the content of README again.
-# " [`ai/vercel_ai_sdk_6.md`](ai/vercel_ai_sdk_6.md)"
-# So the link is `ai/vercel_ai_sdk_6.md`.
-# The README is in `articles/`.
-# So `articles/ai/vercel_ai_sdk_6.md` relative to `articles/` is `ai/vercel_ai_sdk_6.md`.
-# So the paths in README are relative to `articles/`.
+def strip_code(text: str) -> str:
+    # Remove fenced code blocks and inline code spans so example snippets are ignored
+    text = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+    text = re.sub(r"`[^`\n]+`", "", text)
+    return text
 
-grep -o ']([^)]*)' "$README_FILE" | sed 's/](//;s/)//' | while read -r link; do
-  # Skip http links
-  if [[ "$link" == http* ]]; then
-    continue
-  fi
+def extract_md_links(text: str):
+    cleaned = strip_code(text)
+    links = []
+    for raw in re.findall(r"\[[^\]]*\]\(([^)]+)\)", cleaned):
+        target = raw.split("#", 1)[0].strip()
+        if not target or target.startswith(("http://", "https://", "mailto:")):
+            continue
+        if target.endswith(".md"):
+            links.append(target)
+    return links
 
-  # Construct full path
-  # The README is in `articles/`, so we prepend `articles/` to the link path
-  FULL_PATH="articles/$link"
+# Discover all articles on disk
+all_articles = sorted(
+    f for f in glob.glob("articles/**/*.md", recursive=True)
+    if f != "articles/README.md"
+)
 
-  if [ ! -f "$FULL_PATH" ]; then
-    echo "❌ Missing: $FULL_PATH (referenced as $link)"
-    MISSING_FILES=1
-  else
-    echo "✅ Found: $FULL_PATH"
-  fi
-done
+# Check 1: Every relative .md link in articles/README.md resolves to an existing file in articles/
+with open("articles/README.md", encoding="utf-8") as fh:
+    readme_text = fh.read()
 
-if [ $MISSING_FILES -eq 0 ]; then
-  echo "All links are valid!"
-  exit 0
-else
-  echo "Some links are broken."
-  exit 1
-fi
+readme_links = extract_md_links(readme_text)
+resolved_readme_targets = set()
+broken_readme = []
+
+for link in readme_links:
+    full_path = os.path.normpath(os.path.join("articles", link))
+    if not os.path.isfile(full_path):
+        broken_readme.append((link, full_path))
+    else:
+        resolved_readme_targets.add(full_path)
+
+if broken_readme:
+    for link, full_path in broken_readme:
+        errors.append(f"[Check 1] Broken link in articles/README.md: {link} -> {full_path}")
+else:
+    print(f"✅ Check 1 passed: All {len(readme_links)} links in articles/README.md resolve to existing files.")
+
+# Also verify relative .md links in root README.md
+if os.path.isfile("README.md"):
+    with open("README.md", encoding="utf-8") as fh:
+        root_links = extract_md_links(fh.read())
+    for link in root_links:
+        full_path = os.path.normpath(link)
+        if not os.path.isfile(full_path):
+            errors.append(f"[Check 1b] Broken link in README.md: {link} -> {full_path}")
+
+# Check 2: Every .md file under articles/ (excluding articles/README.md) is referenced in articles/README.md
+unlisted = sorted(set(all_articles) - resolved_readme_targets)
+if unlisted:
+    for path in unlisted:
+        errors.append(f"[Check 2] Unlisted article missing from articles/README.md: {path}")
+else:
+    print(f"✅ Check 2 passed: All {len(all_articles)} articles on disk are indexed in articles/README.md (0 orphans).")
+
+# Check 3: Every relative .md link inside every article resolves cleanly
+broken_internal = []
+internal_link_count = 0
+linked_articles = 0
+
+for article in all_articles:
+    with open(article, encoding="utf-8") as fh:
+        content = fh.read()
+    links = extract_md_links(content)
+    if links:
+        linked_articles += 1
+    article_dir = os.path.dirname(article)
+    for link in links:
+        internal_link_count += 1
+        target_path = os.path.normpath(os.path.join(article_dir, link))
+        if not os.path.isfile(target_path):
+            broken_internal.append((article, link, target_path))
+
+if broken_internal:
+    for article, link, target_path in broken_internal:
+        errors.append(f"[Check 3] Broken internal link in {article}: {link} -> {target_path}")
+else:
+    print(f"✅ Check 3 passed: All {internal_link_count} internal cross-links across {linked_articles} articles resolve cleanly.")
+
+# Check 4: Zero empty directories under articles/ and 100% lowercase kebab-case.md filenames
+empty_dirs = []
+for root, dirs, files in os.walk("articles"):
+    if not dirs and not files:
+        empty_dirs.append(root)
+
+kebab_re = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*\.md$")
+non_kebab = []
+for article in all_articles:
+    basename = os.path.basename(article)
+    if not kebab_re.match(basename):
+        non_kebab.append(article)
+
+if empty_dirs:
+    for d in empty_dirs:
+        errors.append(f"[Check 4] Empty directory under articles/: {d}")
+if non_kebab:
+    for path in non_kebab:
+        errors.append(f"[Check 4] Filename is not lowercase kebab-case.md: {path}")
+if not empty_dirs and not non_kebab:
+    print(f"✅ Check 4 passed: 0 empty directories and 100% lowercase kebab-case.md compliance ({len(all_articles)} files).")
+
+print("\n--- Summary ---")
+print(f"Total articles: {len(all_articles)}")
+print(f"Articles with internal links: {linked_articles} ({internal_link_count} total links)")
+
+if errors:
+    print("\n❌ Verification failed:")
+    for err in errors:
+        print(" ", err)
+    sys.exit(1)
+
+print("\n🎉 All checks passed!")
+PY

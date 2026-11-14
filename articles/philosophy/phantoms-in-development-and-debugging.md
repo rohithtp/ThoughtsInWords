@@ -250,6 +250,15 @@ That is the practice of phantom-resilient information development. It is not gla
 
 ---
 
+## Related Articles
+
+- [Chasing the Phantom in Information Development](chasing-the-phantom-in-information-development.md) — the core metaphor behind pursuing moving targets in knowledge systems.
+- [Chasing Different Phantoms in Information Development](chasing-different-phantoms-in-information-development.md) — a taxonomy of distinct phantoms across documentation and knowledge bases.
+- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](the-slow-navigator-framework.md) — separating real technical anomalies from reactive panic during debugging.
+- [Postmortem: An Emotional Retrospective](postmortem-emotional-retrospective.md) — processing the human side of incidents and system failures.
+
+---
+
 ## References
 
 - [The Heisenbug Phenomenon](https://en.wikipedia.org/wiki/Heisenbug) — Wikipedia overview of observer-dependent defects

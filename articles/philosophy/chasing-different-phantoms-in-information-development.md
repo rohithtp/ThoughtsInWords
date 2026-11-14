@@ -198,6 +198,15 @@ The phantoms are not the enemy of good documentation. They are the reason good d
 
 ---
 
+## Related Articles
+
+- [Chasing the Phantom in Information Development](chasing-the-phantom-in-information-development.md) — the foundational exploration of pursuing elusive perfection in technical knowledge.
+- [Phantoms in Development and Debugging](phantoms-in-development-and-debugging.md) — applying phantom-resilient habits to debugging and software reliability.
+- [Organizing Thoughts: Different Approaches](organizing-thoughts-different-approaches.md) — choosing structures that match how knowledge evolves.
+- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](the-slow-navigator-framework.md) — handling hesitation and scope creep during knowledge work.
+
+---
+
 ## References
 
 - [The Diataxis Framework](https://diataxis.fr/) — A systematic approach to technical documentation

@@ -41,3 +41,12 @@ Dan McKinley's concept of "Choose Boring Technology" is a pillar of ageless desi
 ## Conclusion
 
 Ageless programming is not about refusing to learn new things. It is about distinguishing between the ephemeral and the foundational. By investing in timeless principles—simplicity, clarity, modularity, and stability—we create software that respects the time and sanity of those who come after us.
+
+---
+
+## Related Articles
+
+- [The Architecture of the "Disposable" Core](../design/architecture-of-disposable-core.md) — isolating volatile cores behind stable interfaces for graceful replacement.
+- [The Silent Architecture of Utility Modules](../design/silent-architecture-of-utility-modules.md) — why defensive rigor in small foundational helpers sustains long-lived systems.
+- [File Over App: A Manifesto for Digital Longevity](file-over-app-manifesto.md) — applying longevity principles to personal knowledge and plain-text archives.
+- [Egoless Programming](egoless-programming.md) — collaborative craftsmanship and detachment from personal code ego.

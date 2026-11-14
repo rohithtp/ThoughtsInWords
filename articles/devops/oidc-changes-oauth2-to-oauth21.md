@@ -156,6 +156,13 @@ Not everything changes. The core OIDC concepts remain intact:
 - **Client Credentials** flow for machine-to-machine auth remains in OAuth 2.1.
 - **Device Code** flow for input-limited devices remains in OAuth 2.1.
 
+## Related Articles
+
+- [Understanding OAuth 2.0](understanding-oauth2.md) — foundational OAuth 2.0 flows and terminology.
+- [OpenID Connect (OIDC): Introduction, Walkthrough, and History](oidc-protocol-introduction-and-history.md) — full walkthrough of OIDC flows, claims, and specifications.
+- [National-Scale SSO Requirements: A Checklist for a Billion Users](../design/national-sso-requirements.md) — security, resilience, and PKCE/FAPI baselines at scale.
+- [Sandbox and Ephemeral Identity Primitives](../cloud-native/sandbox-ephemeral-identity-primitive.md) — short-lived OIDC workload identities in isolated compute.
+
 ## References
 
 1. [RFC 6749 — OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc6749)

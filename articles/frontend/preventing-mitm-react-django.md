@@ -97,3 +97,11 @@ If your React application is packaged as a mobile or desktop app (e.g., via Reac
 | Domain/Origin Spoofing | Strict `CORS_ALLOWED_ORIGINS` | Django `django-cors-headers` |
 | Malicious Injection in Frontend | Content Security Policy (CSP) | Nginx Headers / Django |
 | Native Client Interception | Certificate/Public Key Pinning | Native React Client Layer |
+
+---
+
+## Related Articles
+
+- [Mitigating Man-in-the-Middle (MITM) Attacks in Heterogeneous Distributed Applications](../distributed-systems/mitm-in-heterogeneous-distributed-applications.md) — multi-layer defense across React, API gateways, and Python backends including DPoP and mTLS.
+- [Air-Gapped Environment Development and Deployment: Data Isolation Behind the Wall](../cloud-native/air-gapped-environment-development-deployment.md) — managing internal certificate authorities and isolated network boundaries.
+- [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](airgapped-font-cdn-anti-pattern.md) — eliminating risky external CDN calls from strict CSP configurations.

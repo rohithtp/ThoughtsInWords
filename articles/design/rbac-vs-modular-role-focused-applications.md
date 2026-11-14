@@ -64,3 +64,12 @@ An alternative approach is to decouple the user interfaces based on the user's r
 ## Conclusion
 
 Neither approach is inherently superior. The decision between comprehensive RBAC within a single application and a suite of modular, role-based applications hinges on your organization's security requirements, the complexity of user workflows, and the maturity of your engineering infrastructure. As systems scale and security becomes a higher priority, the modular approach is increasingly becoming the architecture of choice for complex enterprise applications.
+
+---
+
+## Related Articles
+
+- [Policy Brain: ABAC and the Future of Authorization](../devops/policy-brain-abac-and-future.md) — evolving beyond static roles into attribute- and relationship-based access control.
+- [National-Scale SSO Requirements: A Checklist for a Billion Users](national-sso-requirements.md) — identity foundations for multi-application, multi-role ecosystems.
+- [The Architecture of the "Disposable" Core](architecture-of-disposable-core.md) — keeping modular application boundaries clean for independent replacement.
+- [The Silent Architecture of Utility Modules](silent-architecture-of-utility-modules.md) — ensuring shared auth/validation helpers don't become cross-app failure points.

@@ -68,3 +68,11 @@ Whether you are using Figma or Antigravity, connection is not a one-time event.
 ## Conclusion
 
 Connecting Google Stitch effectively bridges the gap between rapid ideation and concrete implementation. By integrating it into Figma or leveraging MCP for direct IDE access, you can significantly reduce the friction of the design-to-code lifecycle, keeping your focus on building great products rather than translating mockups.
+
+---
+
+## Related Articles
+
+- [Antigravity with Stitch: The AI-Powered Development Workflow](antigravity-with-stitch.md) — architectural overview of the Stitch + Antigravity pipeline.
+- [MCP: The Future of the Model Context Protocol and Its Alternatives](mcp-future-and-alternatives.md) — how MCP tool servers standardize IDE-to-design integrations.
+- [Tools in AI: The Rise of MCP and the Future of Agentic Systems](tools-in-ai-mcp-and-future.md) — broader landscape of agentic tool protocols.

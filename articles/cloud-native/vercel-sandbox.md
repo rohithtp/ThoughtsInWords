@@ -47,3 +47,11 @@ Vercel Sandbox is not for hosting your user-facing website (which is what Vercel
 ## Conclusion
 
 Vercel Sandbox represents a shift in how serverless platforms approach arbitrary code execution. By providing a fast, programmable, and highly secure microVM environment, Vercel bridges the gap between front-end hosting and low-level, safe compute resources for AI and modern development workflows.
+
+---
+
+## Related Articles
+
+- [Sandbox and Ephemeral Identity Primitives](sandbox-ephemeral-identity-primitive.md) — pairing isolated compute sandboxes with short-lived workload credentials.
+- [Data Isolation Strategies: Keeping Multi-Tenant and Multi-Stage Data in a Data Silo](data-isolation-multi-tenant-multi-stage.md) — broader isolation architectures across tenants and stages.
+- [From Source to Sandbox: Decoupling the Modern Open-Source Code Editor](../tools/decoupling-modern-code-editor.md) — moving developer tooling into isolated sandbox environments.

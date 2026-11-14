@@ -67,3 +67,11 @@ Instead of accepting an emotional reaction as truth, examine it. Reframing is th
 Objectivity is not the absence of emotion, but the ability to account for it. By integrating emotional intelligence with critical analysis, we avoid the pitfalls of bias and reactivity. 
 
 We become not just better thinkers, but more effective decision-makers who can navigate complex, high-stakes environments with clarity and composure. True critical thinking requires us to think with our heads while listening to—and managing—our hearts.
+
+---
+
+## Related Articles
+
+- [Critical Thinking: Navigating Emotional Multitudes](critical-thinking-emotional-multitudes.md) — understanding the visceral, subconscious, and relational layers of emotion.
+- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](the-slow-navigator-framework.md) — concrete checkpoints to resist impulsive swerves and analysis paralysis.
+- [Postmortem: An Emotional Retrospective](postmortem-emotional-retrospective.md) — applying objective reflection to emotionally charged project reviews.

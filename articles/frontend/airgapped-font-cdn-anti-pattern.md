@@ -106,6 +106,14 @@ graph LR
 
 ---
 
+## Related Articles
+
+- [Airgapped Production Font Deployment Guide](airgapped-production-font-deployment.md) — step-by-step migration, auditing, and self-hosted asset deployment in React.
+- [Air-Gapped Environment Development and Deployment: Data Isolation Behind the Wall](../cloud-native/air-gapped-environment-development-deployment.md) — broader infrastructure patterns for disconnected software delivery.
+- [Preventing MITM Attacks in React + Django](preventing-mitm-react-django.md) — enforcing strict CSP and eliminating untrusted third-party origins.
+
+---
+
 ## References
 
 - [Airgapped Production Font Deployment Guide](./airgapped-production-font-deployment.md) — Step-by-step React implementation, auditing, and Nginx/Service Worker configuration.
