@@ -17,7 +17,7 @@ Articles are organized by **topic** (domain folders) rather than chronologically
 ```text
 articles/
 ├── README.md              # This index
-├── ai/                    # Artificial Intelligence & ML (16)
+├── ai/                    # Artificial Intelligence & ML (17)
 │   ├── Agents & Tooling
 │   └── Strategy & Impact
 ├── cloud-native/          # Cloud-native architecture & isolation (5)
@@ -58,11 +58,11 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 2. Create a new markdown file using `kebab-case.md` (e.g., `my-topic.md`) and include a `## Related Articles` footer.
 3. Link it in the index below using title-first format and update the category count.
 
-## Category Directory (111 Articles)
+## Category Directory (112 Articles)
 
 | Category | Articles | Subsections |
 | :--- | :---: | :--- |
-| [AI](#ai) | 16 | Agents & Tooling (7), Strategy & Impact (9) |
+| [AI](#ai) | 17 | Agents & Tooling (8), Strategy & Impact (9) |
 | [Cloud Native](#cloud-native) | 5 | — |
 | [Design](#design) | 8 | — |
 | [DevOps & Infrastructure](#devops--infrastructure) | 21 | APIs & Specs (6), Auth (4), Git (4), Ops (2), Platform (5) |
@@ -96,6 +96,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Generative UI for Agents](ai/generative-ui-for-agents.md)
 - [How to Connect Google Stitch to Your Workflow: A Step-by-Step Guide](ai/how-to-connect-google-stitch.md)
 - [Human in the Loop (HITL) AI](ai/human-in-the-loop.md)
+- [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](ai/local-llm-lifecycle-ollama-model-management.md) [NEW]
 - [MCP: The Future of the Model Context Protocol and Its Alternatives](ai/mcp-future-and-alternatives.md)
 - [Tools in AI: The Rise of MCP and the Future of Agentic Systems](ai/tools-in-ai-mcp-and-future.md)
 - [Vercel AI SDK 6 Overview](ai/vercel-ai-sdk-6.md)
@@ -128,7 +129,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [The Architecture of the "Disposable" Core: Designing for Graceful Obsolescence](design/architecture-of-disposable-core.md)
 - [The Evolution of UI Interactions and Aesthetics](design/evolution-of-ui-interactions-and-aesthetics.md)
 - [The Purple Renaissance: Design Trends & Aesthetic Evolution (2025–2026)](design/purple-design-aesthetic-trends-2026.md)
-- [The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems](design/silent-architecture-of-utility-modules.md)
+- [The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems](design/silent-architecture-of-utility-modules.md) [NEW]
 - [Varying Goals and Actualities in Design: The Gap Between Intent and Delivery](design/varying-goals-and-actualities-in-design.md)
 
 ### DevOps & Infrastructure
@@ -218,8 +219,8 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Critical Thinking: Managing Emotions for Objective Results](philosophy/critical-thinking-managing-emotions.md)
 - [Critical Thinking: Navigating Emotional Multitudes](philosophy/critical-thinking-emotional-multitudes.md)
 - [Postmortem: An Emotional Retrospective](philosophy/postmortem-emotional-retrospective.md)
-- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md)
-- [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md)
+- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md) [NEW]
+- [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md) [NEW]
 
 #### Information & Thought
 

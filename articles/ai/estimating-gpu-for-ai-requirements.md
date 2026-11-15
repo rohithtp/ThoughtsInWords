@@ -155,3 +155,8 @@ Run a short pilot with representative data at your target batch size and sequenc
 GPU estimation for AI is not a single calculation—it is a workflow. Start with the parameter count, apply precision and overhead multipliers, account for whether you are training or serving, and validate against real hardware. The difference between a well-estimated GPU budget and a guess can be thousands of dollars per month in cloud costs or the difference between a project that ships and one that stalls in infrastructure procurement.
 
 The field is moving fast. Quantization techniques improve every quarter, new hardware generations shift the boundaries of what fits on a single card, and frameworks continuously optimize their memory efficiency. Treat your GPU estimates as living documents—revisit them as your models, workloads, and available hardware evolve.
+
+## Related Articles
+
+- [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](local-llm-lifecycle-ollama-model-management.md) — managing local model weights, quantization tags, and VRAM/storage hygiene with Ollama.
+- [Transitioning from CPU to GPU: A Scalable Deployment Strategy](cpu-to-gpu-transition-strategy.md) — scaling inference workloads from CPU baselines to GPU-accelerated infrastructure.

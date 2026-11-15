@@ -43,14 +43,19 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 
 ## Explore the Digital Garden
 
-* **[Browse Full Article Index (111 Articles)](./articles/README.md)**
-* **Latest Addition:** [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](./articles/distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md) `[NEW]`
+* **[Browse Full Article Index (112 Articles)](./articles/README.md)**
+* **Recent Additions (7-Day Window, Min 3 / Max 5):**
+  * [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](./articles/ai/local-llm-lifecycle-ollama-model-management.md) *(Nov 15, 2026)* `[NEW]`
+  * [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](./articles/distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md) *(Nov 15, 2026)* `[NEW]`
+  * [The Split Inside the Human Mind](./articles/philosophy/the-split-inside-the-human-mind.md) *(Nov 14, 2026)* `[NEW]`
+  * [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](./articles/philosophy/the-slow-navigator-framework.md) *(Nov 14, 2026)* `[NEW]`
+  * [The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems](./articles/design/silent-architecture-of-utility-modules.md) *(Nov 13, 2026)* `[NEW]`
 
 ### Browse by Topic
 
 | Category | Count | Focus Areas |
 | :--- | :---: | :--- |
-| [AI](./articles/README.md#ai) | 16 | Agents, MCP, Generative UI, GPU sizing, and AI strategy |
+| [AI](./articles/README.md#ai) | 17 | Agents, MCP, Generative UI, GPU sizing, and AI strategy |
 | [Cloud Native](./articles/README.md#cloud-native) | 5 | Air-gapped workflows, multi-tenant isolation, ephemeral sandboxes |
 | [Design](./articles/README.md#design) | 8 | UI/UX evolution, national SSO, disposable cores, utility architecture |
 | [DevOps & Infrastructure](./articles/README.md#devops--infrastructure) | 21 | API specs, OAuth/OIDC/ABAC, Git/JJ, observability, Kubernetes & scaling |

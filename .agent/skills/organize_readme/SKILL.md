@@ -21,17 +21,17 @@ When the user asks to "organize readme", "fix links", or "update index":
    * Check every link in `articles/README.md`, root `README.md`, and internal cross-links across articles.
    * If a link points to a missing path, check if the file was moved or renamed in `articles/` and update the link to point to the existing file path.
 
-3. **Add Unlisted Files & Enforce Title-First Formatting**:
+3. **Add Unlisted Files, Enforce Title-First Formatting & Sync Hybrid Window `[NEW]` Tags**:
    * Identify files found in the scan that are not listed in `articles/README.md`.
    * Ensure all index entries use title-first formatting:
      `- [Article Title / Summary]([category]/[kebab-case-slug].md)`
-   * If unlisted files are added:
-     * **Remove Existing Tags**: Strip any existing `[NEW]` tags from all entries in `articles/README.md` so only the newest entry carries `[NEW]` after the link.
-     * Determine the appropriate category (and subsection) from the parent folder name and content, then insert the title-first entry alphabetically.
-     * *(If multiple unlisted files are added at once, apply `[NEW]` only to the latest one.)*
-   * If no new files are added, ensure at most one `[NEW]` tag remains in `articles/README.md`.
+   * Apply the **Hybrid Window `[NEW]` Policy** across all dated articles:
+     * Compute the active cohort from each article's `**Date:** Month Day, Year` header: include all articles published within **7 days** of the newest article's `**Date:**`, bounded by a **minimum of 3** and a **maximum of 5** articles (`expected_count = min(5, max(3, count_within_7_days))`).
+     * Ensure `README.md` lists those exact cohort articles (newest first) under `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` with `` `[NEW]` ``.
+     * Ensure `articles/README.md` carries `[NEW]` on those exact same cohort entries under `## Article Index`, and remove `[NEW]` from any entries outside the cohort.
+   * For any newly discovered unlisted files, determine the appropriate category (and subsection) from the parent folder name and content, then insert the title-first entry alphabetically (with `[NEW]` if it belongs to the active cohort).
 
 4. **Sync Counts & Verify**:
    * Update category and total article counts in `articles/README.md` (`## Organization`, `## Category Directory`) and root `README.md` (`## Explore the Digital Garden`).
-   * Update the Latest Addition link in root `README.md` to match the entry marked `[NEW]`.
-   * Run `bash verify_links.sh` and confirm all 4 checks pass with exit code `0`.
+   * Verify that the `[NEW]` set in `README.md` (`Recent Additions`) matches `articles/README.md` 1-to-1.
+   * Run `bash verify_links.sh` and confirm all 5 checks pass with exit code `0`.

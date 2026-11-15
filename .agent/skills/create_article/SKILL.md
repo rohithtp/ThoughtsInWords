@@ -19,7 +19,7 @@ When the user asks to "create a new article" or "add a summary of [URL]":
 
 2. **Generate Content & Cross-Links**:
    * Create a summary or full article in Markdown format.
-   * Include metadata at the top:
+   * Include metadata at the top — every new article **MUST** include `**Date:** Month Day, Year` (e.g., `**Date:** November 15, 2026`) so the Hybrid Window `[NEW]` lifecycle and verification checks can rank recency accurately:
      ```markdown
      # Title of Article
 
@@ -40,16 +40,20 @@ When the user asks to "create a new article" or "add a summary of [URL]":
    * Always use lowercase `kebab-case.md` for the filename: `articles/[category]/[kebab-case-slug].md`.
    * Never use underscores (`_`) or uppercase characters in article filenames.
 
-4. **Update Index & Manage `[NEW]` Tag**:
-   * Open `articles/README.md`.
-   * **Remove Existing Tags**: Remove any existing `[NEW]` tags across all entries in `articles/README.md` (and update the Latest Addition callout in root `README.md`).
-   * **Find Category Header**: Locate the appropriate category (and subsection, if applicable) under `## Article Index`.
-   * **Add Title-First Entry**: Insert a title-first link in alphabetical order within the section, with `[NEW]` placed after the link:
-     `- [Article Title / Summary]([category]/[kebab-case-slug].md) [NEW]`
-   * **Update Counts**: Increment the total and category article counts in `articles/README.md` (`## Organization`, `## Category Directory`) and root `README.md` (`## Explore the Digital Garden`).
+4. **Update Index & Manage `[NEW]` Tags (Hybrid Window Policy)**:
+   * **Hybrid Window `[NEW]` Policy**: Multiple articles can hold `[NEW]` simultaneously. Keep `[NEW]` on all articles published within **7 days** of the newest article's `**Date:**`, bounded by a **minimum of 3** and a **maximum of 5** articles (`expected_count = min(5, max(3, count_within_7_days))`).
+   * **Update Root `README.md`**:
+     * Open `README.md` and prepend the new article(s) to `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` in reverse chronological order (newest first), formatted as:
+       `* [Article Title](./articles/[category]/[kebab-case-slug].md) *(Mon DD, YYYY)* \`[NEW]\``
+     * Evict any older entries from `Recent Additions` that fall outside the 7-day window (while keeping at least 3) or exceed the maximum cap of 5. Track which entries were evicted.
+   * **Update `articles/README.md`**:
+     * Remove `[NEW]` **only** from the entries that were evicted from `Recent Additions` (leave `[NEW]` intact on articles still within the active cohort).
+     * Locate the appropriate category (and subsection, if applicable) under `## Article Index` and insert a title-first link in alphabetical order, with `[NEW]` placed after the link:
+       `- [Article Title / Summary]([category]/[kebab-case-slug].md) [NEW]`
+     * Increment the total and category article counts in `articles/README.md` (`## Organization`, `## Category Directory`) and root `README.md` (`## Explore the Digital Garden`).
 
 5. **Verify Repository Health**:
-   * Run `bash verify_links.sh` and confirm all checks pass with exit code `0`.
+   * Run `bash verify_links.sh` and confirm all 5 checks pass with exit code `0`.
 
 ## Example
 
@@ -57,8 +61,8 @@ When the user asks to "create a new article" or "add a summary of [URL]":
 
 **Action:**
 1. Read URL.
-2. Write `articles/frontend/react-compiler-overview.md` with a `## Related Articles` footer.
-3. Remove any existing `[NEW]` tags in `articles/README.md`.
-4. Add entry to `articles/README.md` under `### Frontend`:
+2. Write `articles/frontend/react-compiler-overview.md` with `**Date:** Month Day, Year` at the top and a `## Related Articles` footer.
+3. Prepend the article to `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` in `README.md`, keeping all entries within 7 days of the latest date (min 3, max 5) and noting any evicted entry.
+4. Remove `[NEW]` only from any evicted entry in `articles/README.md`, and add the new entry under `### Frontend`:
    `- [React Compiler Overview](frontend/react-compiler-overview.md) [NEW]`
-5. Update counts in `articles/README.md` and `README.md`, then run `bash verify_links.sh`.
+5. Update counts in `articles/README.md` and `README.md`, then run `bash verify_links.sh` (Checks 1–5 pass).
