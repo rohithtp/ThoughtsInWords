@@ -387,3 +387,10 @@ def handle_payment_command(command: ProcessPaymentCommand, db_session):
 3. **Prefer Orchestration for Complex Workflows:** While choreography works for small, simple pipelines, orchestration engines (e.g., Temporal, Step Functions) provide essential observability, centralized state management, and timeout governance for mission-critical workflows.
 4. **Guard Against Concurrency Anomalies:** Always apply semantic locking, version checks (OCC), and commutative update patterns to mitigate the lack of distributed transaction isolation.
 5. **Anchor with the Outbox Pattern:** Never decouple database writes from event publication. Use the Transactional Outbox Pattern to guarantee message delivery reliability across service boundaries.
+
+---
+
+## Related Articles
+
+- [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](quick-commerce-eventual-consistency-architecture-gap.md) — a real-world e-commerce case where sub-hour physical fulfillment exposes eventual consistency and dual-OMS integration gaps.
+- [Lightweight Apache Kafka Alternatives](lightweight-apache-kafka-alternatives.md) — messaging and streaming brokers used to implement choreographed sagas and transactional outbox relays.

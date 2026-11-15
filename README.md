@@ -43,8 +43,8 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 
 ## Explore the Digital Garden
 
-* **[Browse Full Article Index (110 Articles)](./articles/README.md)**
-* **Latest Addition:** [The Split Inside the Human Mind](./articles/philosophy/the-split-inside-the-human-mind.md) `[NEW]`
+* **[Browse Full Article Index (111 Articles)](./articles/README.md)**
+* **Latest Addition:** [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](./articles/distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md) `[NEW]`
 
 ### Browse by Topic
 
@@ -54,7 +54,7 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 | [Cloud Native](./articles/README.md#cloud-native) | 5 | Air-gapped workflows, multi-tenant isolation, ephemeral sandboxes |
 | [Design](./articles/README.md#design) | 8 | UI/UX evolution, national SSO, disposable cores, utility architecture |
 | [DevOps & Infrastructure](./articles/README.md#devops--infrastructure) | 21 | API specs, OAuth/OIDC/ABAC, Git/JJ, observability, Kubernetes & scaling |
-| [Distributed Systems](./articles/README.md#distributed-systems) | 4 | Distributed locks, Kafka alternatives, MITM mitigation, Sagas |
+| [Distributed Systems](./articles/README.md#distributed-systems) | 5 | Distributed locks, Kafka alternatives, MITM mitigation, Sagas |
 | [Environment](./articles/README.md#environment) | 2 | Atmospheric water generation and planetary magnetospheres |
 | [Frontend](./articles/README.md#frontend) | 16 | React, Expo, static search, air-gapped fonts, TypeScript, UI frameworks |
 | [Licensing](./articles/README.md#licensing) | 1 | Unlicense vs. CC0 open-source licensing |

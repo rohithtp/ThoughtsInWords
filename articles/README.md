@@ -28,7 +28,7 @@ articles/
 │   ├── Git & Version Control
 │   ├── Observability & Operations
 │   └── Platform & Scaling
-├── distributed-systems/   # Distributed systems & messaging (4)
+├── distributed-systems/   # Distributed systems & messaging (5)
 ├── environment/           # Climate & planetary systems (2)
 ├── frontend/              # Web development, mobile & frameworks (16)
 ├── licensing/             # Open source licensing (1)
@@ -58,7 +58,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 2. Create a new markdown file using `kebab-case.md` (e.g., `my-topic.md`) and include a `## Related Articles` footer.
 3. Link it in the index below using title-first format and update the category count.
 
-## Category Directory (110 Articles)
+## Category Directory (111 Articles)
 
 | Category | Articles | Subsections |
 | :--- | :---: | :--- |
@@ -66,7 +66,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 | [Cloud Native](#cloud-native) | 5 | — |
 | [Design](#design) | 8 | — |
 | [DevOps & Infrastructure](#devops--infrastructure) | 21 | APIs & Specs (6), Auth (4), Git (4), Ops (2), Platform (5) |
-| [Distributed Systems](#distributed-systems) | 4 | — |
+| [Distributed Systems](#distributed-systems) | 5 | — |
 | [Environment](#environment) | 2 | — |
 | [Frontend](#frontend) | 16 | — |
 | [Licensing](#licensing) | 1 | — |
@@ -174,6 +174,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Lightweight Apache Kafka Alternatives](distributed-systems/lightweight-apache-kafka-alternatives.md)
 - [Mitigating Man-in-the-Middle (MITM) Attacks in Heterogeneous Distributed Applications (React + Python)](distributed-systems/mitm-in-heterogeneous-distributed-applications.md)
 - [The Anatomy of a Distributed Lock and How It Differs from Physical Clocks](distributed-systems/anatomy-of-distributed-lock.md)
+- [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md) [NEW]
 - [The Saga Pattern: Managing Distributed Transactions and Eventual Consistency in Microservices](distributed-systems/saga-pattern-distributed-transactions.md)
 
 ### Environment
@@ -218,7 +219,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Critical Thinking: Navigating Emotional Multitudes](philosophy/critical-thinking-emotional-multitudes.md)
 - [Postmortem: An Emotional Retrospective](philosophy/postmortem-emotional-retrospective.md)
 - [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md)
-- [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md) [NEW]
+- [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md)
 
 #### Information & Thought
 
