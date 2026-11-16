@@ -45,6 +45,7 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 
 * **[Browse Full Article Index (113 Articles)](./articles/README.md)**
 * **[Browse Garden Activity Log & Changelog](./articles/CHANGELOG.md)**
+* **[Browse Expert & Architecture Review Reports](./reviews/README.md)**
 * **Recent Additions (7-Day Window, Min 3 / Max 5):**
   * [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](./articles/devops/design-first-partner-api-openapi-architecture.md) *(Nov 16, 2026)* `[NEW]`
   * [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](./articles/ai/local-llm-lifecycle-ollama-model-management.md) *(Nov 15, 2026)* `[NEW]`

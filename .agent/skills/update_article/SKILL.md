@@ -46,4 +46,5 @@ When the user asks to "update article", "expand", "revise", or "add a section to
      * If any `[UPDATED]` entry was rotated out of `Recently Updated`, note the rotation if appropriate.
 
 5. **Verify Repository Health**:
-   * Run `bash verify_links.sh` and confirm Checks 1–6 pass with exit code `0`.
+   * Run `bash verify_links.sh` and confirm Checks 1–7 pass with exit code `0`.
+   * *(Optional)* Run `.agent/skills/review_article/SKILL.md` to perform a full Reader Mode, Subject Matter Expert, and Technical Architect review and link a `0–10` Before/After report under `reviews/<category>/<slug>-review.md`.

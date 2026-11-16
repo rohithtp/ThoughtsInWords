@@ -58,7 +58,8 @@ When the user asks to "create a new article" or "add a summary of [URL]":
      * Record the new article under today's date in `articles/CHANGELOG.md` (`* **Added:** [Article Title](category/kebab-case-slug.md)`), along with any evicted `[NEW]` rotation notes (`* **Rotated (\`[NEW]\`):** ...`) so no trail is lost.
 
 5. **Verify Repository Health**:
-   * Run `bash verify_links.sh` and confirm all 6 checks pass with exit code `0`.
+   * Run `bash verify_links.sh` and confirm all 7 checks pass with exit code `0`.
+   * *(Optional)* Run `.agent/skills/review_article/SKILL.md` to perform a full Reader Mode, Subject Matter Expert, and Technical Architect review and link a `0–10` Before/After report under `reviews/<category>/<slug>-review.md`.
 
 ## Example
 
@@ -70,4 +71,4 @@ When the user asks to "create a new article" or "add a summary of [URL]":
 3. Prepend the article to `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` in `README.md`, keeping all entries within 7 days of the latest date (min 3, max 5) and noting any evicted entry.
 4. Remove `[NEW]` only from any evicted entry in `articles/README.md`, and add the new entry under `### Frontend`:
    `- [React Compiler Overview](frontend/react-compiler-overview.md) [NEW]`
-5. Update counts in `articles/README.md` and `README.md`, then run `bash verify_links.sh` (Checks 1–5 pass).
+5. Update counts in `articles/README.md` and `README.md`, then run `bash verify_links.sh` (Checks 1–7 pass).

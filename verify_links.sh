@@ -331,9 +331,116 @@ if check6_ok:
         f"{len(articles_readme_updated)}/5 [UPDATED] badge(s) synced, articles/CHANGELOG.md present)."
     )
 
+# Check 7: Review Reports Integrity, Bidirectional Article Links & 0-10 Scorecard Parity
+check7_ok = True
+all_reviews = sorted(
+    f for f in glob.glob("reviews/**/*.md", recursive=True)
+    if f != "reviews/README.md"
+)
+
+resolved_reviews_readme_targets = set()
+if not os.path.isfile("reviews/README.md"):
+    errors.append("[Check 7] Missing review reports index: reviews/README.md.")
+    check7_ok = False
+else:
+    with open("reviews/README.md", encoding="utf-8") as fh:
+        reviews_readme_text = fh.read()
+    reviews_readme_links = extract_md_links(reviews_readme_text)
+    for link in reviews_readme_links:
+        full_path = os.path.normpath(os.path.join("reviews", link))
+        if not os.path.isfile(full_path):
+            errors.append(f"[Check 7] Broken link in reviews/README.md: {link} -> {full_path}")
+            check7_ok = False
+        else:
+            resolved_reviews_readme_targets.add(full_path)
+
+required_review_headings = [
+    (r"^## 2\. Before vs\. After Scorecard \(0[–-]10\)\s*$", "## 2. Before vs. After Scorecard (0–10)"),
+    (r"^## 3\. Reader Mode Review\s*$", "## 3. Reader Mode Review"),
+    (r"^## 4\. Subject Matter Expert \(SME\) Review\s*$", "## 4. Subject Matter Expert (SME) Review"),
+    (r"^## 5\. Technical Architect & Repo Concept Review\s*$", "## 5. Technical Architect & Repo Concept Review"),
+]
+
+for report in all_reviews:
+    rel_report = os.path.relpath(report, "reviews")
+    parts = rel_report.split(os.sep)
+    basename = os.path.basename(report)
+
+    # 1. Verify filename ends with -review.md and follows lowercase kebab-case.md
+    if not kebab_re.match(basename) or not basename.endswith("-review.md") or len(parts) != 2:
+        errors.append(
+            f"[Check 7] Review report must be placed at reviews/<category>/<kebab-case>-review.md: {report}"
+        )
+        check7_ok = False
+        continue
+
+    category = parts[0]
+    slug = basename[:-len("-review.md")]
+    target_article = os.path.normpath(os.path.join("articles", category, f"{slug}.md"))
+
+    with open(report, encoding="utf-8") as fh:
+        report_text = fh.read()
+
+    # 2. Verify every relative .md link inside the report resolves cleanly
+    report_links = extract_md_links(report_text)
+    report_dir = os.path.dirname(report)
+    resolved_from_report = set()
+    for link in report_links:
+        target_path = os.path.normpath(os.path.join(report_dir, link))
+        if not os.path.isfile(target_path):
+            errors.append(f"[Check 7] Broken link in {report}: {link} -> {target_path}")
+            check7_ok = False
+        else:
+            resolved_from_report.add(target_path)
+
+    # 3. Verify corresponding target article exists on disk
+    if not os.path.isfile(target_article):
+        errors.append(f"[Check 7] Target article missing for review report {report}: expected {target_article}")
+        check7_ok = False
+    else:
+        # 5. Verify bidirectional linking between report and target article
+        if target_article not in resolved_from_report:
+            errors.append(
+                f"[Check 7] Review report {report} does not link back to target article ../../articles/{category}/{slug}.md"
+            )
+            check7_ok = False
+
+        with open(target_article, encoding="utf-8") as fh:
+            article_text = fh.read()
+        article_links = extract_md_links(article_text)
+        article_dir = os.path.dirname(target_article)
+        resolved_from_article = {
+            os.path.normpath(os.path.join(article_dir, link))
+            for link in article_links
+        }
+        if report not in resolved_from_article:
+            errors.append(
+                f"[Check 7] Target article {target_article} does not link to review report ../../reviews/{category}/{slug}-review.md"
+            )
+            check7_ok = False
+
+    # 4. Verify report is indexed in reviews/README.md
+    if report not in resolved_reviews_readme_targets:
+        errors.append(f"[Check 7] Review report missing from reviews/README.md index: {report}")
+        check7_ok = False
+
+    # 6. Verify required 0-10 scorecard and three persona sections exist
+    cleaned_report = strip_code(report_text)
+    for pattern, label in required_review_headings:
+        if not re.search(pattern, cleaned_report, flags=re.MULTILINE):
+            errors.append(f"[Check 7] Review report {report} missing required section: {label}")
+            check7_ok = False
+
+if check7_ok:
+    print(
+        f"✅ Check 7 passed: reviews/README.md valid and {len(all_reviews)} review report(s) verified "
+        f"(bidirectional links & 0-10 scorecards intact)."
+    )
+
 print("\n--- Summary ---")
 print(f"Total articles: {len(all_articles)}")
 print(f"Articles with internal links: {linked_articles} ({internal_link_count} total links)")
+print(f"Review reports verified: {len(all_reviews)}")
 
 if errors:
     print("\n❌ Verification failed:")

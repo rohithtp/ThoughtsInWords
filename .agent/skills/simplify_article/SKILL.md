@@ -46,5 +46,5 @@ When the user asks to "simplify article", "make readable", or "clean up format" 
     - Follow the repo-level trail rules in `.agent/skills/update_article/SKILL.md`:
         - Unless the article already holds `[NEW]`, prepend it to `* **Recently Updated (Revision Trail, Max 5):**` in `README.md` with `` `[UPDATED]` `` (capping at 5) and sync `[UPDATED]` in `articles/README.md`.
         - Record the simplification under today's date in `articles/CHANGELOG.md` (`* **Simplified:** [Article Title](category/slug.md) — ...`).
-    - Run `bash verify_links.sh` and confirm Checks 1–6 pass with exit code `0`.
+    - Run `bash verify_links.sh` and confirm Checks 1–7 pass with exit code `0`.
     - Confirm that ALL references/links appearing in the original text are present in the new text.

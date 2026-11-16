@@ -39,4 +39,4 @@ When the user asks to "organize readme", "fix links", or "update index":
 4. **Sync Counts & Verify**:
    * Update category and total article counts in `articles/README.md` (`## Organization`, `## Category Directory`) and root `README.md` (`## Explore the Digital Garden`).
    * Verify that the `[NEW]` and `[UPDATED]` sets in `README.md` match `articles/README.md` 1-to-1.
-   * Run `bash verify_links.sh` and confirm all 6 checks pass with exit code `0`.
+   * Run `bash verify_links.sh` and confirm all 7 checks pass with exit code `0`.
