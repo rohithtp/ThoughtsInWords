@@ -34,7 +34,7 @@ def extract_md_links(text: str):
 # Discover all articles on disk
 all_articles = sorted(
     f for f in glob.glob("articles/**/*.md", recursive=True)
-    if f != "articles/README.md"
+    if f not in {"articles/README.md", "articles/CHANGELOG.md"}
 )
 
 # Check 1: Every relative .md link in articles/README.md resolves to an existing file in articles/
@@ -58,7 +58,7 @@ if broken_readme:
 else:
     print(f"✅ Check 1 passed: All {len(readme_links)} links in articles/README.md resolve to existing files.")
 
-# Also verify relative .md links in root README.md
+# Also verify relative .md links in root README.md and articles/CHANGELOG.md
 if os.path.isfile("README.md"):
     with open("README.md", encoding="utf-8") as fh:
         root_links = extract_md_links(fh.read())
@@ -66,6 +66,14 @@ if os.path.isfile("README.md"):
         full_path = os.path.normpath(link)
         if not os.path.isfile(full_path):
             errors.append(f"[Check 1b] Broken link in README.md: {link} -> {full_path}")
+
+if os.path.isfile("articles/CHANGELOG.md"):
+    with open("articles/CHANGELOG.md", encoding="utf-8") as fh:
+        changelog_links = extract_md_links(fh.read())
+    for link in changelog_links:
+        full_path = os.path.normpath(os.path.join("articles", link))
+        if not os.path.isfile(full_path):
+            errors.append(f"[Check 1c] Broken link in articles/CHANGELOG.md: {link} -> {full_path}")
 
 # Check 2: Every .md file under articles/ (excluding articles/README.md) is referenced in articles/README.md
 unlisted = sorted(set(all_articles) - resolved_readme_targets)
@@ -222,6 +230,105 @@ if check5_ok:
     print(
         f"✅ Check 5 passed: Hybrid Window [NEW] parity verified ({len(articles_readme_new)}/{expected_new_count} "
         f"within 7d of {latest_date}) and total count ({len(all_articles)}) synced across both READMEs."
+    )
+
+# Check 6: Article & Repo Revision Trail Parity (**Last Updated:**, ## Changelog, [UPDATED], articles/CHANGELOG.md)
+check6_ok = True
+if not os.path.isfile("articles/CHANGELOG.md"):
+    errors.append("[Check 6] Missing repository-level activity log: articles/CHANGELOG.md.")
+    check6_ok = False
+
+updated_articles_meta = {}
+has_changelog_section = set()
+
+for article in all_articles:
+    with open(article, encoding="utf-8") as fh:
+        content = fh.read()
+    head = content[:1000]
+    lu_line = re.search(r"^\*\*Last Updated:\*\*(.*)$", head, flags=re.MULTILINE)
+    if lu_line:
+        lu_raw = lu_line.group(1).strip()
+        try:
+            lu_date = datetime.strptime(lu_raw, "%B %d, %Y").date()
+        except ValueError:
+            errors.append(f"[Check 6] Invalid **Last Updated:** format in {article}: {lu_raw!r} (expected 'Month Day, Year').")
+            check6_ok = False
+            continue
+
+        updated_articles_meta[article] = lu_date
+        if article not in article_dates:
+            errors.append(f"[Check 6] {article} has **Last Updated:** but is missing a valid **Date:** header.")
+            check6_ok = False
+        elif lu_date < article_dates[article]:
+            errors.append(
+                f"[Check 6] {article} has **Last Updated:** ({lu_date}) earlier than **Date:** ({article_dates[article]})."
+            )
+            check6_ok = False
+
+    cl_match = re.search(r"^## Changelog\s*$", content, flags=re.MULTILINE)
+    if cl_match:
+        cl_body = content[cl_match.end():]
+        next_h2 = re.search(r"^##\s+", cl_body, flags=re.MULTILINE)
+        if next_h2:
+            cl_body = cl_body[:next_h2.start()]
+        if re.search(r"^\s*[-*]\s+\*\*[^*]+:\*\*", cl_body, flags=re.MULTILINE):
+            has_changelog_section.add(article)
+        elif lu_line:
+            errors.append(f"[Check 6] {article} has ## Changelog but no '- **Mon DD, YYYY:** ...' entry.")
+            check6_ok = False
+    elif lu_line:
+        errors.append(f"[Check 6] {article} has **Last Updated:** but is missing a '## Changelog' section.")
+        check6_ok = False
+
+articles_readme_updated = {
+    os.path.normpath(os.path.join("articles", match))
+    for match in re.findall(
+        r"^\s*-\s*\[[^\]]+\]\(([^)]+\.md)\)\s*\[UPDATED\]\s*$",
+        cleaned_articles_readme,
+        flags=re.MULTILINE,
+    )
+}
+root_readme_updated = {
+    os.path.normpath(match)
+    for match in re.findall(
+        r"^\s*\*\s*\[[^\]]+\]\(([^)]+\.md)\).*\[UPDATED\]",
+        cleaned_root_readme,
+        flags=re.MULTILINE,
+    )
+}
+
+if articles_readme_updated != root_readme_updated:
+    only_articles = sorted(articles_readme_updated - root_readme_updated)
+    only_root = sorted(root_readme_updated - articles_readme_updated)
+    if only_articles:
+        errors.append(f"[Check 6] [UPDATED] entries in articles/README.md missing from README.md: {only_articles}")
+    if only_root:
+        errors.append(f"[Check 6] [UPDATED] entries in README.md missing from articles/README.md: {only_root}")
+    check6_ok = False
+
+if len(articles_readme_updated) > 5:
+    errors.append(
+        f"[Check 6] Expected at most 5 [UPDATED] articles in Recently Updated, found {len(articles_readme_updated)}."
+    )
+    check6_ok = False
+
+both_badges = sorted((articles_readme_new & articles_readme_updated) | (root_readme_new & root_readme_updated))
+if both_badges:
+    errors.append(f"[Check 6] Article(s) cannot hold both [NEW] and [UPDATED] badges: {both_badges}")
+    check6_ok = False
+
+for article in sorted(articles_readme_updated):
+    if article not in updated_articles_meta:
+        errors.append(f"[Check 6] [UPDATED] article missing valid **Last Updated:** header: {article}")
+        check6_ok = False
+    if article not in has_changelog_section:
+        errors.append(f"[Check 6] [UPDATED] article missing valid ## Changelog section: {article}")
+        check6_ok = False
+
+if check6_ok:
+    print(
+        f"✅ Check 6 passed: Revision trail verified ({len(updated_articles_meta)} updated article(s), "
+        f"{len(articles_readme_updated)}/5 [UPDATED] badge(s) synced, articles/CHANGELOG.md present)."
     )
 
 print("\n--- Summary ---")

@@ -1,0 +1,37 @@
+# Garden Activity Log & Changelog
+
+This log permanently records additions, substantive updates, simplifications, and `[NEW]` / `[UPDATED]` index rotations across the **ThoughtsInWords** digital garden. While the root [README.md](../README.md) highlights only the most recent active cohorts, this changelog preserves the full revision trail over time.
+
+## How the Revision Trail Works
+
+1. **Article-Level Trail:** Every article preserves its immutable creation `**Date:**`. When revised, it sets/updates `**Last Updated:** Month Day, Year` in the header and appends a summary bullet to its in-article `## Changelog` section.
+2. **Index Badges (`[NEW]` & `[UPDATED]`):** Newly published articles appear under **Recent Additions** (7-day Hybrid Window, min 3 / max 5). Substantively updated articles appear under **Recently Updated** (max 5) with an `[UPDATED]` badge.
+3. **Permanent Archive:** Every creation, update, simplification, and badge rotation is recorded chronologically below so historical context is never lost.
+
+---
+
+## November 2026
+
+### November 16, 2026
+* **Added:** [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md) — decoupled OpenAPI 3.1 repository architecture, automated PR gates, multi-channel partner distribution, and edge/staging contract verification.
+* **Updated:** [OpenAPI Specification v3.2.0: Highlights and Changes](devops/openapi-spec-v3-2-0-highlights.md) — added reciprocal cross-links to the Design-First Partner API architecture and API NFR articles, plus `**Last Updated:**` and `## Changelog` revision tracking.
+* **Rotated (`[NEW]`):** [The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems](design/silent-architecture-of-utility-modules.md) rotated out of the 5-article `Recent Additions` cap.
+* **Infrastructure:** Introduced two-layer article & repository revision tracking (`**Last Updated:**`, in-article `## Changelog`, `[UPDATED]` badges, `articles/CHANGELOG.md`, `update_article` skill, and `verify_links.sh` Check 6).
+
+### November 15, 2026
+* **Added:** [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](ai/local-llm-lifecycle-ollama-model-management.md)
+* **Added:** [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md)
+
+### November 14, 2026
+* **Added:** [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md)
+* **Added:** [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md)
+
+### November 13, 2026
+* **Added:** [The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems](design/silent-architecture-of-utility-modules.md)
+
+### November 12, 2026
+* **Added:** [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](frontend/airgapped-font-cdn-anti-pattern.md)
+* **Added:** [From One Machine to Many: The Complete Guide to Learning Docker Compose and Kubernetes](devops/docker-compose-to-kubernetes-guide.md)
+
+### November 11, 2026
+* **Added:** [Airgapped Production Font Deployment Guide](frontend/airgapped-production-font-deployment.md)

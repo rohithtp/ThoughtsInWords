@@ -27,14 +27,18 @@ When the user asks to "create a new article" or "add a summary of [URL]":
      **Date:** Month Day, Year
      ```
    * Structure the content with clear headers (`## Summary`, `## Key Points`, `## Conclusion`, etc.).
-   * **Add Related Articles**: Include a `## Related Articles` section at the bottom (before `## References`, if present) linking to 2–3 related existing articles using relative `.md` paths:
+   * **Add Related Articles & Initial Changelog**: Include a `## Related Articles` section at the bottom (before `## References`, if present) linking to 2–3 related existing articles using relative `.md` paths, followed by an initial `## Changelog` at the very bottom:
      ```markdown
      ## Related Articles
 
      - [Related Article Title](sibling-article.md) — brief note on how it connects.
      - [Cross-Topic Article Title](../other-category/article-slug.md) — brief note on how it connects.
+
+     ## Changelog
+
+     - **Mon DD, YYYY:** Initial publication.
      ```
-   * Where appropriate, add a reciprocal link back in closely related existing articles to strengthen the digital garden mesh.
+   * Where appropriate, add a reciprocal link back in closely related existing articles to strengthen the digital garden mesh. Whenever editing an existing article published on an earlier date, also update its `**Last Updated:** Month Day, Year` header, its in-article `## Changelog`, the `Recently Updated` / `[UPDATED]` trail in `README.md` and `articles/README.md`, and `articles/CHANGELOG.md`.
 
 3. **Create File (`kebab-case.md`)**:
    * Always use lowercase `kebab-case.md` for the filename: `articles/[category]/[kebab-case-slug].md`.
@@ -46,14 +50,15 @@ When the user asks to "create a new article" or "add a summary of [URL]":
      * Open `README.md` and prepend the new article(s) to `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` in reverse chronological order (newest first), formatted as:
        `* [Article Title](./articles/[category]/[kebab-case-slug].md) *(Mon DD, YYYY)* \`[NEW]\``
      * Evict any older entries from `Recent Additions` that fall outside the 7-day window (while keeping at least 3) or exceed the maximum cap of 5. Track which entries were evicted.
-   * **Update `articles/README.md`**:
+   * **Update `articles/README.md` & `articles/CHANGELOG.md`**:
      * Remove `[NEW]` **only** from the entries that were evicted from `Recent Additions` (leave `[NEW]` intact on articles still within the active cohort).
      * Locate the appropriate category (and subsection, if applicable) under `## Article Index` and insert a title-first link in alphabetical order, with `[NEW]` placed after the link:
        `- [Article Title / Summary]([category]/[kebab-case-slug].md) [NEW]`
      * Increment the total and category article counts in `articles/README.md` (`## Organization`, `## Category Directory`) and root `README.md` (`## Explore the Digital Garden`).
+     * Record the new article under today's date in `articles/CHANGELOG.md` (`* **Added:** [Article Title](category/kebab-case-slug.md)`), along with any evicted `[NEW]` rotation notes (`* **Rotated (\`[NEW]\`):** ...`) so no trail is lost.
 
 5. **Verify Repository Health**:
-   * Run `bash verify_links.sh` and confirm all 5 checks pass with exit code `0`.
+   * Run `bash verify_links.sh` and confirm all 6 checks pass with exit code `0`.
 
 ## Example
 

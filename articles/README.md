@@ -17,12 +17,13 @@ Articles are organized by **topic** (domain folders) rather than chronologically
 ```text
 articles/
 ├── README.md              # This index
+├── CHANGELOG.md           # Chronological garden activity & revision log
 ├── ai/                    # Artificial Intelligence & ML (17)
 │   ├── Agents & Tooling
 │   └── Strategy & Impact
 ├── cloud-native/          # Cloud-native architecture & isolation (5)
 ├── design/                # UI/UX & software design (8)
-├── devops/                # Infrastructure, APIs, Auth, Git, Platform (21)
+├── devops/                # Infrastructure, APIs, Auth, Git, Platform (22)
 │   ├── APIs & Specifications
 │   ├── Authentication & Authorization
 │   ├── Git & Version Control
@@ -51,6 +52,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 * **Contextual Organization**: Content is linked and grouped by topic rather than timestamps, making it easier to explore related ideas.
 * **Evolution**: Some notes may start as rough thoughts (seedlings) and evolve into comprehensive guides (evergreens).
 * **Interconnectivity**: Bidirectional `## Related Articles` footers and cross-cutting reading trails connect ideas across folder boundaries.
+* **Revision Trail & Changelog**: Articles preserve their original `**Date:**`, track revisions via `**Last Updated:**` and an in-article `## Changelog`, surface recent edits with `[UPDATED]`, and record all additions, updates, and badge rotations in [CHANGELOG.md](CHANGELOG.md).
 
 ## Getting Started
 
@@ -58,14 +60,14 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 2. Create a new markdown file using `kebab-case.md` (e.g., `my-topic.md`) and include a `## Related Articles` footer.
 3. Link it in the index below using title-first format and update the category count.
 
-## Category Directory (112 Articles)
+## Category Directory (113 Articles)
 
 | Category | Articles | Subsections |
 | :--- | :---: | :--- |
 | [AI](#ai) | 17 | Agents & Tooling (8), Strategy & Impact (9) |
 | [Cloud Native](#cloud-native) | 5 | — |
 | [Design](#design) | 8 | — |
-| [DevOps & Infrastructure](#devops--infrastructure) | 21 | APIs & Specs (6), Auth (4), Git (4), Ops (2), Platform (5) |
+| [DevOps & Infrastructure](#devops--infrastructure) | 22 | APIs & Specs (7), Auth (4), Git (4), Ops (2), Platform (5) |
 | [Distributed Systems](#distributed-systems) | 5 | — |
 | [Environment](#environment) | 2 | — |
 | [Frontend](#frontend) | 16 | — |
@@ -129,7 +131,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [The Architecture of the "Disposable" Core: Designing for Graceful Obsolescence](design/architecture-of-disposable-core.md)
 - [The Evolution of UI Interactions and Aesthetics](design/evolution-of-ui-interactions-and-aesthetics.md)
 - [The Purple Renaissance: Design Trends & Aesthetic Evolution (2025–2026)](design/purple-design-aesthetic-trends-2026.md)
-- [The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems](design/silent-architecture-of-utility-modules.md) [NEW]
+- [The Silent Architecture of Utility Modules: Designing Small Helpers That Don’t Break Large Systems](design/silent-architecture-of-utility-modules.md)
 - [Varying Goals and Actualities in Design: The Gap Between Intent and Delivery](design/varying-goals-and-actualities-in-design.md)
 
 ### DevOps & Infrastructure
@@ -138,8 +140,9 @@ Topics that span multiple folders can be explored through these curated paths:
 
 - [API Health and Future Capabilities: Non-Functional Requirements for APIs](devops/api-health-and-nfr.md)
 - [API History and Future: From System Calls to AI-Native Meshes](devops/api-history-and-future.md)
+- [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md) [NEW]
 - [Holy Grail: A Journey in Standardization of Strategies for Resource Bundle Consumption](devops/holy-grail-resource-bundle-standardization.md)
-- [OpenAPI Specification v3.2.0: Highlights and Changes](devops/openapi-spec-v3-2-0-highlights.md)
+- [OpenAPI Specification v3.2.0: Highlights and Changes](devops/openapi-spec-v3-2-0-highlights.md) [UPDATED]
 - [OpenFeature API Specification: A Vendor-Agnostic Standard for Feature Flags](devops/openfeature-api-spec.md)
 - [Understanding Headless Delivery Models: API-First Architecture for Multi-Channel Delivery](devops/understanding-headless-delivery-models.md)
 

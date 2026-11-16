@@ -2,6 +2,7 @@
 
 **Source:** [OpenAPI Initiative](https://www.openapis.org/)
 **Date:** January 24, 2026
+**Last Updated:** November 16, 2026
 
 ## Summary
 
@@ -38,3 +39,13 @@ Acknowledging the rise of real-time applications (Chat, AI, IoT), v3.2.0 adds ro
 ## Conclusion
 
 OpenAPI v3.2.0 represents a mature step forward, addressing specific pain points in API design while embracing modern patterns like streaming and complex querying. It provides tool builders and API designers with the precision needed for the next generation of interoperable software.
+
+## Related Articles
+
+- [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](design-first-partner-api-openapi-architecture.md) — treating OpenAPI specifications as decoupled, versioned products with automated governance and multi-channel partner delivery.
+- [API Health and Future Capabilities: Non-Functional Requirements for APIs](api-health-and-nfr.md) — non-functional requirements across maintainability, interoperability, versioning, and developer experience.
+
+## Changelog
+
+- **Nov 16, 2026:** Added reciprocal cross-links to the Design-First Partner API OpenAPI architecture guide and the API Health & Non-Functional Requirements guide.
+- **Jan 24, 2026:** Initial publication.
