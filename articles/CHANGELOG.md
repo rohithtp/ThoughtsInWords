@@ -12,6 +12,9 @@ This log permanently records additions, substantive updates, simplifications, an
 
 ## November 2026
 
+### November 17, 2026
+* **Reviewed & Updated:** [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md) — re-architected all four distribution channels, edge validation, and staging testing onto pure `Apache-2.0`/`MIT`/`BSD-2-Clause` open-source foundations; added airgap provenance (`Syft` + offline `Cosign`), zero-egress portal flags, `0–10` architectural re-evaluation (`8.2` → `9.0`), and cross-links ([Review Report](../reviews/devops/design-first-partner-api-openapi-architecture-review.md)). *(Retains active `[NEW]` badge.)*
+
 ### November 16, 2026
 * **Added:** [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md) — decoupled OpenAPI 3.1 repository architecture, automated PR gates, multi-channel partner distribution, and edge/staging contract verification.
 * **Updated:** [OpenAPI Specification v3.2.0: Highlights and Changes](devops/openapi-spec-v3-2-0-highlights.md) — added reciprocal cross-links to the Design-First Partner API architecture and API NFR articles, plus `**Last Updated:**` and `## Changelog` revision tracking.

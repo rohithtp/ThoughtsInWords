@@ -29,4 +29,4 @@ All 12 parameters (4 per persona) are rated on a `0.0–10.0` scale **Before** a
 
 | Article | Category | Review Report | Before Score | After Score | Delta | Date |
 | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| *(No review reports generated yet — invoke `.agent/skills/review_article/SKILL.md` on any article to create the first report.)* | — | — | — | — | — | — |
+| [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](../articles/devops/design-first-partner-api-openapi-architecture.md) | `devops` | [Review Report](devops/design-first-partner-api-openapi-architecture-review.md) | `7.5` | `9.0` | `+1.5` | Nov 17, 2026 |
