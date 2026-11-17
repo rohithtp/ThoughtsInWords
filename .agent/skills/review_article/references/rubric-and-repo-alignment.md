@@ -53,10 +53,10 @@ Evaluates both the technical viability of proposed solutions and the article's a
 
 | # | Parameter | What to Assess (`0–10`) |
 | :-: | :--- | :--- |
-| **9** | **Architectural Soundness & Trade-Off Rigor** | Are proposed architectures evaluated for scalability, latency/consistency boundaries, blast radius, NFRs (cost, maintainability, lock-in), and tooling licensing/monetization realities? Does it specify *when not to use* an approach? |
+| **9** | **Architectural Soundness & Trade-Off Rigor** | Are proposed architectures evaluated for scalability, latency/consistency boundaries, blast radius, NFRs (cost, maintainability, lock-in), and strictly constrained to **pure open-source systems** without recommending premium, vendor-locked, or community-edition (open-core) tools? Does it specify *when not to use* an approach? |
 | **10** | **ThoughtsInWords Philosophy Alignment** | Does the article embody the core philosophy documented in [README.md](../../../../README.md) without falling into its documented anti-patterns? (See Section 3 below.) |
 | **11** | **Digital Garden Interconnectivity** | Does `## Related Articles` meaningfully connect to 2–4 sibling and cross-category notes using relative `.md` paths, strengthening the cross-cutting reading trails in [articles/README.md](../../../../articles/README.md)? |
-| **12** | **Repository Lifecycle & Standards Compliance** | Does the file satisfy lowercase `kebab-case.md` naming, immutable `**Date:** Month Day, Year`, `**Last Updated:** Month Day, Year` (when revised), `**Review:**` link, `## Related Articles`, `## References` (if applicable), `## Changelog`, and `verify_links.sh` health? |
+| **12** | **Repository Lifecycle & Standards Compliance** | Does the file satisfy lowercase `kebab-case.md` naming, immutable `**Date:** Month Day, Year`, `**Last Updated:** Month Day, Year` (when revised), `**Review:**` link, the pure open-source `Scope & Licensing Note` (when covering systems/tooling), `## Related Articles`, `## References` (if applicable), `## Changelog`, and `verify_links.sh` health? |
 
 ---
 
@@ -77,3 +77,7 @@ Per the root [README.md](../../../../README.md) and [articles/README.md](../../.
    * **Verify:** Does the article acknowledge organizational incentives, legacy constraints, socio-technical friction, or migration costs—rather than pretending a diagram or single abstraction magically eliminates systemic complexity?
 6. **Radical Responsibility & Craft:**
    * Takes ownership of precision in language ("words") and architecture ("thoughts"), ensuring references, trade-offs, and failure modes are explicitly named.
+7. **Pure Open-Source Systems Mandate:**
+   * Articles covering tools, frameworks, or software architectures must include **only pure open-source systems** (governed by OSI-approved open-source licenses with the full feature set self-hostable and free of vendor lock-in or paywalled tiers).
+   * **Exclude:** Premium/commercial-only systems, proprietary/vendor-locked systems, and community-based/open-core ("Community Edition") systems where core features sit behind paid tiers.
+   * **Verify:** Confirm non-qualifying systems are absent from prose, tables, and diagrams, and verify the article includes the `> **Scope & Licensing Note:** This article strictly covers pure open-source systems. Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.` callout when missing. Deduct points under Parameter 9 (and Parameter 12 for the missing note) if violated.

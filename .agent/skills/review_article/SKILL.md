@@ -28,10 +28,10 @@ Before starting, read:
      * Reads the article fresh as a target reader.
      * Scores Parameters 1–4 (`0–10`) with concise justification and specific, actionable edits for hook/clarity, narrative flow, visual aids (Mermaid/tables), and jargon accessibility.
    * **`Subject Matter Expert Reviewer`** (Parameters 5–8):
-     * Audits technical/domain claims, protocols, edge cases, production failure modes, references/citations, and currency.
+     * Audits technical/domain claims, protocols, edge cases, production failure modes, references/citations, and currency, and verifies that any tools/systems discussed are **pure open-source systems** (identifying non-qualifying premium, vendor-locked, or community-edition/open-core references and suggesting pure open-source replacements).
      * Scores Parameters 5–8 (`0–10`) and provides prioritized technical corrections, missing failure scenarios, or authoritative citations.
    * **`Technical Architect & Repo Concept Reviewer`** (Parameters 9–12):
-     * Evaluates architectural trade-offs (scalability, consistency, NFRs, blast radius, lock-in, monetization/licensing disclosures).
+     * Evaluates architectural trade-offs (scalability, consistency, NFRs, blast radius, lock-in) and audits strict compliance with the **Pure Open-Source Systems Only** standard (ensuring the article covers only pure open-source systems, does not refer to premium, proprietary/vendor-locked, or community-based/open-core systems, and includes a scope note stating they are currently not included).
      * Audits alignment with the **ThoughtsInWords** philosophy in `README.md` (*Intersection of Logic and Emotion*, *Optimistic Nihilism*, *Intellectual Humility*, *Radical Responsibility*, and explicitly guarding against the *Engineer's Philosophy* weakness of over-simplifying systemic/psychological problems as trivial "bugs").
      * Audits Digital Garden interconnectivity (`## Related Articles`, cross-cutting reading trails) and lifecycle metadata (`kebab-case.md`, `**Date:**`, `**Last Updated:**`, `## Changelog`).
      * Scores Parameters 9–12 (`0–10`) and lists concrete architectural/repo-alignment recommendations.
@@ -42,7 +42,7 @@ Before starting, read:
 Merge all findings into a deduplicated, conflict-free remediation plan tagged by priority (`Critical`, `High`, `Medium`, `Low`):
 * Ensure every SME technical addition or Technical Architect trade-off table respects Reader Mode pacing (use clean tables, Mermaid diagrams, or concise bullet lists rather than dense prose walls).
 * Ensure existing valid citations, `## References`, and original `**Date:**` are strictly preserved.
-* Confirm whether any cited tools/services require a brief monetization/licensing note per repo standards.
+* Flag any references to premium, vendor-locked, or community-based/open-core systems in text, tables, or Mermaid diagrams as `Critical`/`High` remediation items to be removed or replaced with pure open-source alternatives, and ensure the standardized `Scope & Licensing Note` (stating that premium, proprietary/vendor-locked, and community-edition systems are currently not included) is scheduled if missing.
 
 ### Stage 3: Apply Recommended Changes & Link Report in the Article
 
@@ -57,7 +57,11 @@ Edit `articles/<category>/<slug>.md` to apply the synthesized improvements:
      **Review:** [Expert & Architecture Review Report](../../reviews/<category>/<slug>-review.md)
      ```
 2. **Apply Body Improvements**:
-   * Implement all prioritized Reader, SME, and Technical Architect recommendations (e.g., sharper `## Summary` / `## Key Points`, trade-off matrices, edge-case handling, Mermaid architecture visuals, philosophy/systemic nuance, and enriched `## Related Articles`).
+   * Implement all prioritized Reader, SME, and Technical Architect recommendations (e.g., sharper `## Summary` / `## Key Points`, trade-off matrices, edge-case handling, Mermaid architecture visuals, philosophy/systemic nuance, pure open-source-only replacements, and enriched `## Related Articles`).
+   * If the article covers software systems or tooling and does not yet include the exclusion note, add:
+     ```markdown
+     > **Scope & Licensing Note:** This article strictly covers pure open-source systems. Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.
+     ```
 3. **Update In-Article `## Changelog`**:
    * Ensure `## Changelog` sits at the very bottom of the article (after `## Related Articles` and `## References`).
    * Prepend a new entry in reverse chronological order (seeding `- **Mon DD, YYYY:** Initial publication.` from `**Date:**` if creating `## Changelog` for the first time):

@@ -21,7 +21,8 @@ When the user asks to "simplify article", "make readable", or "clean up format" 
         - Cluttered lists (ensure items are on separate lines).
         - Poor spacing (add blank lines between sections).
         - Long, complex paragraphs (break them down if possible, but be careful not to change the meaning).
-    - **Monetization Check**: Identify if any tools, libraries, or frameworks mentioned have monetized components or premium tiers (Pro versions). If missing, add a brief note about their monetization status.
+    - **Pure Open-Source Systems & Scope Check**: Verify that any tools, libraries, frameworks, or systems mentioned in the article are **pure open-source systems** only, and do **not** refer to premium/commercial-only systems, proprietary/vendor-locked systems, or community-based/open-core ("Community Edition") systems (remove or replace non-qualifying systems with pure open-source equivalents while preserving valid standard/specification references). If the article covers systems/tooling and does not already state that these categories are excluded, add:
+        `> **Scope & Licensing Note:** This article strictly covers pure open-source systems. Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.`
     - **Preserve Metadata & Update Trail**:
         - Keep the original `**Date:** Month Day, Year` unchanged.
         - Add or update `**Last Updated:** Month Day, Year` directly below `**Date:**` using today's date.

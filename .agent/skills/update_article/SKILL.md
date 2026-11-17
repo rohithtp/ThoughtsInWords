@@ -18,6 +18,10 @@ When the user asks to "update article", "expand", "revise", or "add a section to
 
 2. **Apply Content Changes**:
    * Edit or expand the article sections cleanly while preserving existing `## References` and inline links.
+   * **Pure Open-Source Systems Check:** When the article covers tools, platforms, or software systems, verify that both existing and newly added content include **only pure open-source systems** and do **not** refer to premium/commercial, proprietary/vendor-locked, or community-based/open-core ("Community Edition") systems (remove or replace non-qualifying references with pure open-source equivalents). If the article does not already include a note stating that these categories are excluded, add:
+     ```markdown
+     > **Scope & Licensing Note:** This article strictly covers pure open-source systems. Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.
+     ```
    * Check whether `## Related Articles` needs new cross-links for any newly added concepts.
 
 3. **Update the In-Article `## Changelog`**:

@@ -27,6 +27,10 @@ When the user asks to "create a new article" or "add a summary of [URL]":
      **Date:** Month Day, Year
      ```
    * Structure the content with clear headers (`## Summary`, `## Key Points`, `## Conclusion`, etc.).
+   * **Pure Open-Source Systems Only:** When the article discusses tools, frameworks, platforms, or software systems, include **only pure open-source systems** (governed by OSI-approved open-source licenses with the full feature set self-hostable and free of vendor lock-in or paywalled tiers). Do **not** include or recommend premium/commercial-only systems, proprietary/vendor-locked systems, or community-based/open-core ("Community Edition") systems—omit or replace any non-qualifying tools from source material with pure open-source equivalents, and include the following note if not already stated:
+     ```markdown
+     > **Scope & Licensing Note:** This article strictly covers pure open-source systems. Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.
+     ```
    * **Add Related Articles & Initial Changelog**: Include a `## Related Articles` section at the bottom (before `## References`, if present) linking to 2–3 related existing articles using relative `.md` paths, followed by an initial `## Changelog` at the very bottom:
      ```markdown
      ## Related Articles
