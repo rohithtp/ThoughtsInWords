@@ -2,7 +2,7 @@
 
 Welcome to the agentic control plane for **ThoughtsInWords** ([Root Overview](../../README.md) | [Full Article Index](../../articles/README.md) | [Review Reports Index](../../reviews/README.md) | [Activity Changelog](../../articles/CHANGELOG.md)).
 
-The `.agent/skills/` folder houses **6 modular agent skills** (backed by 8 Markdown specification, reference, and template files) that automate the complete lifecycle of the digital garden: ingesting and authoring articles, enforcing licensing and metadata invariants, refactoring structure, running multi-subagent `0–10` architectural audits, reconciling repository indexes, and publishing via Jujutsu (`jj`).
+The `.agent/skills/` folder houses **6 modular agent skills** (backed by 8 Markdown specification, reference, and template files plus 1 pre-push verification/staging script) that automate the complete lifecycle of the digital garden: ingesting and authoring articles, enforcing licensing and metadata invariants, refactoring structure, running multi-subagent `0–10` architectural audits, reconciling repository indexes, and publishing via Jujutsu (`jj`).
 
 ---
 
@@ -14,7 +14,7 @@ Before cataloging individual capabilities, this control plane is evaluated acros
 
 | # | Architectural Parameter | Scale Required (`0–10`) | Scope & Engineering Rationale |
 | :-: | :--- | :---: | :--- |
-| **1** | **Discovery & Context Window Scale** | `2.5` | Small, bounded surface area: 6 skill directories (8 files, 520 lines total), easily indexed in a single context pass without retrieval chunking. |
+| **1** | **Discovery & Context Window Scale** | `2.5` | Small, bounded surface area: 6 skill directories (8 Markdown files + 1 script, 539 lines total), easily indexed in a single context pass without retrieval chunking. |
 | **2** | **Agentic Compute & Orchestration Scale** | `2.0` / `7.5` | `2.0` for static index/skill discovery; peaks at `7.5` at runtime in `review_article`, which spawns 3 parallel independent subagents with state re-verification. |
 | **3** | **State Mutation & Blast Radius Scale** | `1.5` / `8.0` | `1.5` for documenting `.agent/skills/README.md`; `8.0` across the skills themselves, which mutate articles, root/category/review indexes, changelogs, and remote VCS history. |
 | **4** | **Cross-Skill Dependency & DAG Coupling Scale** | `8.0` | High workflow coupling: `create_article`, `update_article`, `simplify_article`, and `review_article` share badge exclusivity, changelog sync, and index contracts enforced by `organize_readme` and `verify_links.sh`. |
@@ -34,7 +34,7 @@ Each skill in `.agent/skills/` is rated below across 5 architectural dimensions 
 | [`create_article`](./create_article/SKILL.md) | `8.0` | `9.0` | `3.0` | `9.0` | `7.5` | **`7.3`** | Clear step-by-step authoring contract with Hybrid Window math and Pure Open-Source guardrails; optionally chains into `review_article`. |
 | [`update_article`](./update_article/SKILL.md) | `8.5` | `9.0` | `3.0` | `9.0` | `8.0` | **`7.7`** | Protects immutable `**Date:**`, enforces `[NEW]` vs. `[UPDATED]` mutual exclusivity, and keeps in-article and repo changelogs aligned. |
 | [`simplify_article`](./simplify_article/SKILL.md) | `7.5` | `8.5` | `2.0` | `9.0` | `8.0` | **`7.0`** | Strict link/reference preservation contract; references a legacy `view_file` tool name rather than staying tool-agnostic. |
-| [`commit_and_push`](./commit_and_push/SKILL.md) | `8.5` | `5.0` | `1.0` | `4.0` | `6.5` | **`5.0`** | Clean 3-step `jj` sequence (`describe`, `bookmark set`, `git push`), but lacks a built-in pre-push `verify_links.sh` gate and force-assumes `main`. |
+| [`commit_and_push`](./commit_and_push/SKILL.md) | `9.5` | `9.0` | `2.0` | `9.5` | `9.0` | **`7.8`** | Two-phase guarded `jj` workflow via [`prepare_commit.sh`](./commit_and_push/scripts/prepare_commit.sh): enforces `verify_links.sh` (Checks 1–7) before `jj describe` / `jj bookmark set`, parameterizes target bookmark (default `main`), and routes failures to `organize_readme`. |
 
 > **Architect's Note on Scoring:** The `Multi-Agent Orchestration` score reflects whether a skill requires subagent fan-out (`review_article` does; atomic skills like `commit_and_push` intentionally do not). `Composite` is the equal-weighted mean across the 5 columns.
 
@@ -76,7 +76,8 @@ flowchart TD
     Sync --> Gate["verify_links.sh (Checks 1-7)"]
     Gate -->|"Exit 0"| Push
     Gate -->|"Errors found"| Organize
-    Push --> Remote["jj describe -> jj bookmark set main -> jj git push"]
+    Push -->|"prepare_commit.sh (verify_links.sh -> describe -> bookmark)"| Remote["jj git push --bookmark"]
+    Push -->|"Checks 1-7 fail"| Organize
 ```
 
 ---
@@ -90,7 +91,7 @@ flowchart TD
 | **Simplify Article** | [`simplify_article/`](./simplify_article/SKILL.md) | "simplify article", "make readable", "clean up format" | Existing article, `README.md`, `articles/README.md`, `articles/CHANGELOG.md` | `bash verify_links.sh` (Checks 1–7) + link preservation check |
 | **Review and Verify Article** | [`review_article/`](./review_article/SKILL.md) | Multi-persona quality audit, `0–10` scoring, architectural review | Target article, `reviews/<category>/<slug>-review.md`, `reviews/README.md`, indexes & changelog | `bash verify_links.sh` (Checks 1–7) |
 | **Organize README** | [`organize_readme/`](./organize_readme/SKILL.md) | "organize readme", "fix links", "update index" | `README.md`, `articles/README.md`, `articles/CHANGELOG.md`, broken internal links | `bash verify_links.sh` (Checks 1–7) |
-| **Commit and Push with JJ** | [`commit_and_push/`](./commit_and_push/SKILL.md) | Save progress and push working copy to git remote | Jujutsu (`jj`) revision description, `main` bookmark, remote git repository | Manual / `jj git fetch` conflict check |
+| **Commit and Push with JJ** | [`commit_and_push/`](./commit_and_push/SKILL.md) | Save progress and push working copy to git remote | Jujutsu (`jj`) revision description, target bookmark (default `main`), remote git repository | `prepare_commit.sh` (`bash verify_links.sh` Checks 1–7) before `jj describe` / `bookmark set` / `jj git push` |
 
 ### 3.1 Create Article (`create_article`)
 
@@ -145,9 +146,10 @@ flowchart TD
 ### 3.6 Commit and Push with JJ (`commit_and_push`)
 
 * **Specification:** [`commit_and_push/SKILL.md`](./commit_and_push/SKILL.md)
+* **Supporting Scripts:** [`commit_and_push/scripts/prepare_commit.sh`](./commit_and_push/scripts/prepare_commit.sh)
 * **Core Capabilities:**
-  * **Jujutsu (`jj`) Publication Flow:** Executes `jj describe -m "..."`, advances the `main` bookmark to `@` (`jj bookmark set main -r @`), and pushes to the git remote (`jj git push`), noting `jj git fetch` + rebase recovery on conflicts.
-  * **Operational Note:** Because this skill does not explicitly invoke `bash verify_links.sh`, agents should verify Checks 1–7 pass prior to executing `commit_and_push`.
+  * **Two-Phase Guarded `jj` Publication Flow:** Phase 1 executes `prepare_commit.sh` locally (`set -euo pipefail`) to run `bash verify_links.sh` (Checks 1–7) **before** executing `jj describe -m "..."` and `jj bookmark set <bookmark> -r @` (default `main`). Phase 2 executes `jj git push --bookmark <bookmark>` only after Phase 1 exits `0`, isolating network access strictly to the push step.
+  * **Hard Gate & Self-Healing Routing:** Aborts before any bookmark mutation if Checks 1–7 fail, forbids manual bypass, and routes index/badge/link drift to [`organize_readme`](./organize_readme/SKILL.md) before retrying.
 
 ---
 
@@ -181,7 +183,9 @@ Every content skill enforces four shared architectural contracts:
 .agent/skills/
 ├── README.md                                          # This architectural overview & capability index
 ├── commit_and_push/
-│   └── SKILL.md                                       # Jujutsu (jj) commit, bookmark, and push workflow
+│   ├── SKILL.md                                       # Two-phase guarded Jujutsu (jj) publication workflow
+│   └── scripts/
+│       └── prepare_commit.sh                          # Atomic pre-push verify_links.sh gate & jj bookmark stager
 ├── create_article/
 │   └── SKILL.md                                       # New article authoring, OS-only filter & [NEW] lifecycle
 ├── organize_readme/

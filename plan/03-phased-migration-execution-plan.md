@@ -11,7 +11,7 @@
 | :--- | :---: | :--- | :--- | :---: |
 | **Phase 1** | `9.5 / 10` | Formalize [`review_article`](../.agent/skills/review_article/SKILL.md) multi-agent pipeline | 3 read-only reviewer agent specs + `run_review_workflow.py` + JSON Scorecard schema | **Low** |
 | **Phase 2** | `8.5 / 10` | Shared rules & single-writer reconciliation | `.agent/rules/AGENTS.md` + `index-reconciler` agent replacing multi-writer index edits | **Low–Medium** |
-| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | `article-author`, `article-refactor`, tool-agnostic cleanup, pre-push `verify_links.sh` gate | **Medium** |
+| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | `article-author`, `article-refactor`, tool-agnostic cleanup *(pre-push `prepare_commit.sh` gate **Completed**)* | **Medium** |
 
 ---
 
@@ -76,11 +76,11 @@
    * Use `workspace: "share"` when invoked across batches of multiple articles in parallel.
 3. **Update [`update_article/SKILL.md`](../.agent/skills/update_article/SKILL.md):**
    * Retain as a lightweight hybrid skill for single-section edits in the active conversation, while routing index/badge updates through `index-reconciler` (or delegating multi-article cross-link updates to a subagent).
-4. **Add Pre-Push Gate to [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md):**
-   * Keep `commit_and_push` as a Skill (`2.0 / 10` conversion ROI—no subagent needed).
-   * Insert mandatory **Step 0: Verify Repository Health** (`bash verify_links.sh` must exit `0`) and confirm `jj status` before `jj describe -m`, `jj bookmark set main -r @`, and `jj git push`.
+4. **Add Pre-Push Gate to [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) *(Completed — Option 4)*:**
+   * Kept `commit_and_push` as a Skill (`2.0 / 10` conversion ROI—no subagent needed).
+   * Added atomic local staging script [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) (`set -euo pipefail`) that enforces `bash verify_links.sh` (Checks 1–7 == exit `0`) **before** `jj describe -m` and `jj bookmark set <bookmark> -r @` (default `main`), isolating network access strictly to Phase 2 (`jj git push --bookmark <bookmark>`) and routing Check 1–7 failures to [`organize_readme`](../.agent/skills/organize_readme/SKILL.md).
 5. **Sync Documentation:** Update [`.agent/skills/README.md`](../.agent/skills/README.md) to reflect the active `.agent/agents/` and `.agent/rules/` components once each phase ships.
 
 ### Phase 3 Acceptance Criteria
-* End-to-end smoke test (`article-author` → `run_review_workflow.py` → `index-reconciler` → `verify_links.sh` → `commit_and_push` dry run) executes with zero manual index edits and passes Checks 1–7.
+* End-to-end smoke test (`article-author` → `run_review_workflow.py` → `index-reconciler` → `verify_links.sh` → `prepare_commit.sh` / `commit_and_push` dry run) executes with zero manual index edits and passes Checks 1–7.
 * Batch refactoring via `article-refactor` with `workspace: "share"` executes without working-copy conflicts.

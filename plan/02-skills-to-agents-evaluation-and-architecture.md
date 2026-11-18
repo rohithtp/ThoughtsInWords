@@ -39,7 +39,7 @@ Each skill is evaluated across 6 architectural conversion parameters (`0.0–10.
 | [`create_article`](../.agent/skills/create_article/SKILL.md) | `8.5` | `8.0` | `7.5` | `3.5` | `7.5` | `8.5` | **`8.0`** | **Convert to Scoped `article-author` Agent** (writes only `articles/<cat>/<slug>.md`). |
 | [`simplify_article`](../.agent/skills/simplify_article/SKILL.md) | `7.5` | `8.5` | `7.0` | `4.0` | `8.5` | `8.0` | **`7.5`** | **Convert to Scoped `article-refactor` Agent** for isolated/batch readability refactoring. |
 | [`update_article`](../.agent/skills/update_article/SKILL.md) | `6.0` | `6.5` | `6.5` | `3.5` | `7.0` | `7.5` | **`6.0`** | **Keep Hybrid:** Skill for minor direct edits; Subagent for multi-article cross-link backfills. |
-| [`commit_and_push`](../.agent/skills/commit_and_push/SKILL.md) | `1.5` | `1.0` | `2.0` | `2.0` | `2.0` | `3.0` | **`2.0`** | **Do NOT convert to an agent.** Retain as a Skill with a mandatory pre-push `verify_links.sh` gate. |
+| [`commit_and_push`](../.agent/skills/commit_and_push/SKILL.md) | `1.5` | `1.0` | `2.0` | `2.0` | `2.0` | `3.0` | **`2.0`** | **Do NOT convert to an agent.** Retained as a two-phase guarded Skill with [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) pre-push `verify_links.sh` gate *(Implemented)*. |
 
 ---
 
@@ -124,9 +124,9 @@ SCORECARD_SCHEMA = {
 * **Single-Article & Read-Only Operations (`workspace: "inherit"`):** All 3 read-only reviewer agents and single-article runs operate directly in `inherit` mode without cloning overhead.
 * **Batch Multi-Article Operations (`workspace: "share"`):** Parallelized multi-article runs (e.g., batch `simplify_article` or batch `review_article`) spawn workers with `workspace: "share"` so file edits never collide before merging and running [`verify_links.sh`](../verify_links.sh).
 
-### Change 6 — Keep `commit_and_push` as a Guarded Procedural Skill
-* **Problem:** [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) directly runs `jj describe`, `jj bookmark set main -r @`, and `jj git push` without validating repository health.
-* **Solution:** Retain `commit_and_push` as a Skill (lowest ROI for an autonomous agent at `2.0 / 10`), remove `view_file` tool-specific coupling from `simplify_article/SKILL.md`, and add a mandatory **Pre-Push Verification Gate** (`bash verify_links.sh` must exit `0`) before `jj git push`.
+### Change 6 — Keep `commit_and_push` as a Guarded Procedural Skill (`Pre-Push Gate Implemented`)
+* **Problem:** [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) previously ran `jj describe`, `jj bookmark set main -r @`, and `jj git push` without validating repository health.
+* **Solution:** Retain `commit_and_push` as a Skill (lowest ROI for an autonomous agent at `2.0 / 10`), remove `view_file` tool-specific coupling from `simplify_article/SKILL.md`, and enforce a two-phase **Pre-Push Verification Gate** (`prepare_commit.sh` runs `bash verify_links.sh` before `jj describe` and `jj bookmark set <bookmark> -r @`; only then runs `jj git push --bookmark <bookmark>`). *(Pre-push gate implemented via [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh); `simplify_article` cleanup remains scheduled for Phase 3.)*
 
 ---
 
@@ -166,7 +166,7 @@ flowchart TD
         Org --> Gate
     end
 
-    Gate -->|"Verified Clean Working Copy"| JJSkill["Skill: commit_and_push (jj describe -> bookmark -> push)"]
+    Gate -->|"Verified Clean Working Copy"| JJSkill["Skill: commit_and_push (prepare_commit.sh -> jj git push --bookmark)"]
 ```
 
 ### Target `.agent/` Directory Structure (Post-Migration)
@@ -184,7 +184,10 @@ flowchart TD
 │   └── index-reconciler.md                            # Single-writer index, changelog & verify_links.sh agent
 └── skills/
     ├── README.md                                      # Control plane overview & capability directory
-    ├── commit_and_push/SKILL.md                       # Guarded jj workflow (pre-push verify_links.sh gate)
+    ├── commit_and_push/
+    │   ├── SKILL.md                                   # Guarded two-phase jj workflow (pre-push verify_links.sh gate)
+    │   └── scripts/
+    │       └── prepare_commit.sh                      # Atomic pre-push verify_links.sh gate & jj bookmark stager
     ├── create_article/SKILL.md                        # Thin entry trigger -> article-author + index-reconciler
     ├── organize_readme/SKILL.md                       # Thin entry trigger -> index-reconciler
     ├── review_article/
