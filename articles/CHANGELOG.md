@@ -12,6 +12,10 @@ This log permanently records additions, substantive updates, simplifications, an
 
 ## November 2026
 
+### November 18, 2026
+* **Added:** [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](philosophy/energy-resolving-into-stillness.md) — internal mechanics of kinetic force vs. unshakable stillness, the illusion of duality, and transmutation into effortless potency (*Shanta*).
+* **Rotated (`[NEW]`):** [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md) rotated out of the 5-article `Recent Additions` cap.
+
 ### November 17, 2026
 * **Reviewed & Updated:** [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md) — re-architected all four distribution channels, edge validation, and staging testing onto pure `Apache-2.0`/`MIT`/`BSD-2-Clause` open-source foundations; added airgap provenance (`Syft` + offline `Cosign`), zero-egress portal flags, `0–10` architectural re-evaluation (`8.2` → `9.0`), and cross-links ([Review Report](../reviews/devops/design-first-partner-api-openapi-architecture-review.md)). *(Retains active `[NEW]` badge.)*
 

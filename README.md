@@ -43,15 +43,15 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 
 ## Explore the Digital Garden
 
-* **[Browse Full Article Index (113 Articles)](./articles/README.md)**
+* **[Browse Full Article Index (114 Articles)](./articles/README.md)**
 * **[Browse Garden Activity Log & Changelog](./articles/CHANGELOG.md)**
 * **[Browse Expert & Architecture Review Reports](./reviews/README.md)**
 * **Recent Additions (7-Day Window, Min 3 / Max 5):**
+  * [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](./articles/philosophy/energy-resolving-into-stillness.md) *(Nov 18, 2026)* `[NEW]`
   * [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](./articles/devops/design-first-partner-api-openapi-architecture.md) *(Nov 16, 2026)* `[NEW]`
   * [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](./articles/ai/local-llm-lifecycle-ollama-model-management.md) *(Nov 15, 2026)* `[NEW]`
   * [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](./articles/distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md) *(Nov 15, 2026)* `[NEW]`
   * [The Split Inside the Human Mind](./articles/philosophy/the-split-inside-the-human-mind.md) *(Nov 14, 2026)* `[NEW]`
-  * [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](./articles/philosophy/the-slow-navigator-framework.md) *(Nov 14, 2026)* `[NEW]`
 * **Recently Updated (Revision Trail, Max 5):**
   * [OpenAPI Specification v3.2.0: Highlights and Changes](./articles/devops/openapi-spec-v3-2-0-highlights.md) *(Updated Nov 16, 2026 — added partner API architecture & NFR cross-links)* `[UPDATED]`
 
@@ -67,7 +67,7 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 | [Environment](./articles/README.md#environment) | 2 | Atmospheric water generation and planetary magnetospheres |
 | [Frontend](./articles/README.md#frontend) | 16 | React, Expo, static search, air-gapped fonts, TypeScript, UI frameworks |
 | [Licensing](./articles/README.md#licensing) | 1 | Unlicense vs. CC0 open-source licensing |
-| [Philosophy](./articles/README.md#philosophy) | 21 | Career growth, critical thinking, information development, programming philosophy |
+| [Philosophy](./articles/README.md#philosophy) | 22 | Career growth, critical thinking, information development, programming philosophy |
 | [Testing](./articles/README.md#testing) | 2 | Self-healing tests and reuse vs. functional steps |
 | [Tools](./articles/README.md#tools) | 11 | Editors, shells, terminals, Go 1.26, proxy & productivity tools |
 | [Travel](./articles/README.md#travel) | 3 | Travel guides, wellness retreats, visa & rail booking tools |

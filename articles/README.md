@@ -33,7 +33,7 @@ articles/
 ├── environment/           # Climate & planetary systems (2)
 ├── frontend/              # Web development, mobile & frameworks (16)
 ├── licensing/             # Open source licensing (1)
-├── philosophy/            # Tech philosophy, thinking & wellness (21)
+├── philosophy/            # Tech philosophy, thinking & wellness (22)
 │   ├── Career & Growth
 │   ├── Critical Thinking & Emotions
 │   ├── Information & Thought
@@ -60,7 +60,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 2. Create a new markdown file using `kebab-case.md` (e.g., `my-topic.md`) and include a `## Related Articles` footer.
 3. Link it in the index below using title-first format and update the category count.
 
-## Category Directory (113 Articles)
+## Category Directory (114 Articles)
 
 | Category | Articles | Subsections |
 | :--- | :---: | :--- |
@@ -72,7 +72,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 | [Environment](#environment) | 2 | — |
 | [Frontend](#frontend) | 16 | — |
 | [Licensing](#licensing) | 1 | — |
-| [Philosophy](#philosophy) | 21 | Career (3), Critical Thinking (5), Info & Thought (6), Wellness (4), Programming (3) |
+| [Philosophy](#philosophy) | 22 | Career (3), Critical Thinking (6), Info & Thought (6), Wellness (4), Programming (3) |
 | [Testing](#testing) | 2 | — |
 | [Tools](#tools) | 11 | — |
 | [Travel](#travel) | 3 | — |
@@ -221,8 +221,9 @@ Topics that span multiple folders can be explored through these curated paths:
 
 - [Critical Thinking: Managing Emotions for Objective Results](philosophy/critical-thinking-managing-emotions.md)
 - [Critical Thinking: Navigating Emotional Multitudes](philosophy/critical-thinking-emotional-multitudes.md)
+- [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](philosophy/energy-resolving-into-stillness.md) [NEW]
 - [Postmortem: An Emotional Retrospective](philosophy/postmortem-emotional-retrospective.md)
-- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md) [NEW]
+- [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md)
 - [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md) [NEW]
 
 #### Information & Thought
