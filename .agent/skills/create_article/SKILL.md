@@ -18,20 +18,16 @@ When the user asks to "create a new article" or "add a summary of [URL]":
    * Determine the current date.
 
 2. **Generate Content & Cross-Links**:
-   * Create a summary or full article in Markdown format.
-   * Include metadata at the top — every new article **MUST** include `**Date:** Month Day, Year` (e.g., `**Date:** November 15, 2026`) so the Hybrid Window `[NEW]` lifecycle and verification checks can rank recency accurately:
+   * Create a summary or full article in Markdown format with clear headers (`## Summary`, `## Key Points`, `## Conclusion`, etc.).
+   * Follow [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 1 (Pure Open-Source Systems Mandate)** when discussing tools, frameworks, or platforms, and include the exact `Scope & Licensing Note` callout if applicable.
+   * Follow [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 3 (Header Metadata & Bottom Section Ordering)**:
      ```markdown
      # Title of Article
 
      **Source:** [Hostname](URL) (if applicable)
      **Date:** Month Day, Year
      ```
-   * Structure the content with clear headers (`## Summary`, `## Key Points`, `## Conclusion`, etc.).
-   * **Pure Open-Source Systems Only:** When the article discusses tools, frameworks, platforms, or software systems, include **only pure open-source systems** (governed by OSI-approved open-source licenses with the full feature set self-hostable and free of vendor lock-in or paywalled tiers). Do **not** include or recommend premium/commercial-only systems, proprietary/vendor-locked systems, or community-based/open-core ("Community Edition") systems—omit or replace any non-qualifying tools from source material with pure open-source equivalents, and include the following note if not already stated:
-     ```markdown
-     > **Scope & Licensing Note:** This article strictly covers pure open-source systems. Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.
-     ```
-   * **Add Related Articles & Initial Changelog**: Include a `## Related Articles` section at the bottom (before `## References`, if present) linking to 2–3 related existing articles using relative `.md` paths, followed by an initial `## Changelog` at the very bottom:
+     Include `## Related Articles` (2–3 relative `.md` links), preserve `## References` if present, and end with an initial `## Changelog`:
      ```markdown
      ## Related Articles
 
@@ -42,28 +38,19 @@ When the user asks to "create a new article" or "add a summary of [URL]":
 
      - **Mon DD, YYYY:** Initial publication.
      ```
-   * Where appropriate, add a reciprocal link back in closely related existing articles to strengthen the digital garden mesh. Whenever editing an existing article published on an earlier date, also update its `**Last Updated:** Month Day, Year` header, its in-article `## Changelog`, the `Recently Updated` / `[UPDATED]` trail in `README.md` and `articles/README.md`, and `articles/CHANGELOG.md`.
+   * Where appropriate, add a reciprocal link back in closely related existing articles; when editing an existing article from an earlier date, update its metadata and trail per [`update_article/SKILL.md`](../update_article/SKILL.md).
 
 3. **Create File (`kebab-case.md`)**:
-   * Always use lowercase `kebab-case.md` for the filename: `articles/[category]/[kebab-case-slug].md`.
-   * Never use underscores (`_`) or uppercase characters in article filenames.
+   * Per [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 2**, save to `articles/[category]/[kebab-case-slug].md` using lowercase `kebab-case.md` (no underscores or uppercase characters).
 
-4. **Update Index & Manage `[NEW]` Tags (Hybrid Window Policy)**:
-   * **Hybrid Window `[NEW]` Policy**: Multiple articles can hold `[NEW]` simultaneously. Keep `[NEW]` on all articles published within **7 days** of the newest article's `**Date:**`, bounded by a **minimum of 3** and a **maximum of 5** articles (`expected_count = min(5, max(3, count_within_7_days))`).
-   * **Update Root `README.md`**:
-     * Open `README.md` and prepend the new article(s) to `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` in reverse chronological order (newest first), formatted as:
-       `* [Article Title](./articles/[category]/[kebab-case-slug].md) *(Mon DD, YYYY)* \`[NEW]\``
-     * Evict any older entries from `Recent Additions` that fall outside the 7-day window (while keeping at least 3) or exceed the maximum cap of 5. Track which entries were evicted.
-   * **Update `articles/README.md` & `articles/CHANGELOG.md`**:
-     * Remove `[NEW]` **only** from the entries that were evicted from `Recent Additions` (leave `[NEW]` intact on articles still within the active cohort).
-     * Locate the appropriate category (and subsection, if applicable) under `## Article Index` and insert a title-first link in alphabetical order, with `[NEW]` placed after the link:
-       `- [Article Title / Summary]([category]/[kebab-case-slug].md) [NEW]`
-     * Increment the total and category article counts in `articles/README.md` (`## Organization`, `## Category Directory`) and root `README.md` (`## Explore the Digital Garden`).
-     * Record the new article under today's date in `articles/CHANGELOG.md` (`* **Added:** [Article Title](category/kebab-case-slug.md)`), along with any evicted `[NEW]` rotation notes (`* **Rotated (\`[NEW]\`):** ...`) so no trail is lost.
+4. **Reconcile Indexes, `[NEW]` Tags & Changelog**:
+   * Delegate index updates to [`organize_readme/SKILL.md`](../organize_readme/SKILL.md) (enforcing [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 4**):
+     * Insert the article alphabetically in `articles/README.md`, recompute the Hybrid Window `[NEW]` cohort (`README.md` + `articles/README.md`), and sync category/total article counts.
+     * Log the addition under today's date in `articles/CHANGELOG.md` (``* **Added:** [Article Title](category/kebab-case-slug.md)`` plus any ``* **Rotated (`[NEW]`):** ...`` entries).
 
 5. **Verify Repository Health**:
    * Run `bash verify_links.sh` and confirm all 7 checks pass with exit code `0`.
-   * *(Optional)* Run `.agent/skills/review_article/SKILL.md` to perform a full Reader Mode, Subject Matter Expert, and Technical Architect review and link a `0–10` Before/After report under `reviews/<category>/<slug>-review.md`.
+   * *(Optional)* Run [`review_article/SKILL.md`](../review_article/SKILL.md) to perform a full Reader Mode, Subject Matter Expert, and Technical Architect review and link a `0–10` Before/After report under `reviews/<category>/<slug>-review.md`.
 
 ## Example
 
@@ -71,8 +58,6 @@ When the user asks to "create a new article" or "add a summary of [URL]":
 
 **Action:**
 1. Read URL.
-2. Write `articles/frontend/react-compiler-overview.md` with `**Date:** Month Day, Year` at the top and a `## Related Articles` footer.
-3. Prepend the article to `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` in `README.md`, keeping all entries within 7 days of the latest date (min 3, max 5) and noting any evicted entry.
-4. Remove `[NEW]` only from any evicted entry in `articles/README.md`, and add the new entry under `### Frontend`:
-   `- [React Compiler Overview](frontend/react-compiler-overview.md) [NEW]`
-5. Update counts in `articles/README.md` and `README.md`, then run `bash verify_links.sh` (Checks 1–7 pass).
+2. Write `articles/frontend/react-compiler-overview.md` complying with [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) Invariants 1–3 (`**Date:** Month Day, Year`, `Scope & Licensing Note` if tooling-focused, `## Related Articles`, and initial `## Changelog`).
+3. Reconcile `README.md`, `articles/README.md` (`### Frontend`), counts, Hybrid Window `[NEW]` cohort, and `articles/CHANGELOG.md` (``* **Added:** ...``) via [`organize_readme/SKILL.md`](../organize_readme/SKILL.md).
+4. Run `bash verify_links.sh` (Checks 1–7 pass).

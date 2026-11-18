@@ -10,8 +10,8 @@
 | Phase | Priority & ROI | Scope | Primary Deliverables | Risk Level |
 | :--- | :---: | :--- | :--- | :---: |
 | **Phase 1** | `9.5 / 10` | Formalize [`review_article`](../.agent/skills/review_article/SKILL.md) multi-agent pipeline | 3 read-only reviewer agent specs + `run_review_workflow.py` + JSON Scorecard schema | **Low** |
-| **Phase 2** | `8.5 / 10` | Shared rules & single-writer reconciliation | `.agent/rules/AGENTS.md` + `index-reconciler` agent replacing multi-writer index edits | **Low–Medium** |
-| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | `article-author`, `article-refactor`, tool-agnostic cleanup *(pre-push `prepare_commit.sh` gate **Completed**)* | **Medium** |
+| **Phase 2** | `8.5 / 10` | Shared rules & single-writer reconciliation | [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md) + `SKILL.md` deduplication *(Completed — Option 4)*; `index-reconciler` agent *(Pending)* | **Low–Medium** |
+| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | `article-author`, `article-refactor` *(Pending)*; `simplify_article` tool-agnostic cleanup & pre-push `prepare_commit.sh` gate *(Completed — Option 4)* | **Medium** |
 
 ---
 
@@ -44,16 +44,14 @@
 
 ### Step-by-Step Tasks
 
-1. **Create `.agent/rules/AGENTS.md`:**
-   * Consolidate the **Pure Open-Source Systems Mandate** and exact `Scope & Licensing Note` callout.
-   * Consolidate the **`kebab-case.md` naming rule** and topic-directory policy (no date-based folders, no empty directories).
-   * Consolidate the **immutable `**Date:**` header**, `**Last Updated:**`, and bottom `## Changelog` ordering contract.
-   * Consolidate the **Hybrid Window `[NEW]` policy** (`min(5, max(3, count_within_7_days))`) and **`[UPDATED]` exclusivity** (max 5, never combined with `[NEW]`).
+1. **Create `.agent/rules/AGENTS.md` & Deduplicate `SKILL.md` Governance *(Completed — Option 4)*:**
+   * Consolidated the **Pure Open-Source Systems Mandate** and exact `Scope & Licensing Note` callout, **`kebab-case.md` naming**, **immutable `**Date:**` / `**Last Updated:**` / bottom `## Changelog` ordering**, and **Hybrid Window `[NEW]` / `[UPDATED]` exclusivity** into [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md).
+   * Consolidated procedural `README.md`, `articles/README.md`, and `articles/CHANGELOG.md` trail updates into [`organize_readme/SKILL.md`](../.agent/skills/organize_readme/SKILL.md) and deduplicated [`create_article`](../.agent/skills/create_article/SKILL.md), [`update_article`](../.agent/skills/update_article/SKILL.md), [`simplify_article`](../.agent/skills/simplify_article/SKILL.md), and [`review_article`](../.agent/skills/review_article/SKILL.md).
 2. **Define `.agent/agents/index-reconciler.md` (Model Tier: `flash`):**
    * Owns all edits to [`README.md`](../README.md), [`articles/README.md`](../articles/README.md), [`articles/CHANGELOG.md`](../articles/CHANGELOG.md), and [`reviews/README.md`](../reviews/README.md).
    * Accepts a list of structured JSON handoff payloads from upstream content agents (or runs full discovery when invoked standalone via [`organize_readme`](../.agent/skills/organize_readme/SKILL.md)).
    * Resolves broken relative cross-links, verifies 1-to-1 `[NEW]` and `[UPDATED]` badge parity, updates category/total counts, and executes `bash verify_links.sh` as its mandatory completion gate.
-3. **Update `.agent/skills/organize_readme/SKILL.md`:** Convert into a thin routing skill delegating reconciliation to `index-reconciler`.
+3. **Update `.agent/skills/organize_readme/SKILL.md`:** Canonical procedural trail owner implemented *(Option 4)*; convert into a thin routing trigger once `index-reconciler` subagent is deployed.
 
 ### Phase 2 Acceptance Criteria
 * Two simulated concurrent article handoffs processed through `index-reconciler` produce accurate counts, zero duplicate or missing `[NEW]`/`[UPDATED]` badges, and exit code `0` from `bash verify_links.sh` (Checks 1–7).
@@ -72,14 +70,14 @@
    * Keep URL ingestion and heavy synthesis isolated from the main user conversation.
 2. **Create `.agent/agents/article-refactor.md` (from [`simplify_article`](../.agent/skills/simplify_article/SKILL.md)):**
    * Scoped strictly to structural cleanup, header hierarchy normalization, Mermaid flow injection, and **100% link/citation retention verification**, returning the JSON handoff payload to `index-reconciler`.
-   * Remove the legacy tool reference (`view_file` on line 16 of [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md)) in favor of tool-agnostic wording.
+   * ~~Remove the legacy tool reference (`view_file` on line 16 of [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md)) in favor of tool-agnostic wording.~~ *(Completed — Option 4.)*
    * Use `workspace: "share"` when invoked across batches of multiple articles in parallel.
 3. **Update [`update_article/SKILL.md`](../.agent/skills/update_article/SKILL.md):**
    * Retain as a lightweight hybrid skill for single-section edits in the active conversation, while routing index/badge updates through `index-reconciler` (or delegating multi-article cross-link updates to a subagent).
 4. **Add Pre-Push Gate to [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) *(Completed — Option 4)*:**
    * Kept `commit_and_push` as a Skill (`2.0 / 10` conversion ROI—no subagent needed).
    * Added atomic local staging script [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) (`set -euo pipefail`) that enforces `bash verify_links.sh` (Checks 1–7 == exit `0`) **before** `jj describe -m` and `jj bookmark set <bookmark> -r @` (default `main`), isolating network access strictly to Phase 2 (`jj git push --bookmark <bookmark>`) and routing Check 1–7 failures to [`organize_readme`](../.agent/skills/organize_readme/SKILL.md).
-5. **Sync Documentation:** Update [`.agent/skills/README.md`](../.agent/skills/README.md) to reflect the active `.agent/agents/` and `.agent/rules/` components once each phase ships.
+5. **Sync Documentation:** Keep [`.agent/skills/README.md`](../.agent/skills/README.md) synchronized as each phase ships *(updated for [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md), Option 4 `SKILL.md` deduplication, and `prepare_commit.sh`; update again once `.agent/agents/` and `run_review_workflow.py` ship)*.
 
 ### Phase 3 Acceptance Criteria
 * End-to-end smoke test (`article-author` → `run_review_workflow.py` → `index-reconciler` → `verify_links.sh` → `prepare_commit.sh` / `commit_and_push` dry run) executes with zero manual index edits and passes Checks 1–7.

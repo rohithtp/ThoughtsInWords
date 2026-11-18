@@ -51,9 +51,9 @@ Each skill is evaluated across 6 architectural conversion parameters (`0.0–10.
   * Restrict content agents (`article-author`, `article-refactor`, `article-remediator`) to writing **only** their target `articles/<category>/<slug>.md` (and `reviews/<category>/<slug>-review.md`).
   * Promote `organize_readme` into a single-writer **`index-reconciler`** agent invoked at workflow fan-in to recompute Hybrid Window cohorts, sync both READMEs and `articles/CHANGELOG.md`, update `reviews/README.md`, and run `bash verify_links.sh`.
 
-### Change 2 — Extract Shared Governance Invariants into `.agent/rules/AGENTS.md`
-* **Problem:** Repository-wide rules (Pure Open-Source Systems Mandate, `Scope & Licensing Note`, `kebab-case.md` naming, immutable `**Date:**`) are duplicated across 4 `SKILL.md` files and are not automatically inherited by subagents unless manually pasted into prompts.
-* **Solution:** Centralize invariant rules inside `.agent/rules/AGENTS.md` so Antigravity automatically loads them into workspace agents, shrinking skill/agent definitions and eliminating rule drift.
+### Change 2 — Extract Shared Governance Invariants into `.agent/rules/AGENTS.md` *(Implemented — Option 4)*
+* **Problem:** Repository-wide rules (Pure Open-Source Systems Mandate, `Scope & Licensing Note`, `kebab-case.md` naming, immutable `**Date:**`, Hybrid Window `[NEW]` / `[UPDATED]` exclusivity) and procedural trail updates were previously duplicated across 4 `SKILL.md` files and not automatically inherited by subagents unless manually pasted into prompts.
+* **Solution:** Centralized all declarative invariants inside [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md) so Antigravity automatically loads them into workspace conversations and subagents, and consolidated procedural `README.md` / `articles/README.md` / `articles/CHANGELOG.md` trail sync into [`organize_readme/SKILL.md`](../.agent/skills/organize_readme/SKILL.md), removing governance boilerplate across [`create_article`](../.agent/skills/create_article/SKILL.md), [`update_article`](../.agent/skills/update_article/SKILL.md), [`simplify_article`](../.agent/skills/simplify_article/SKILL.md), and [`review_article`](../.agent/skills/review_article/SKILL.md). *(Completed via Option 4.)*
 
 ### Change 3 — Formalize `review_article` into Persistent Read-Only Agents + `run_workflow`
 * **Problem:** [`review_article/SKILL.md`](../.agent/skills/review_article/SKILL.md) currently constructs ad-hoc subagent prompts in prose and relies on manual score extraction and Delta arithmetic.
@@ -124,9 +124,9 @@ SCORECARD_SCHEMA = {
 * **Single-Article & Read-Only Operations (`workspace: "inherit"`):** All 3 read-only reviewer agents and single-article runs operate directly in `inherit` mode without cloning overhead.
 * **Batch Multi-Article Operations (`workspace: "share"`):** Parallelized multi-article runs (e.g., batch `simplify_article` or batch `review_article`) spawn workers with `workspace: "share"` so file edits never collide before merging and running [`verify_links.sh`](../verify_links.sh).
 
-### Change 6 — Keep `commit_and_push` as a Guarded Procedural Skill (`Pre-Push Gate Implemented`)
-* **Problem:** [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) previously ran `jj describe`, `jj bookmark set main -r @`, and `jj git push` without validating repository health.
-* **Solution:** Retain `commit_and_push` as a Skill (lowest ROI for an autonomous agent at `2.0 / 10`), remove `view_file` tool-specific coupling from `simplify_article/SKILL.md`, and enforce a two-phase **Pre-Push Verification Gate** (`prepare_commit.sh` runs `bash verify_links.sh` before `jj describe` and `jj bookmark set <bookmark> -r @`; only then runs `jj git push --bookmark <bookmark>`). *(Pre-push gate implemented via [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh); `simplify_article` cleanup remains scheduled for Phase 3.)*
+### Change 6 — Keep `commit_and_push` as a Guarded Procedural Skill (`Pre-Push Gate & Tool-Agnostic Cleanup Implemented`)
+* **Problem:** [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) previously ran `jj describe`, `jj bookmark set main -r @`, and `jj git push` without validating repository health, and [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md) referenced a legacy `view_file` tool name.
+* **Solution:** Retain `commit_and_push` as a Skill (lowest ROI for an autonomous agent at `2.0 / 10`), enforce a two-phase **Pre-Push Verification Gate** (`prepare_commit.sh` runs `bash verify_links.sh` before `jj describe` and `jj bookmark set <bookmark> -r @`; only then runs `jj git push --bookmark <bookmark>`), and make [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md) tool-agnostic. *(Both [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) and the `simplify_article` `view_file` cleanup are now **Implemented**.)*
 
 ---
 

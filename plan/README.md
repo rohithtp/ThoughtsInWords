@@ -10,9 +10,9 @@ This folder captures the complete Technical / AI Architect assessment (`0–10` 
 
 | Order | Document | Scope & Focus | Key Outputs | Status |
 | :-: | :--- | :--- | :--- | :--- |
-| **01** | [Skills Capability & Scale Assessment](./01-skills-capability-and-scale-assessment.md) | Prompt evaluation (`0–10`), 8-parameter AI/technical scale requirements, and current maturity scorecard of all 6 skills | Prompt `4.2 → 9.2` refinement, `0–10` scale matrix, per-skill strengths & gaps | Baseline Completed |
-| **02** | [Skills-to-Agents Evaluation & Target Architecture](./02-skills-to-agents-evaluation-and-architecture.md) | Paradigm comparison, 6-parameter conversion ROI (`0–10`), 6 required architectural changes, and hybrid topology | Conversion ROI scores (`9.5` down to `2.0`), JSON contracts, Mermaid architecture | Design Proposed |
-| **03** | [Phased Migration Execution Plan](./03-phased-migration-execution-plan.md) | Actionable 3-phase implementation plan, file deliverables, invariants migration, and verification gates | Phase 1 (`review_article`), Phase 2 (`index-reconciler` + rules), Phase 3 (content agents + `jj` gate) | Ready for Execution |
+| **01** | [Skills Capability & Scale Assessment](./01-skills-capability-and-scale-assessment.md) | Prompt evaluation (`0–10`), 8-parameter AI/technical scale requirements, and current maturity scorecard of all 6 skills | Prompt `4.2 → 9.2` refinement, `0–10` scale matrix, Option 4 governance & pre-push remediations | Updated (Option 4) |
+| **02** | [Skills-to-Agents Evaluation & Target Architecture](./02-skills-to-agents-evaluation-and-architecture.md) | Paradigm comparison, 6-parameter conversion ROI (`0–10`), 6 required architectural changes, and hybrid topology | Conversion ROI scores (`9.5` down to `2.0`), JSON contracts, Mermaid architecture (`AGENTS.md` + `prepare_commit.sh` live) | In Progress |
+| **03** | [Phased Migration Execution Plan](./03-phased-migration-execution-plan.md) | Actionable 3-phase implementation plan, file deliverables, invariants migration, and verification gates | Phase 1 (`review_article`), Phase 2 (`.agent/rules/AGENTS.md` **Done**; `index-reconciler` pending), Phase 3 (`prepare_commit.sh` & cleanup **Done**; content agents pending) | Partially Implemented |
 
 ---
 
