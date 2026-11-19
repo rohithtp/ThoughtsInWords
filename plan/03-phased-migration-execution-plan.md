@@ -9,36 +9,35 @@
 
 | Phase | Priority & ROI | Scope | Primary Deliverables | Risk Level |
 | :--- | :---: | :--- | :--- | :---: |
-| **Phase 1** | `9.5 / 10` | Formalize [`review_article`](../.agent/skills/review_article/SKILL.md) multi-agent pipeline | 3 read-only reviewer agent specs + `run_review_workflow.py` + JSON Scorecard schema | **Low** |
-| **Phase 2** | `8.5 / 10` | Shared rules & single-writer reconciliation | [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md) + `SKILL.md` deduplication *(Completed — Option 4)*; `index-reconciler` agent *(Pending)* | **Low–Medium** |
-| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | `article-author`, `article-refactor` *(Pending)*; `simplify_article` tool-agnostic cleanup & pre-push `prepare_commit.sh` gate *(Completed — Option 4)* | **Medium** |
+| **Phase 1** | `9.5 / 10` | Formalize [`review_article`](../.agent/skills/review_article/SKILL.md) multi-agent pipeline | [`schemas.py`](../.agent/skills/review_article/scripts/schemas.py) (`BEFORE_SCORECARD_SCHEMA` / `AFTER_SCORECARD_SCHEMA`) + [`run_review_workflow.py`](../.agent/skills/review_article/scripts/run_review_workflow.py) *(Implemented — Option B4)* | **Low** |
+| **Phase 2** | `8.5 / 10` | Shared rules & single-writer reconciliation | [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md) + `SKILL.md` deduplication *(Completed — Option 4)*; [`reconcile_indexes.py`](../.agent/skills/organize_readme/scripts/reconcile_indexes.py) + `INDEX_HANDOFF_SCHEMA` *(Implemented — Option A4)* | **Low–Medium** |
+| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | Single-writer content skill partitioning (`create_article`, `update_article`, `simplify_article`) + pre-push [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) *(Implemented — Options 4 + A4)*; optional standalone `.agent/agents/*.md` files *(Optional)* | **Medium** |
 
 ---
 
-## Phase 1: Formalize `review_article` as a Deterministic Multi-Agent Workflow
+## Phase 1: Formalize `review_article` as a Deterministic Multi-Agent Workflow *(Implemented — Option B4)*
 
-**Target Outcome:** Eliminate ad-hoc prompt synthesis and manual arithmetic in [`review_article`](../.agent/skills/review_article/SKILL.md) by moving Stages 1–4 into reusable read-only reviewer definitions orchestrated by `run_workflow`.
+**Target Outcome:** Eliminate ad-hoc prompt synthesis and manual arithmetic in [`review_article`](../.agent/skills/review_article/SKILL.md) by orchestrating persistent read-only reviewer handles via `run_workflow` and schema-validated Python math/rendering.
 
 ### Step-by-Step Tasks
 
-1. **Create Persistent Read-Only Reviewer Definitions (`.agent/agents/`):**
-   * `reader-mode-reviewer.md`: Owns Parameters 1–4 from [`rubric-and-repo-alignment.md`](../.agent/skills/review_article/references/rubric-and-repo-alignment.md); `EnableWriteTools: false`.
-   * `subject-expert-reviewer.md`: Owns Parameters 5–8 (accuracy, failure modes, citations, pure open-source compliance); `EnableWriteTools: false`.
-   * `technical-architect-reviewer.md`: Owns Parameters 9–12 (trade-offs, ThoughtsInWords philosophy & anti-oversimplification check, interconnectivity, metadata compliance); `EnableWriteTools: false`.
-2. **Implement `.agent/skills/review_article/scripts/run_review_workflow.py`:**
-   * **Stage 1 (`Before` Audit):** Use `parallel()` to invoke persistent `agent()` handles with `SCORECARD_SCHEMA` so all 3 personas return structured `0–10` scores and prioritized recommendations (`Critical`, `High`, `Medium`, `Low`).
-   * **Stage 2 & 3 (Remediation):** Merge recommendations and pass them to the remediator turn to update `articles/<category>/<slug>.md` (preserving `**Date:**`, updating `**Last Updated:**`, adding `**Review:**` link, ensuring `Scope & Licensing Note`, prepending `## Changelog`).
-   * **Stage 4 (`After` Re-Verification):** Reuse the **same 3 persistent agent handles** (`await r1(after_prompt)`, `await r2(after_prompt)`, `await r3(after_prompt)`) to score the revised article against Stage 1 findings.
-   * **Deterministic Score Math:** Compute Persona Sub-Averages, Overall Composite Score, and exact Deltas (`After - Before`) in Python, and render `reviews/<category>/<slug>-review.md` using [`report-template.md`](../.agent/skills/review_article/resources/report-template.md).
-3. **Update `.agent/skills/review_article/SKILL.md`:** Point the skill directly to `run_review_workflow.py` via `run_workflow`.
+1. **Implement [`schemas.py`](../.agent/skills/review_article/scripts/schemas.py) *(Implemented)*:**
+   * Defines Draft-07 compatible `BEFORE_SCORECARD_SCHEMA` (with `R-XX` / `S-XX` / `A-XX` recommendation IDs), `REMEDIATION_RESULT_SCHEMA`, `AFTER_SCORECARD_SCHEMA` (`Applied` vs. `Deferred`), and `INDEX_HANDOFF_SCHEMA`.
+   * Implements `compute_scorecard()` with anti-inflation clamping (holding `After <= Before` if all linked Stage 1 recommendations remain `Deferred`), deterministic Python means/deltas, and `render_review_report()` generating Check 7 compliant Markdown from [`report-template.md`](../.agent/skills/review_article/resources/report-template.md).
+2. **Implement [`run_review_workflow.py`](../.agent/skills/review_article/scripts/run_review_workflow.py) *(Implemented)*:**
+   * **Stage 1 (`Before` Audit):** Instantiates 3 persistent read-only handles (`r_reader`, `r_sme`, `r_arch`) and executes `parallel()` with `BEFORE_SCORECARD_SCHEMA`.
+   * **Stage 2 & 3 (Scoped Remediation):** Sorts prioritized findings and runs `Article Remediator` (`REMEDIATION_RESULT_SCHEMA`) scoped strictly to `articles/<category>/<slug>.md` (preserving `**Date:**`, adding `**Last Updated:**`, `**Review:**` link, `Scope & Licensing Note`, and bottom `## Changelog`).
+   * **Stage 4 (`After` Re-Verification):** Reuses the **same 3 persistent handles** via `parallel()` against `AFTER_SCORECARD_SCHEMA`, computes exact scorecard math and renders `reviews/<category>/<slug>-review.md` in Python.
+   * **Stage 5 (Single-Writer Handoff):** Emits `INDEX_HANDOFF_SCHEMA` to [`reconcile_indexes.py`](../.agent/skills/organize_readme/scripts/reconcile_indexes.py).
+3. **Update [`review_article/SKILL.md`](../.agent/skills/review_article/SKILL.md) *(Implemented)*:** Points the skill directly to `run_review_workflow.py` via `run_workflow`.
 
 ### Phase 1 Acceptance Criteria
-* Running `review_article` on a sample article produces a valid `SCORECARD_SCHEMA` payload for all 3 personas (Before and After) with zero manual score arithmetic errors.
+* `python3 .agent/skills/review_article/scripts/schemas.py --self-test` verifies schema contracts, anti-inflation clamping, arithmetic, and Check 7 heading integrity (`exit 0`).
 * `bash verify_links.sh` Check 7 passes with exit code `0`.
 
 ---
 
-## Phase 2: Centralize Rules & Deploy Single-Writer `index-reconciler`
+## Phase 2: Centralize Rules & Deploy Single-Writer `reconcile_indexes.py` *(Implemented — Options 4 + A4)*
 
 **Target Outcome:** Remove duplicated governance rules from individual skills and eliminate race conditions on singleton index/changelog files.
 
@@ -47,38 +46,35 @@
 1. **Create `.agent/rules/AGENTS.md` & Deduplicate `SKILL.md` Governance *(Completed — Option 4)*:**
    * Consolidated the **Pure Open-Source Systems Mandate** and exact `Scope & Licensing Note` callout, **`kebab-case.md` naming**, **immutable `**Date:**` / `**Last Updated:**` / bottom `## Changelog` ordering**, and **Hybrid Window `[NEW]` / `[UPDATED]` exclusivity** into [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md).
    * Consolidated procedural `README.md`, `articles/README.md`, and `articles/CHANGELOG.md` trail updates into [`organize_readme/SKILL.md`](../.agent/skills/organize_readme/SKILL.md) and deduplicated [`create_article`](../.agent/skills/create_article/SKILL.md), [`update_article`](../.agent/skills/update_article/SKILL.md), [`simplify_article`](../.agent/skills/simplify_article/SKILL.md), and [`review_article`](../.agent/skills/review_article/SKILL.md).
-2. **Define `.agent/agents/index-reconciler.md` (Model Tier: `flash`):**
-   * Owns all edits to [`README.md`](../README.md), [`articles/README.md`](../articles/README.md), [`articles/CHANGELOG.md`](../articles/CHANGELOG.md), and [`reviews/README.md`](../reviews/README.md).
-   * Accepts a list of structured JSON handoff payloads from upstream content agents (or runs full discovery when invoked standalone via [`organize_readme`](../.agent/skills/organize_readme/SKILL.md)).
-   * Resolves broken relative cross-links, verifies 1-to-1 `[NEW]` and `[UPDATED]` badge parity, updates category/total counts, and executes `bash verify_links.sh` as its mandatory completion gate.
-3. **Update `.agent/skills/organize_readme/SKILL.md`:** Canonical procedural trail owner implemented *(Option 4)*; convert into a thin routing trigger once `index-reconciler` subagent is deployed.
+2. **Implement [`reconcile_indexes.py`](../.agent/skills/organize_readme/scripts/reconcile_indexes.py) *(Implemented — Option A4)*:**
+   * Single-writer deterministic engine owning all edits to [`README.md`](../README.md), [`articles/README.md`](../articles/README.md), [`articles/CHANGELOG.md`](../articles/CHANGELOG.md), and [`reviews/README.md`](../reviews/README.md).
+   * Accepts `--handoff` / `--handoff-file` (`INDEX_HANDOFF_SCHEMA` object or array) or runs standalone tree discovery.
+   * Inserts unlisted articles alphabetically, self-heals uniquely moved paths, computes Hybrid Window `[NEW]` and top-5 `[UPDATED]` cohorts, updates all counts, records idempotent `articles/CHANGELOG.md` entries, and executes `bash verify_links.sh` as its completion gate.
+3. **Update [`organize_readme/SKILL.md`](../.agent/skills/organize_readme/SKILL.md) *(Implemented)*:** Configured around `reconcile_indexes.py` handoff and standalone modes with LLM fallback for ambiguous broken cross-links.
 
 ### Phase 2 Acceptance Criteria
-* Two simulated concurrent article handoffs processed through `index-reconciler` produce accurate counts, zero duplicate or missing `[NEW]`/`[UPDATED]` badges, and exit code `0` from `bash verify_links.sh` (Checks 1–7).
-* All subagents automatically respect repository invariants via `.agent/rules/AGENTS.md` without inline prompt repetition.
+* `python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --dry-run` and live execution pass idempotently (`exit 0`) with zero unintended diffs and `verify_links.sh` Checks 1–7 == `0`.
+* All subagents and workflows inherit repository invariants via `.agent/rules/AGENTS.md`.
 
 ---
 
-## Phase 3: Scope Content Agents & Guard `commit_and_push`
+## Phase 3: Scope Content Workflows & Guard `commit_and_push` *(Core Implemented — Options 4 + A4)*
 
-**Target Outcome:** Complete the Hybrid Control Plane by isolating article authoring/refactoring into scoped subagents and securing the Jujutsu (`jj`) publication path.
+**Target Outcome:** Partition content workflows so they mutate only target article files, hand off indexes via `INDEX_HANDOFF_SCHEMA`, and secure the Jujutsu (`jj`) publication path.
 
 ### Step-by-Step Tasks
 
-1. **Create `.agent/agents/article-author.md` (from [`create_article`](../.agent/skills/create_article/SKILL.md)):**
-   * Scoped strictly to creating `articles/<category>/<kebab-case>.md` (and optional reciprocal cross-links in existing articles) and returning the JSON handoff payload to `index-reconciler`.
-   * Keep URL ingestion and heavy synthesis isolated from the main user conversation.
-2. **Create `.agent/agents/article-refactor.md` (from [`simplify_article`](../.agent/skills/simplify_article/SKILL.md)):**
-   * Scoped strictly to structural cleanup, header hierarchy normalization, Mermaid flow injection, and **100% link/citation retention verification**, returning the JSON handoff payload to `index-reconciler`.
-   * ~~Remove the legacy tool reference (`view_file` on line 16 of [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md)) in favor of tool-agnostic wording.~~ *(Completed — Option 4.)*
-   * Use `workspace: "share"` when invoked across batches of multiple articles in parallel.
-3. **Update [`update_article/SKILL.md`](../.agent/skills/update_article/SKILL.md):**
-   * Retain as a lightweight hybrid skill for single-section edits in the active conversation, while routing index/badge updates through `index-reconciler` (or delegating multi-article cross-link updates to a subagent).
+1. **Scope [`create_article/SKILL.md`](../.agent/skills/create_article/SKILL.md) *(Implemented — Option A4)*:**
+   * Restricted writes strictly to `articles/<category>/<kebab-case>.md` (and optional reciprocal cross-links) with `INDEX_HANDOFF_SCHEMA` (`"Added"`) handoff to `reconcile_indexes.py`. *(Optional future extension: `.agent/agents/article-author.md` wrapper.)*
+2. **Scope [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md) *(Implemented — Options 4 + A4)*:**
+   * Tool-agnostic structural cleanup preserving 100% of links/citations, supporting parallel batches via `workspace: "share"` merged at fan-in via `--handoff '[...]'` to `reconcile_indexes.py`. *(Optional future extension: `.agent/agents/article-refactor.md` wrapper.)*
+3. **Scope [`update_article/SKILL.md`](../.agent/skills/update_article/SKILL.md) *(Implemented — Option A4)*:**
+   * Restricted writes to target article edits with `INDEX_HANDOFF_SCHEMA` (`"Updated"`) handoff to `reconcile_indexes.py`.
 4. **Add Pre-Push Gate to [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) *(Completed — Option 4)*:**
    * Kept `commit_and_push` as a Skill (`2.0 / 10` conversion ROI—no subagent needed).
    * Added atomic local staging script [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) (`set -euo pipefail`) that enforces `bash verify_links.sh` (Checks 1–7 == exit `0`) **before** `jj describe -m` and `jj bookmark set <bookmark> -r @` (default `main`), isolating network access strictly to Phase 2 (`jj git push --bookmark <bookmark>`) and routing Check 1–7 failures to [`organize_readme`](../.agent/skills/organize_readme/SKILL.md).
-5. **Sync Documentation:** Keep [`.agent/skills/README.md`](../.agent/skills/README.md) synchronized as each phase ships *(updated for [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md), Option 4 `SKILL.md` deduplication, and `prepare_commit.sh`; update again once `.agent/agents/` and `run_review_workflow.py` ship)*.
+5. **Sync Documentation *(Implemented)*:** Updated [`.agent/skills/README.md`](../.agent/skills/README.md) and [`plan/`](./README.md) for `.agent/rules/AGENTS.md`, `prepare_commit.sh`, `reconcile_indexes.py`, `schemas.py`, and `run_review_workflow.py`.
 
 ### Phase 3 Acceptance Criteria
-* End-to-end smoke test (`article-author` → `run_review_workflow.py` → `index-reconciler` → `verify_links.sh` → `prepare_commit.sh` / `commit_and_push` dry run) executes with zero manual index edits and passes Checks 1–7.
-* Batch refactoring via `article-refactor` with `workspace: "share"` executes without working-copy conflicts.
+* `schemas.py --self-test`, `reconcile_indexes.py`, AST/syntax checks, and `bash verify_links.sh` (Checks 1–7) all pass with exit code `0`.
+* Batch refactoring via `simplify_article` with `workspace: "share"` merges cleanly via `--handoff '[...]'` to `reconcile_indexes.py` without singleton contention.

@@ -3,41 +3,46 @@ name: Organize README
 description: Scans the `articles/` directory for broken links, unlisted files, naming issues, or stale counts in `articles/README.md` and fixes them.
 ---
 
-# Organize README
+# Organize README (Single-Writer Index Reconciler)
 
-This skill is the canonical procedural owner for updating `README.md`, `articles/README.md`, and `articles/CHANGELOG.md` so repository indexes, badge cohorts, and activity logs stay synchronized with the `articles/` tree and the declarative invariants in [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md).
+This skill is the canonical **single-writer** owner for mutating `README.md`, `articles/README.md`, `articles/CHANGELOG.md`, and `reviews/README.md`. Backed by [`reconcile_indexes.py`](./scripts/reconcile_indexes.py) and [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md), it ensures index entries, category/total counts, Hybrid Window `[NEW]` / `[UPDATED]` cohorts, review rows, and changelog trails stay synchronized without multi-writer contention.
 
-## Usage
+## Single-Writer Execution Engine (`reconcile_indexes.py`)
 
-When the user asks to "organize readme", "fix links", or "update index", or when a content skill (`create_article`, `update_article`, `simplify_article`, `review_article`) hands off trail reconciliation:
+Content workflows (`create_article`, `update_article`, `simplify_article`, `review_article`) **must never edit singleton index files directly**. Instead, they restrict edits to target article files and pass a structured [`INDEX_HANDOFF_SCHEMA`](../review_article/scripts/schemas.py) payload to [`reconcile_indexes.py`](./scripts/reconcile_indexes.py):
 
-1. **Scan Files & Naming (Invariant 2)**:
-   * List all `.md` files in `articles/` recursively (excluding `articles/README.md` and `articles/CHANGELOG.md`).
-   * Enforce [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) Invariant 2: topic category folders (`articles/<category>/<kebab-case>.md`), lowercase `kebab-case.md` filenames, no date-based folders, and zero empty directories.
-   * Read `articles/README.md`, `articles/CHANGELOG.md`, and root `README.md`.
+### 1. Handoff Mode (Called by Content Workflows)
 
-2. **Verify & Fix Links**:
-   * Check every link in `articles/README.md`, `articles/CHANGELOG.md`, root `README.md`, and internal cross-links across articles.
-   * If a link points to a missing path, check if the file was moved or renamed in `articles/` and update the link to point to the existing file path.
+Run with a single JSON object or JSON array of handoff payloads:
 
-3. **Reconcile Index, `[NEW]` / `[UPDATED]` Badges & `articles/CHANGELOG.md` (Invariant 4)**:
-   * Identify unlisted files found in the scan and insert title-first entries alphabetically under the appropriate category (and subsection) in `articles/README.md`:
-     `- [Article Title / Summary]([category]/[kebab-case-slug].md)`
-   * Apply the **Hybrid Window `[NEW]` Policy** from [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) Invariant 4 (`expected_count = min(5, max(3, count_within_7_days))` anchored to the newest article's `**Date:**`):
-     * Ensure root `README.md` lists those exact cohort articles (newest first) under `* **Recent Additions (7-Day Window, Min 3 / Max 5):**` formatted as `* [Article Title](./articles/[category]/[kebab-case-slug].md) *(Mon DD, YYYY)* \`[NEW]\``.
-     * Ensure `articles/README.md` carries `[NEW]` on those exact same cohort entries under `## Article Index`, and remove `[NEW]` from any evicted entries outside the cohort.
-   * Sync the **Recently Updated Revision Trail (`[UPDATED]`, Max 5)**:
-     * Scan articles for `**Last Updated:** Month Day, Year` and `## Changelog` (and consume any trail handoffs from upstream content skills).
-     * Ensure root `README.md` lists up to the 5 most recently updated articles (excluding any holding `[NEW]` per Invariant 4 exclusivity) under `* **Recently Updated (Revision Trail, Max 5):**` formatted as `* [Article Title](./articles/[category]/[kebab-case-slug].md) *(Updated Mon DD, YYYY — brief summary)* \`[UPDATED]\``.
-     * Ensure `articles/README.md` carries `[UPDATED]` on those exact same entries (removing `[UPDATED]` from evicted 6th+ entries, and never combining `[NEW]` and `[UPDATED]`).
-   * **Record in `articles/CHANGELOG.md`**: Under `### Month Day, Year` (creating the date header in reverse chronological order if needed), log events using the canonical action prefixes:
-     * ``* **Added:** [Article Title](category/slug.md)``
-     * ``* **Updated:** [Article Title](category/slug.md) — <brief summary>.``
-     * ``* **Simplified:** [Article Title](category/slug.md) — <brief summary>.``
-     * ``* **Reviewed & Updated:** [Article Title](category/slug.md) — <brief summary> ([Review Report](../reviews/<category>/<slug>-review.md)).``
-     * ``* **Rotated (`[NEW]`):** Removed `[NEW]` from [Article Title](category/slug.md) ...`` *(note badge rotations when entries leave the active cohort)*.
+```bash
+python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '{
+  "action": "Added",
+  "article_path": "articles/<category>/<kebab-case-slug>.md",
+  "title": "Article Title",
+  "date": "November 19, 2026",
+  "changelog_summary": "Concise summary of the addition or change"
+}'
+```
 
-4. **Sync Counts & Verify**:
-   * Update category and total article counts in `articles/README.md` (`## Organization`, `## Category Directory`) and root `README.md` (`## Explore the Digital Garden`).
-   * Verify that the `[NEW]` and `[UPDATED]` sets in `README.md` match `articles/README.md` 1-to-1.
-   * Run `bash verify_links.sh` and confirm all 7 checks pass with exit code `0`.
+* Accepted `action` values: `"Added"`, `"Updated"`, `"Simplified"`, `"Reviewed & Updated"`.
+* For `"Reviewed & Updated"`, include `"review_move": {"report_path": "reviews/<category>/<slug>-review.md", "before_score": 7.5, "after_score": 9.0, "delta": "+1.5", "review_date": "Nov 19, 2026"}`.
+* For batch runs (multiple concurrent scoped agents), pass `--handoff '[...]'` or `--handoff-file <path>` once at fan-in to reconcile all changes atomically.
+
+### 2. Standalone Discovery & Audit Mode
+
+When the user asks to `"organize readme"`, `"fix links"`, or `"update index"`:
+
+1. **Run the Deterministic Reconciler:**
+   ```bash
+   python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py
+   ```
+   The script automatically:
+   * Scans all `.md` files under `articles/` (excluding `articles/README.md` and `articles/CHANGELOG.md`) and enforces [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 2** (`articles/<category>/<kebab-case-slug>.md`, zero empty directories).
+   * Inserts unlisted files alphabetically into `articles/README.md` (`- [Title](category/slug.md)`), self-heals uniquely moved article paths, and updates `## Organization` tree counts and `## Category Directory` totals.
+   * Recomputes the exact **Hybrid Window `[NEW]`** cohort (`min(5, max(3, count_within_7_days))` anchored to the newest `**Date:**`) and top-5 **`[UPDATED]`** revision trail (**Invariant 4** exclusivity), enforcing 1-to-1 parity between `README.md` and `articles/README.md` and recording `* **Rotated (\`[NEW]\`):**` notices in `articles/CHANGELOG.md`.
+   * Syncs unlisted `reviews/<category>/<slug>-review.md` reports into `reviews/README.md`.
+   * Executes `bash verify_links.sh` (Checks 1–7) as its completion gate.
+
+2. **LLM Fallback for Ambiguous Cross-Links or Deletions:**
+   * If `verify_links.sh` reports Check 1/3 internal cross-link failures inside article bodies or deleted/ambiguous targets that cannot be auto-resolved by unique filename matching, inspect the reported files, repair the broken relative `.md` paths (or check `## Related Articles`), and re-run `python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py` until Checks 1–7 exit `0`.

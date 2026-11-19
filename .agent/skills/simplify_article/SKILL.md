@@ -35,7 +35,17 @@ When the user asks to "simplify article", "make readable", or "clean up format" 
         - A Mermaid flow diagram to visualize complex structures, processes, or workflows if required.
     - Ensure there is a newline before and after headers and lists.
 
-4.  **Update Repository Trail & Verify**
-    - Delegate repository trail reconciliation to [`organize_readme/SKILL.md`](../organize_readme/SKILL.md) (per [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 4**) with `articles/CHANGELOG.md` action ``* **Simplified:** [Article Title](category/slug.md) — ...``.
-    - Run `bash verify_links.sh` and confirm Checks 1–7 pass with exit code `0`.
-    - Confirm that ALL references/links appearing in the original text are present in the new text.
+4.  **Single-Writer Trail Reconciliation & Verification (Option A4)**
+    - **Write Scope Partition:** Never edit `README.md`, `articles/README.md`, or `articles/CHANGELOG.md` directly. Hand off an [`INDEX_HANDOFF_SCHEMA`](../review_article/scripts/schemas.py) payload to [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) (per [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 4**):
+      ```bash
+      python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '{
+        "action": "Simplified",
+        "article_path": "articles/<category>/<slug>.md",
+        "title": "Article Title",
+        "date": "<original Date>",
+        "last_updated": "<today Month Day, Year>",
+        "changelog_summary": "Simplified structure and readability while preserving all references"
+      }'
+      ```
+    - [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) syncs `[UPDATED]` exclusivity, records `* **Simplified:**` in `articles/CHANGELOG.md`, and executes `bash verify_links.sh` (Checks 1–7 == exit `0`).
+    - Confirm that ALL references/links appearing in the original text are present in the new text (use `workspace: "share"` when running batch simplification across multiple articles concurrently, merging into `--handoff '[...]'` at fan-in).
