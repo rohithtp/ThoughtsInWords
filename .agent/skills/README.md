@@ -2,7 +2,7 @@
 
 Welcome to the agentic control plane for **ThoughtsInWords** ([Root Overview](../../README.md) | [Full Article Index](../../articles/README.md) | [Review Reports Index](../../reviews/README.md) | [Activity Changelog](../../articles/CHANGELOG.md) | [Repository Rules](../rules/AGENTS.md)).
 
-The `.agent/skills/` folder houses **6 modular agent skills** (backed by 8 Markdown specification, reference, and template files totaling 472 lines plus 4 deterministic/orchestration scripts totaling 2,079 lines) governed by the always-on workspace rule [`.agent/rules/AGENTS.md`](../rules/AGENTS.md) (34 lines). Together they automate the complete lifecycle of the digital garden: ingesting and authoring articles, enforcing licensing and metadata invariants, refactoring structure, running schema-validated multi-subagent `0–10` architectural audits (`run_review_workflow.py`), reconciling repository indexes via a single-writer engine (`reconcile_indexes.py`), and publishing via Jujutsu (`jj`).
+The `.agent/skills/` folder houses **6 modular agent skills** (backed by 8 Markdown specification, reference, and template files totaling 477 lines plus 5 deterministic/orchestration scripts totaling 2,461 lines, statically indexed by [`pyrightconfig.json`](../../pyrightconfig.json) and managed via [`pyproject.toml`](../../pyproject.toml) / [`requirements.txt`](../../requirements.txt)) governed by the always-on workspace rule [`.agent/rules/AGENTS.md`](../rules/AGENTS.md) (34 lines). Together they automate the complete lifecycle of the digital garden: ingesting and authoring articles, enforcing licensing and metadata invariants, refactoring structure, running schema-validated multi-subagent `0–10` architectural audits (`run_review_workflow.py`), reconciling repository indexes via a single-writer engine (`reconcile_indexes.py`) executed through the `uv`-first / `pip`-fallback wrapper [`run_python.sh`](./organize_readme/scripts/run_python.sh), and publishing via Jujutsu (`jj`).
 
 ---
 
@@ -14,12 +14,12 @@ Before cataloging individual capabilities, this control plane is evaluated acros
 
 | # | Architectural Parameter | Scale Required (`0–10`) | Scope & Engineering Rationale |
 | :-: | :--- | :---: | :--- |
-| **1** | **Discovery & Context Window Scale** | `2.5` | Small, bounded markdown surface area: 1 always-on rule file (`AGENTS.md`, 34 lines) + 6 skill directories (8 Markdown files, 472 lines) + 4 scripts (`prepare_commit.sh`, `reconcile_indexes.py`, `schemas.py`, `run_review_workflow.py`), easily indexed in one context pass. |
+| **1** | **Discovery & Context Window Scale** | `2.5` | Small, bounded markdown surface area: 1 always-on rule file (`AGENTS.md`, 34 lines) + 6 skill directories (8 Markdown files, 477 lines) + 5 scripts (`prepare_commit.sh`, `run_python.sh`, `reconcile_indexes.py`, `schemas.py`, `run_review_workflow.py`), easily indexed in one context pass. |
 | **2** | **Agentic Compute & Orchestration Scale** | `2.0` / `7.5` | `2.0` for static index/skill discovery; peaks at `7.5` at runtime in `review_article`, which spawns 3 stateful read-only reviewer handles via `run_workflow` (`parallel()`) with `BEFORE_SCORECARD_SCHEMA` and `AFTER_SCORECARD_SCHEMA`. |
 | **3** | **State Mutation & Blast Radius Scale** | `1.5` / `8.0` | `1.5` for documenting `.agent/skills/README.md`; `8.0` across the skills themselves, partitioned so content skills write only target articles while `reconcile_indexes.py` owns singleton indexes (`README.md`, `articles/README.md`, `articles/CHANGELOG.md`, `reviews/README.md`). |
 | **4** | **Cross-Skill Dependency & DAG Coupling Scale** | `8.0` | High workflow coupling: `create_article`, `update_article`, `simplify_article`, and `review_article` inherit invariants from `.agent/rules/AGENTS.md` and emit `INDEX_HANDOFF_SCHEMA` payloads to `reconcile_indexes.py` and `verify_links.sh`. |
 | **5** | **Governance & Repository Invariant Scale** | `9.0` | Strict invariant surface centralized in `.agent/rules/AGENTS.md`: Hybrid Window `[NEW]` math, `[UPDATED]` exclusivity, Pure Open-Source Systems mandate, immutable `**Date:**`, and a 12-parameter `0–10` review rubric. |
-| **6** | **Verification & Deterministic Gate Scale** | `8.5` | Backed by [`verify_links.sh`](../../verify_links.sh) (Checks 1–7), `schemas.py --self-test` (JSON Schema + anti-inflation validation), and `reconcile_indexes.py` single-writer verification. |
+| **6** | **Verification & Deterministic Gate Scale** | `8.5` | Backed by [`verify_links.sh`](../../verify_links.sh) (Checks 1–8), `schemas.py --self-test` (JSON Schema + anti-inflation validation), `run_review_workflow.py --self-test` (5-stage mock pipeline), and `reconcile_indexes.py` single-writer verification. |
 | **7** | **Documentation Depth & Dual-Audience Ergonomics** | `8.0` | Must serve both **human maintainers** (navigating workflows, invariants, and VCS rules) and **AI agents** (fast capability routing, preconditions, and execution contracts). |
 | **8** | **Operational Maintenance & Drift-Prevention Scale** | `6.5` | Centralizing declarative invariants in `.agent/rules/AGENTS.md`, index writes in `reconcile_indexes.py`, and scorecards in `schemas.py` prevents multi-file rule and arithmetic drift. |
 
@@ -29,12 +29,12 @@ Each skill in `.agent/skills/` is rated below across 5 architectural dimensions 
 
 | Skill | Determinism | Invariant Coverage | Multi-Agent Orchestration | Verification Coupling | Idempotency & Safety | Composite (`0–10`) | Key Architectural Observation |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| [`review_article`](./review_article/SKILL.md) | `9.8` | `9.8` | `9.8` | `9.5` | `9.6` | **`9.7`** | *(Remediated from `9.1` via Options B4 + A4)* Stateful `run_workflow` pipeline ([`run_review_workflow.py`](./review_article/scripts/run_review_workflow.py)) enforcing [`schemas.py`](./review_article/scripts/schemas.py) (`BEFORE_SCORECARD_SCHEMA` / `AFTER_SCORECARD_SCHEMA`), anti-inflation clamping, Python math/Check 7 rendering, and single-writer `reconcile_indexes.py` handoff. |
+| [`review_article`](./review_article/SKILL.md) | `9.8` | `9.8` | `9.8` | `9.5` | `9.6` | **`9.7`** | *(Remediated from `9.1` via Options B4 + A4 + Strategy S4)* Standard-Python `run_workflow` module ([`run_review_workflow.py`](./review_article/scripts/run_review_workflow.py) invoked via `runpy.run_path` + `--self-test`) enforcing [`schemas.py`](./review_article/scripts/schemas.py) (`BEFORE_SCORECARD_SCHEMA` / `AFTER_SCORECARD_SCHEMA`), anti-inflation clamping, Python math/Check 7 rendering, and single-writer `reconcile_indexes.py` handoff. |
 | [`organize_readme`](./organize_readme/SKILL.md) | `9.9` | `9.8` | `9.0` | `9.5` | `9.5` | **`9.5`** | *(Remediated from `8.2` via Option A4)* Deterministic single-writer [`reconcile_indexes.py`](./organize_readme/scripts/reconcile_indexes.py) consuming `INDEX_HANDOFF_SCHEMA` payloads, computing `[NEW]`/`[UPDATED]` parity, updating counts/changelogs/reviews, and gating on `verify_links.sh`. |
 | [`update_article`](./update_article/SKILL.md) | `9.2` | `9.5` | `7.5` | `9.5` | `9.0` | **`8.9`** | *(Remediated from `8.2` via Option A4)* Scoped strictly to article edits (`**Date:**` immutable, `**Last Updated:**`, bottom `## Changelog`), handing off `INDEX_HANDOFF_SCHEMA` (`"Updated"`) to `reconcile_indexes.py` with zero direct singleton index writes. |
 | [`create_article`](./create_article/SKILL.md) | `9.0` | `9.5` | `7.5` | `9.5` | `8.5` | **`8.8`** | *(Remediated from `8.0` via Option A4)* Scoped strictly to authoring `articles/<category>/<kebab-case>.md`, handing off `INDEX_HANDOFF_SCHEMA` (`"Added"`) to `reconcile_indexes.py` and optionally chaining into `run_review_workflow.py`. |
 | [`simplify_article`](./simplify_article/SKILL.md) | `9.0` | `9.5` | `7.0` | `9.5` | `9.0` | **`8.8`** | *(Remediated from `8.0` via Option A4)* Tool-agnostic structural refactoring with 100% link preservation, batch-ready (`workspace: "share"`), emitting `INDEX_HANDOFF_SCHEMA` (`"Simplified"`) to `reconcile_indexes.py`. |
-| [`commit_and_push`](./commit_and_push/SKILL.md) | `9.5` | `9.0` | `2.0` | `9.5` | `9.0` | **`7.8`** | Two-phase guarded `jj` workflow via [`prepare_commit.sh`](./commit_and_push/scripts/prepare_commit.sh): enforces `verify_links.sh` (Checks 1–7) before `jj describe` / `jj bookmark set`, parameterizes target bookmark (default `main`), and routes failures to `organize_readme`. |
+| [`commit_and_push`](./commit_and_push/SKILL.md) | `9.5` | `9.0` | `2.0` | `9.5` | `9.0` | **`7.8`** | Two-phase guarded `jj` workflow via [`prepare_commit.sh`](./commit_and_push/scripts/prepare_commit.sh): enforces `verify_links.sh` (Checks 1–8) before `jj describe` / `jj bookmark set`, parameterizes target bookmark (default `main`), and routes failures to `organize_readme`. |
 
 > **Architect's Note on Scoring:** The `Multi-Agent Orchestration` score reflects whether a skill requires subagent fan-out (`review_article` does; atomic skills like `commit_and_push` intentionally do not). `Composite` is the equal-weighted mean across the 5 columns.
 
@@ -73,11 +73,11 @@ flowchart TD
     Report -->|"INDEX_HANDOFF_SCHEMA"| Sync
     Organize --> Sync
 
-    Sync --> Gate["verify_links.sh (Checks 1-7)"]
+    Sync --> Gate["verify_links.sh (Checks 1-8)"]
     Gate -->|"Exit 0"| Push
     Gate -->|"Errors found"| Organize
     Push -->|"prepare_commit.sh (verify_links.sh -> describe -> bookmark)"| Remote["jj git push --bookmark"]
-    Push -->|"Checks 1-7 fail"| Organize
+    Push -->|"Checks 1-8 fail"| Organize
 ```
 
 ---
@@ -86,12 +86,12 @@ flowchart TD
 
 | Skill | Folder | Trigger Intents | Primary Mutated Targets | Verification Gate |
 | :--- | :--- | :--- | :--- | :--- |
-| **Create Article** | [`create_article/`](./create_article/SKILL.md) | "create a new article", "add a summary of [URL]" | `articles/<category>/<slug>.md` (hands off indexes to `reconcile_indexes.py`) | `reconcile_indexes.py` + `bash verify_links.sh` (Checks 1–7) |
-| **Update Article** | [`update_article/`](./update_article/SKILL.md) | "update article", "expand", "revise", "add a section to" | Existing article only (hands off indexes to `reconcile_indexes.py`) | `reconcile_indexes.py` + `bash verify_links.sh` (Checks 1–7) |
+| **Create Article** | [`create_article/`](./create_article/SKILL.md) | "create a new article", "add a summary of [URL]" | `articles/<category>/<slug>.md` (hands off indexes to `reconcile_indexes.py`) | `reconcile_indexes.py` + `bash verify_links.sh` (Checks 1–8) |
+| **Update Article** | [`update_article/`](./update_article/SKILL.md) | "update article", "expand", "revise", "add a section to" | Existing article only (hands off indexes to `reconcile_indexes.py`) | `reconcile_indexes.py` + `bash verify_links.sh` (Checks 1–8) |
 | **Simplify Article** | [`simplify_article/`](./simplify_article/SKILL.md) | "simplify article", "make readable", "clean up format" | Existing article only (hands off indexes to `reconcile_indexes.py`) | `reconcile_indexes.py` + `bash verify_links.sh` + link retention |
-| **Review and Verify Article** | [`review_article/`](./review_article/SKILL.md) | Multi-persona quality audit, `0–10` scoring, architectural review | Target article, `reviews/<category>/<slug>-review.md` (via `run_review_workflow.py` -> `reconcile_indexes.py`) | `schemas.py` contracts + `reconcile_indexes.py` + `verify_links.sh` |
-| **Organize README** | [`organize_readme/`](./organize_readme/SKILL.md) | "organize readme", "fix links", "update index" | Single-writer owner of `README.md`, `articles/README.md`, `reviews/README.md`, `articles/CHANGELOG.md` | `reconcile_indexes.py` + `bash verify_links.sh` (Checks 1–7) |
-| **Commit and Push with JJ** | [`commit_and_push/`](./commit_and_push/SKILL.md) | Save progress and push working copy to git remote | Jujutsu (`jj`) revision description, target bookmark (default `main`), remote git repository | `prepare_commit.sh` (`bash verify_links.sh` Checks 1–7) before `jj describe` / `bookmark set` / `jj git push` |
+| **Review and Verify Article** | [`review_article/`](./review_article/SKILL.md) | Multi-persona quality audit, `0–10` scoring, architectural review | Target article, `reviews/<category>/<slug>-review.md` (via `run_review_workflow.py` -> `reconcile_indexes.py`) | `schemas.py` & workflow `--self-test` + `reconcile_indexes.py` + `verify_links.sh` |
+| **Organize README** | [`organize_readme/`](./organize_readme/SKILL.md) | "organize readme", "fix links", "update index" | Single-writer owner of `README.md`, `articles/README.md`, `reviews/README.md`, `articles/CHANGELOG.md` | `reconcile_indexes.py` + `bash verify_links.sh` (Checks 1–8) |
+| **Commit and Push with JJ** | [`commit_and_push/`](./commit_and_push/SKILL.md) | Save progress and push working copy to git remote | Jujutsu (`jj`) revision description, target bookmark (default `main`), remote git repository | `prepare_commit.sh` (`bash verify_links.sh` Checks 1–8) before `jj describe` / `bookmark set` / `jj git push` |
 
 ### 3.1 Create Article (`create_article`)
 
@@ -135,7 +135,7 @@ flowchart TD
 ### 3.5 Organize README (`organize_readme`)
 
 * **Specification:** [`organize_readme/SKILL.md`](./organize_readme/SKILL.md)
-* **Supporting Scripts:** [`organize_readme/scripts/reconcile_indexes.py`](./organize_readme/scripts/reconcile_indexes.py)
+* **Supporting Scripts:** [`organize_readme/scripts/run_python.sh`](./organize_readme/scripts/run_python.sh), [`organize_readme/scripts/reconcile_indexes.py`](./organize_readme/scripts/reconcile_indexes.py)
 * **Core Capabilities (Single-Writer Index Engine — Option A4):**
   * **Structured Handoff & Standalone Discovery:** Consumes validated `INDEX_HANDOFF_SCHEMA` payloads (`--handoff` / `--handoff-file`) or scans `articles/` standalone, enforcing [`.agent/rules/AGENTS.md`](../rules/AGENTS.md) Invariant 2 (`articles/<category>/<kebab-case>.md`, zero empty directories).
   * **Self-Healing & Deterministic Index Sync:** Inserts unlisted articles alphabetically (`- [Title](category/slug.md)`), self-heals uniquely moved paths, updates `reviews/README.md`, computes the exact Hybrid Window `[NEW]` cohort and top-5 `[UPDATED]` exclusivity trail (Invariant 4), writes `articles/CHANGELOG.md` events idempotently, updates category/total counts across both READMEs, and gates on `bash verify_links.sh`.
@@ -145,8 +145,8 @@ flowchart TD
 * **Specification:** [`commit_and_push/SKILL.md`](./commit_and_push/SKILL.md)
 * **Supporting Scripts:** [`commit_and_push/scripts/prepare_commit.sh`](./commit_and_push/scripts/prepare_commit.sh)
 * **Core Capabilities:**
-  * **Two-Phase Guarded `jj` Publication Flow:** Phase 1 executes `prepare_commit.sh` locally (`set -euo pipefail`) to run `bash verify_links.sh` (Checks 1–7) **before** executing `jj describe -m "..."` and `jj bookmark set <bookmark> -r @` (default `main`). Phase 2 executes `jj git push --bookmark <bookmark>` only after Phase 1 exits `0`, isolating network access strictly to the push step.
-  * **Hard Gate & Self-Healing Routing:** Aborts before any bookmark mutation if Checks 1–7 fail, forbids manual bypass, and routes index/badge/link drift to [`organize_readme`](./organize_readme/SKILL.md) before retrying.
+  * **Two-Phase Guarded `jj` Publication Flow:** Phase 1 executes `prepare_commit.sh` locally (`set -euo pipefail`) to run `bash verify_links.sh` (Checks 1–8) **before** executing `jj describe -m "..."` and `jj bookmark set <bookmark> -r @` (default `main`). Phase 2 executes `jj git push --bookmark <bookmark>` only after Phase 1 exits `0`, isolating network access strictly to the push step.
+  * **Hard Gate & Self-Healing Routing:** Aborts before any bookmark mutation if Checks 1–8 fail, forbids manual bypass, and routes index/badge/link drift to [`organize_readme`](./organize_readme/SKILL.md) before retrying.
 
 ---
 
@@ -169,6 +169,7 @@ Declarative repository invariants are centralized as an always-on workspace rule
    * **Check 5:** Hybrid Window `[NEW]` cohort accuracy and article count parity across both READMEs.
    * **Check 6:** Revision trail integrity (`**Last Updated:**` format and date ordering, `## Changelog` entries, `[UPDATED]` cap of 5, mutual exclusivity with `[NEW]`, and `articles/CHANGELOG.md` presence).
    * **Check 7:** Review report structure (`reviews/<category>/<slug>-review.md`), `reviews/README.md` indexing, bidirectional article ↔ report linking, and required `0–10` scorecard/persona sections.
+   * **Check 8:** `uv`/`pip` manifests ([`pyproject.toml`](../../pyproject.toml), [`requirements.txt`](../../requirements.txt), [`pyrightconfig.json`](../../pyrightconfig.json), [`.gitignore`](../../.gitignore) Python patterns), Python compilation (`py_compile` across `.agent/skills/**/*.py`), offline `--self-test` gates via [`run_python.sh`](./organize_readme/scripts/run_python.sh), and control-plane/plan relative link resolution.
 
 ---
 
@@ -189,16 +190,17 @@ Declarative repository invariants are centralized as an always-on workspace rule
     ├── organize_readme/
     │   ├── SKILL.md                                   # Single-writer index, badge & CHANGELOG trigger
     │   └── scripts/
+    │       ├── run_python.sh                          # uv-first / pip-fallback dependency & Python runner
     │       └── reconcile_indexes.py                   # Deterministic single-writer index & verify_links.sh engine
     ├── review_article/
-    │   ├── SKILL.md                                   # Thin trigger -> run_review_workflow.py via run_workflow
+    │   ├── SKILL.md                                   # Thin trigger -> runpy.run_path('...run_review_workflow.py')
     │   ├── references/
     │   │   └── rubric-and-repo-alignment.md           # 12-parameter 0-10 rubric & ThoughtsInWords philosophy checks
     │   ├── resources/
     │   │   └── report-template.md                     # Canonical Before/After review report template
     │   └── scripts/
     │       ├── schemas.py                             # Dual scorecard & handoff schemas, anti-inflation clamp & renderer
-    │       └── run_review_workflow.py                 # Stateful multi-turn parallel review_article run_workflow script
+    │       └── run_review_workflow.py                 # Standard-Python run_pipeline() + offline mock --self-test
     ├── simplify_article/
     │   └── SKILL.md                                   # Tool-agnostic structure cleanup -> reconcile_indexes.py handoff
     └── update_article/

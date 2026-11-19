@@ -10,7 +10,7 @@ if [[ -z "${COMMIT_MSG// }" ]]; then
   exit 2
 fi
 
-echo "🔍 [Step 1/3] Running repository verification gate (verify_links.sh Checks 1-7)..."
+echo "🔍 [Step 1/3] Running repository verification gate (verify_links.sh Checks 1-8)..."
 bash verify_links.sh
 
 echo "📝 [Step 2/3] Describing working copy revision (@)..."

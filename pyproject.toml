@@ -1,0 +1,26 @@
+[project]
+name = "thoughts-in-words-agents"
+version = "0.1.0"
+description = "Agent skills, single-writer index reconciler, and schema-validated review workflows for ThoughtsInWords"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "jsonschema>=4.20.0",
+    "pyright>=1.1.380",
+    "ruff>=0.7.0",
+]
+
+[tool.uv]
+python-preference = "system"
+
+[tool.pyright]
+include = [".agent/skills"]
+extraPaths = [
+    ".agent/skills/review_article/scripts",
+    ".agent/skills/organize_readme/scripts",
+]
+pythonVersion = "3.11"
+typeCheckingMode = "basic"

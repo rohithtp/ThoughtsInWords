@@ -24,9 +24,9 @@ When the user asks to "update article", "expand", "revise", or "add a section to
    * Per [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 3**, ensure `## Changelog` sits at the very bottom (after `## Related Articles` and `## References`), prepending `- **Mon DD, YYYY:** <summary>.` in reverse chronological order (seeding `- **Mon DD, YYYY:** Initial publication.` from `**Date:**` if creating `## Changelog` for the first time).
 
 4. **Single-Writer Index & Trail Reconciliation (`README.md`, `articles/README.md`, `articles/CHANGELOG.md`)**:
-   * **Write Scope Partition (Option A4):** Never edit `README.md`, `articles/README.md`, or `articles/CHANGELOG.md` directly. Emit an [`INDEX_HANDOFF_SCHEMA`](../review_article/scripts/schemas.py) payload to [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) (enforcing [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 4**):
+   * **Write Scope Partition (Option A4):** Never edit `README.md`, `articles/README.md`, or `articles/CHANGELOG.md` directly. Emit an [`INDEX_HANDOFF_SCHEMA`](../review_article/scripts/schemas.py) payload to [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) via [`run_python.sh`](../organize_readme/scripts/run_python.sh) (enforcing [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 4**):
      ```bash
-     python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '{
+     bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '{
        "action": "Updated",
        "article_path": "articles/<category>/<slug>.md",
        "title": "Article Title",
@@ -36,7 +36,7 @@ When the user asks to "update article", "expand", "revise", or "add a section to
        "reciprocal_articles_touched": []
      }'
      ```
-   * [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) enforces `[NEW]` vs. `[UPDATED]` exclusivity, updates `Recently Updated (Max 5)` across both READMEs, appends `* **Updated:**` in `articles/CHANGELOG.md`, and runs `bash verify_links.sh` (Checks 1–7 == exit `0`).
+   * [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) enforces `[NEW]` vs. `[UPDATED]` exclusivity, updates `Recently Updated (Max 5)` across both READMEs, appends `* **Updated:**` in `articles/CHANGELOG.md`, and runs `bash verify_links.sh` (Checks 1–8 == exit `0`).
 
 5. **Optional Quality Audit**:
    * *(Optional)* Run [`review_article/SKILL.md`](../review_article/SKILL.md) (`run_review_workflow.py`) to perform a schema-validated Reader Mode, Subject Matter Expert, and Technical Architect review and link a `0–10` Before/After report under `reviews/<category>/<slug>-review.md`.

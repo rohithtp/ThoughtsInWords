@@ -1,30 +1,43 @@
 #!/usr/bin/env python3
-"""Stateful multi-turn review_article orchestration script for Antigravity `run_workflow` (Option B4 + A4).
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
+"""Stateful multi-turn review_article orchestration module for Antigravity `run_workflow` (Option B4 + A4).
 
 Invoke via `run_workflow`:
   run_workflow(
-      ScriptPath="/abs/path/to/.agent/skills/review_article/scripts/run_review_workflow.py",
+      Script=(
+          "import runpy\\n"
+          "mod = runpy.run_path('.agent/skills/review_article/scripts/run_review_workflow.py', init_globals=globals())\\n"
+          "await mod['run_pipeline'](globals())\\n"
+      ),
       Args={"article_path": "articles/<category>/<slug>.md"},
       Description="Run 5-stage schema-validated multi-persona article review",
   )
+
+Self-test locally without LLM calls (via uv/pip runner):
+  bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/review_article/scripts/run_review_workflow.py --self-test
 """
 
 from __future__ import annotations
 
+import argparse
+import asyncio
 import json
-import os
 import re
 import subprocess
 import sys
+import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
-# Resolve workspace root cleanly inside `run_workflow`
-_workspaces = globals().get("WORKSPACES", ())
-REPO_ROOT = Path(_workspaces[0]) if _workspaces else Path.cwd()
-SCRIPTS_DIR = REPO_ROOT / ".agent" / "skills" / "review_article" / "scripts"
-RECONCILER_SCRIPT = REPO_ROOT / ".agent" / "skills" / "organize_readme" / "scripts" / "reconcile_indexes.py"
+DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[4]
+SCRIPTS_DIR = Path(__file__).resolve().parent
+RECONCILER_SCRIPT = (
+    DEFAULT_REPO_ROOT / ".agent" / "skills" / "organize_readme" / "scripts" / "reconcile_indexes.py"
+)
 
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -34,7 +47,10 @@ from schemas import (  # noqa: E402
     BEFORE_SCORECARD_SCHEMA,
     INDEX_HANDOFF_SCHEMA,
     REMEDIATION_RESULT_SCHEMA,
+    build_python_cmd,
     compute_scorecard,
+    ensure_dependencies,
+    get_uv_env,
     render_review_report,
     validate_against_schema,
 )
@@ -48,28 +64,61 @@ def _format_short_date(dt: datetime) -> str:
     return f"{dt.strftime('%b')} {dt.day}, {dt.year}"
 
 
-def _validate_article_path(raw_path: str) -> tuple[Path, str, str, str]:
+def _get_primitive(name: str, env: dict[str, Any], default: Any = None) -> Any:
+    if name in env and env[name] is not None:
+        return env[name]
+    if default is not None:
+        return default
+    raise RuntimeError(
+        f"Missing required run_workflow primitive '{name}'. "
+        "Execute via run_workflow or pass a runtime_env dict."
+    )
+
+
+def _resolve_repo_root(env: dict[str, Any]) -> Path:
+    workspaces = env.get("WORKSPACES")
+    if workspaces and len(workspaces) > 0:
+        return Path(workspaces[0])
+    return DEFAULT_REPO_ROOT
+
+
+def _validate_article_path(raw_path: str, repo_root: Path) -> tuple[Path, str, str, str]:
     rel_path = raw_path.strip().lstrip("./")
     m = re.match(r"^articles/([a-z0-9-]+)/([a-z0-9-]+)\.md$", rel_path)
     if not m:
         raise ValueError(
             f"article_path must match 'articles/<category>/<kebab-case>.md', got: {raw_path!r}"
         )
-    abs_path = REPO_ROOT / rel_path
+    abs_path = repo_root / rel_path
     if not abs_path.is_file():
         raise FileNotFoundError(f"Target article does not exist on disk: {abs_path}")
     return abs_path, rel_path, m.group(1), m.group(2)
 
 
-async def run_pipeline() -> dict[str, Any]:
-    wf_args: dict[str, Any] = globals().get("args", {}) or {}
+async def run_pipeline(runtime_env: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Execute the 5-stage stateful review pipeline inside a `run_workflow` or mock runtime."""
+    ensure_dependencies()
+    env: dict[str, Any] = runtime_env if runtime_env is not None else globals()
+    repo_root = _resolve_repo_root(env)
+
+    log_fn: Callable[..., Any] = _get_primitive("log", env, default=print)
+    phase_fn: Callable[[str], Any] = _get_primitive("phase", env, default=lambda _name: None)
+    agent_fn: Callable[..., Any] = _get_primitive("agent", env)
+    parallel_fn: Callable[..., Any] = _get_primitive("parallel", env)
+    wf_args: dict[str, Any] = _get_primitive("args", env, default={}) or {}
+
     raw_article_path = wf_args.get("article_path", "")
     if not raw_article_path:
-        raise ValueError("Missing required workflow arg 'article_path' (e.g. 'articles/devops/example.md').")
+        raise ValueError(
+            "Missing required workflow arg 'article_path' (e.g. 'articles/devops/example.md')."
+        )
+    dry_run = bool(wf_args.get("dry_run", False))
 
-    abs_article_path, article_rel_path, category, slug = _validate_article_path(raw_article_path)
+    abs_article_path, article_rel_path, category, slug = _validate_article_path(
+        raw_article_path, repo_root
+    )
     report_rel_path = f"reviews/{category}/{slug}-review.md"
-    abs_report_path = REPO_ROOT / report_rel_path
+    abs_report_path = repo_root / report_rel_path
     today_dt = datetime.now()
     today_long = _format_long_date(today_dt)
 
@@ -78,12 +127,12 @@ async def run_pipeline() -> dict[str, Any]:
     title_m = re.search(r"^#\s+(.+?)\s*$", article_head, flags=re.MULTILINE)
     initial_title = title_m.group(1).strip() if title_m else slug
 
-    log(f"Starting Option B4 review pipeline for {article_rel_path} ('{initial_title}')")
+    log_fn(f"Starting Option B4 review pipeline for {article_rel_path} ('{initial_title}')")
 
     # ------------------------------------------------------------------
     # Stage 1: Persistent Read-Only Reviewer Definitions & Parallel Audit
     # ------------------------------------------------------------------
-    phase("Stage 1: Parallel Multi-Persona Before Audit")
+    phase_fn("Stage 1: Parallel Multi-Persona Before Audit")
 
     read_only_guard = (
         "CRITICAL READ-ONLY CONSTRAINT: You are an independent read-only auditor. "
@@ -139,9 +188,9 @@ async def run_pipeline() -> dict[str, Any]:
         "Populate `pure_oss_audit` and `philosophy_alignment_notes`. Use recommendation IDs formatted strictly as `A-01`, `A-02`, etc."
     )
 
-    r_reader = agent(reader_standing, role="Reader Mode Reviewer (Params 1-4)")
-    r_sme = agent(sme_standing, role="Subject Expert Reviewer (Params 5-8)")
-    r_arch = agent(arch_standing, role="Technical Architect Reviewer (Params 9-12)")
+    r_reader = agent_fn(reader_standing, role="Reader Mode Reviewer (Params 1-4)")
+    r_sme = agent_fn(sme_standing, role="Subject Expert Reviewer (Params 5-8)")
+    r_arch = agent_fn(arch_standing, role="Technical Architect Reviewer (Params 9-12)")
 
     before_tasks = [
         (
@@ -161,7 +210,7 @@ async def run_pipeline() -> dict[str, Any]:
         ),
     ]
 
-    before_payloads = await parallel(
+    before_payloads = await parallel_fn(
         before_tasks,
         lambda item: item[0](item[1], schema=BEFORE_SCORECARD_SCHEMA),
     )
@@ -170,7 +219,7 @@ async def run_pipeline() -> dict[str, Any]:
     # ------------------------------------------------------------------
     # Stage 2 & 3: Synthesize Recommendations & Remediate Target Article
     # ------------------------------------------------------------------
-    phase("Stage 2 & 3: Synthesize & Remediate Target Article")
+    phase_fn("Stage 2 & 3: Synthesize & Remediate Target Article")
 
     priority_rank = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
     merged_recs: list[dict[str, Any]] = []
@@ -179,7 +228,7 @@ async def run_pipeline() -> dict[str, Any]:
             merged_recs.append({"persona": p["persona"], **rec})
     merged_recs.sort(key=lambda r: (priority_rank.get(r["priority"], 9), r["id"]))
 
-    log(f"Synthesized {len(merged_recs)} prioritized recommendations across 3 reviewer personas.")
+    log_fn(f"Synthesized {len(merged_recs)} prioritized recommendations across 3 reviewer personas.")
 
     remediator_prompt = (
         f"You are the scoped Article Remediator for ThoughtsInWords.\n"
@@ -204,7 +253,7 @@ async def run_pipeline() -> dict[str, Any]:
         "Return your result strictly via `finish` matching REMEDIATION_RESULT_SCHEMA."
     )
 
-    remediation = await agent(
+    remediation = await agent_fn(
         remediator_prompt,
         schema=REMEDIATION_RESULT_SCHEMA,
         role="Article Remediator (Scoped)",
@@ -214,7 +263,7 @@ async def run_pipeline() -> dict[str, Any]:
     # ------------------------------------------------------------------
     # Stage 4: Stateful Multi-Turn After Re-Verification & Report Render
     # ------------------------------------------------------------------
-    phase("Stage 4: Stateful Multi-Turn After Re-Verification & Report Rendering")
+    phase_fn("Stage 4: Stateful Multi-Turn After Re-Verification & Report Rendering")
 
     def _make_after_prompt(persona: str, param_range: str, before_data: dict[str, Any]) -> str:
         rec_ids = [r["id"] for r in before_data["recommendations"]]
@@ -236,7 +285,7 @@ async def run_pipeline() -> dict[str, Any]:
         (r_arch, _make_after_prompt("Technical Architect", "9–12", before_payloads[2])),
     ]
 
-    after_payloads = await parallel(
+    after_payloads = await parallel_fn(
         after_tasks,
         lambda item: item[0](item[1], schema=AFTER_SCORECARD_SCHEMA),
     )
@@ -244,7 +293,7 @@ async def run_pipeline() -> dict[str, Any]:
 
     scorecard = compute_scorecard(before_payloads, after_payloads)
     if scorecard["anti_inflation_clamps"]:
-        log(f"Anti-inflation clamps applied: {json.dumps(scorecard['anti_inflation_clamps'])}")
+        log_fn(f"Anti-inflation clamps applied: {json.dumps(scorecard['anti_inflation_clamps'])}")
 
     review_date_long = remediation.get("last_updated") or today_long
     report_md = render_review_report(
@@ -258,12 +307,12 @@ async def run_pipeline() -> dict[str, Any]:
 
     abs_report_path.parent.mkdir(parents=True, exist_ok=True)
     abs_report_path.write_text(report_md, encoding="utf-8")
-    log(f"Wrote deterministic Check 7 report to {report_rel_path}")
+    log_fn(f"Wrote deterministic Check 7 report to {report_rel_path}")
 
     # ------------------------------------------------------------------
     # Stage 5: Single-Writer Index Reconciliation & Verification Gate
     # ------------------------------------------------------------------
-    phase("Stage 5: Single-Writer Index Reconciliation & Verification Gate")
+    phase_fn("Stage 5: Single-Writer Index Reconciliation & Verification Gate")
 
     try:
         parsed_review_dt = datetime.strptime(review_date_long.strip(), "%B %d, %Y")
@@ -287,16 +336,30 @@ async def run_pipeline() -> dict[str, Any]:
     }
     validate_against_schema(handoff_payload, INDEX_HANDOFF_SCHEMA, "handoff")
 
-    proc = subprocess.run(
-        [sys.executable, str(RECONCILER_SCRIPT), "--handoff", json.dumps(handoff_payload)],
-        cwd=str(REPO_ROOT),
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    log(proc.stdout.strip())
+    if dry_run:
+        cmd = build_python_cmd(str(RECONCILER_SCRIPT), "--dry-run")
+        proc = subprocess.run(
+            cmd,
+            cwd=str(DEFAULT_REPO_ROOT),
+            env=get_uv_env(),
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    else:
+        cmd = build_python_cmd(str(RECONCILER_SCRIPT), "--handoff", json.dumps(handoff_payload))
+        proc = subprocess.run(
+            cmd,
+            cwd=str(repo_root),
+            env=get_uv_env(),
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+    log_fn(proc.stdout.strip())
     if proc.stderr.strip():
-        log(f"reconcile_indexes stderr: {proc.stderr.strip()}")
+        log_fn(f"reconcile_indexes stderr: {proc.stderr.strip()}")
 
     summary = {
         "article_path": article_rel_path,
@@ -311,4 +374,205 @@ async def run_pipeline() -> dict[str, Any]:
     return summary
 
 
-await run_pipeline()
+def _run_self_test() -> None:
+    """Exercise all 5 stages of run_pipeline() end-to-end with deterministic mock agents."""
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_root = Path(tmp_dir)
+        article_path = tmp_root / "articles" / "devops" / "sample-article.md"
+        article_path.parent.mkdir(parents=True, exist_ok=True)
+        article_path.write_text(
+            "# Sample Architecture Article\n\n**Date:** November 18, 2026\n\nDraft body.\n",
+            encoding="utf-8",
+        )
+
+        phases_seen: list[str] = []
+        logs_seen: list[str] = []
+        handle_turns: dict[str, int] = {}
+
+        class _MockHandle:
+            def __init__(self, role: str) -> None:
+                self.role = role
+                handle_turns[role] = 0
+
+            async def __call__(self, _prompt: str, schema: dict[str, Any] | None = None) -> dict[str, Any]:
+                handle_turns[self.role] += 1
+                turn = handle_turns[self.role]
+                if self.role.startswith("Reader Mode"):
+                    if turn == 1:
+                        return {
+                            "persona": "Reader Mode",
+                            "scores": [
+                                {"param_id": 1, "name": "Clarity", "score": 7.0, "rationale": "Hook ok"},
+                                {"param_id": 2, "name": "Flow", "score": 7.5, "rationale": "Good flow"},
+                                {"param_id": 3, "name": "Visuals", "score": 6.5, "rationale": "Missing diagram"},
+                                {"param_id": 4, "name": "Takeaway", "score": 7.0, "rationale": "Good checklist"},
+                            ],
+                            "strengths": ["Clear summary"],
+                            "gaps": ["Missing Mermaid diagram"],
+                            "recommendations": [
+                                {
+                                    "id": "R-01",
+                                    "param_id": 3,
+                                    "priority": "High",
+                                    "target_section": "## Architecture",
+                                    "change": "Add Mermaid diagram",
+                                    "invariant1_violation": False,
+                                }
+                            ],
+                        }
+                    return {
+                        "persona": "Reader Mode",
+                        "scores": [
+                            {"param_id": 1, "score": 7.0, "key_improvement_applied": "Retained clear hook"},
+                            {"param_id": 2, "score": 7.5, "key_improvement_applied": "Preserved pacing"},
+                            {"param_id": 3, "score": 8.5, "key_improvement_applied": "Added Mermaid diagram"},
+                            {"param_id": 4, "score": 7.0, "key_improvement_applied": "Checklist intact"},
+                        ],
+                        "verified_improvements": ["Added Mermaid architecture diagram."],
+                        "recommendation_outcomes": [
+                            {"id": "R-01", "status": "Applied", "article_section_updated": "## Architecture"}
+                        ],
+                    }
+
+                if self.role.startswith("Subject Expert"):
+                    if turn == 1:
+                        return {
+                            "persona": "Subject Expert",
+                            "scores": [
+                                {"param_id": 5, "name": "Accuracy", "score": 8.0, "rationale": "Accurate"},
+                                {"param_id": 6, "name": "Edge Cases", "score": 6.0, "rationale": "Missing timeout"},
+                                {"param_id": 7, "name": "Citations", "score": 7.5, "rationale": "RFC cited"},
+                                {"param_id": 8, "name": "Currency", "score": 8.0, "rationale": "Current"},
+                            ],
+                            "strengths": ["Primary specs cited"],
+                            "gaps": ["No backpressure failure mode"],
+                            "recommendations": [
+                                {
+                                    "id": "S-01",
+                                    "param_id": 6,
+                                    "priority": "Critical",
+                                    "target_section": "## Failure Modes",
+                                    "change": "Document bounded queue backpressure",
+                                    "invariant1_violation": False,
+                                }
+                            ],
+                        }
+                    return {
+                        "persona": "Subject Expert",
+                        "scores": [
+                            {"param_id": 5, "score": 8.0, "key_improvement_applied": "Sound claims"},
+                            {"param_id": 6, "score": 8.5, "key_improvement_applied": "Added backpressure mode"},
+                            {"param_id": 7, "score": 7.5, "key_improvement_applied": "Kept RFC citations"},
+                            {"param_id": 8, "score": 8.0, "key_improvement_applied": "Current"},
+                        ],
+                        "verified_improvements": ["Added bounded queue backpressure section."],
+                        "recommendation_outcomes": [
+                            {"id": "S-01", "status": "Applied", "article_section_updated": "## Failure Modes"}
+                        ],
+                    }
+
+                # Technical Architect
+                if turn == 1:
+                    return {
+                        "persona": "Technical Architect",
+                        "scores": [
+                            {"param_id": 9, "name": "Trade-Offs", "score": 7.0, "rationale": "Missing bounds"},
+                            {"param_id": 10, "name": "Philosophy", "score": 8.0, "rationale": "Balanced"},
+                            {"param_id": 11, "name": "Interconnectivity", "score": 7.0, "rationale": "Few links"},
+                            {"param_id": 12, "name": "Lifecycle", "score": 7.0, "rationale": "Missing note"},
+                        ],
+                        "strengths": ["Realistic migration framing"],
+                        "gaps": ["Missing Scope & Licensing Note"],
+                        "pure_oss_audit": "Verified pure Apache-2.0 stack and Scope & Licensing Note.",
+                        "philosophy_alignment_notes": {
+                            "logic_and_emotion": "Grounded operator metrics.",
+                            "engineers_philosophy_check": "Recognizes socio-technical adoption cost.",
+                            "interconnectivity_and_metadata": "Added cross-links and Review header.",
+                        },
+                        "recommendations": [
+                            {
+                                "id": "A-01",
+                                "param_id": 12,
+                                "priority": "High",
+                                "target_section": "Header",
+                                "change": "Add Scope & Licensing Note",
+                                "invariant1_violation": True,
+                            }
+                        ],
+                    }
+                return {
+                    "persona": "Technical Architect",
+                    "scores": [
+                        {"param_id": 9, "score": 8.5, "key_improvement_applied": "Added trade-off bounds"},
+                        {"param_id": 10, "score": 8.0, "key_improvement_applied": "Balanced philosophy"},
+                        {"param_id": 11, "score": 8.0, "key_improvement_applied": "Expanded cross-links"},
+                        {"param_id": 12, "score": 9.0, "key_improvement_applied": "Added Scope & Licensing Note"},
+                    ],
+                    "verified_improvements": ["Added Scope & Licensing Note and Review metadata."],
+                    "recommendation_outcomes": [
+                        {"id": "A-01", "status": "Applied", "article_section_updated": "Header"}
+                    ],
+                }
+
+        def _mock_agent(prompt: str | None = None, schema: dict[str, Any] | None = None, role: str = "", **_kw: Any) -> Any:
+            if schema is None:
+                return _MockHandle(role)
+
+            async def _remediate() -> dict[str, Any]:
+                assert schema == REMEDIATION_RESULT_SCHEMA
+                return {
+                    "article_path": "articles/devops/sample-article.md",
+                    "article_title": "Sample Architecture Article",
+                    "date": "November 18, 2026",
+                    "last_updated": "November 19, 2026",
+                    "verdict_label": "Production-Ready",
+                    "verdict_summary": "Applied diagram, failure modes, and pure-OSS compliance.",
+                    "alignment_status": "Partially Aligned → Aligned",
+                    "changelog_summary": "Applied multi-persona review recommendations",
+                    "applied_recommendation_ids": ["R-01", "S-01", "A-01"],
+                }
+
+            return _remediate()
+
+        async def _mock_parallel(items: list[Any], fn: Callable[[Any], Any]) -> list[Any]:
+            return await asyncio.gather(*(fn(item) for item in items))
+
+        mock_env: dict[str, Any] = {
+            "WORKSPACES": (str(tmp_root),),
+            "args": {"article_path": "articles/devops/sample-article.md", "dry_run": True},
+            "log": logs_seen.append,
+            "phase": phases_seen.append,
+            "agent": _mock_agent,
+            "parallel": _mock_parallel,
+        }
+
+        summary = asyncio.run(run_pipeline(mock_env))
+
+        assert len(phases_seen) == 4
+        assert all(turns == 2 for turns in handle_turns.values()), f"Expected 2 turns per reviewer: {handle_turns}"
+        assert summary["overall_before"] == 7.2
+        assert summary["overall_after"] == 8.0
+        assert summary["overall_delta"] == "+0.8"
+
+        generated_report = tmp_root / "reviews" / "devops" / "sample-article-review.md"
+        assert generated_report.is_file(), "Stage 4 failed to write review report"
+        report_text = generated_report.read_text(encoding="utf-8")
+        for heading in (
+            "## 2. Before vs. After Scorecard (0–10)",
+            "## 3. Reader Mode Review",
+            "## 4. Subject Matter Expert (SME) Review",
+            "## 5. Technical Architect & Repo Concept Review",
+        ):
+            assert heading in report_text, f"Missing Check 7 heading: {heading}"
+
+        print("✅ run_review_workflow.py self-test passed (all 5 stages, multi-turn handles, schemas & Check 7 report verified).")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Review workflow runner and offline self-test.")
+    parser.add_argument("--self-test", action="store_true", help="Run 5-stage mock pipeline self-test.")
+    cli_args = parser.parse_args()
+    if cli_args.self_test:
+        _run_self_test()
+    else:
+        parser.print_help()

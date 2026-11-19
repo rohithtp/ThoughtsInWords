@@ -1,6 +1,6 @@
 ---
 name: Commit and Push with JJ
-description: Verify repository health (verify_links.sh Checks 1-7), commit working copy changes to a target bookmark (default main), and push to remote using Jujutsu (jj).
+description: Verify repository health (verify_links.sh Checks 1-8), commit working copy changes to a target bookmark (default main), and push to remote using Jujutsu (jj).
 ---
 
 # Commit and Push (JJ)
@@ -12,7 +12,7 @@ This skill executes a **two-phase guarded publication workflow** using Jujutsu (
 When you want to save your progress and sync with the remote repository:
 
 1.  **Step 1 — Verify Repository Health & Stage Bookmark (Local / Sandboxed)**:
-    Run the atomic pre-push staging script. It enforces `bash verify_links.sh` (Checks 1–7) **before** describing `@` or advancing the target bookmark (`main` by default; pass an optional second argument to override):
+    Run the atomic pre-push staging script. It enforces `bash verify_links.sh` (Checks 1–8) **before** describing `@` or advancing the target bookmark (`main` by default; pass an optional second argument to override):
     ```bash
     bash .agent/skills/commit_and_push/scripts/prepare_commit.sh "YOUR_COMMIT_MESSAGE" main
     ```

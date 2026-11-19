@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
 """Deterministic single-writer index, badge cohort, review index, and changelog
 reconciler for ThoughtsInWords (Option A4).
 
-Usage:
-  python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py
-  python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --dry-run
-  python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '<json>'
-  python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff-file path/to/handoff.json
+Usage (via uv/pip wrapper or direct python3):
+  bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py
+  bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --dry-run
+  bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '<json>'
+  bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff-file path/to/handoff.json
 """
 
 from __future__ import annotations
@@ -27,7 +31,7 @@ SCHEMAS_DIR = Path(__file__).resolve().parents[2] / "review_article" / "scripts"
 if str(SCHEMAS_DIR) not in sys.path:
     sys.path.insert(0, str(SCHEMAS_DIR))
 
-from schemas import INDEX_HANDOFF_SCHEMA, validate_against_schema  # noqa: E402
+from schemas import INDEX_HANDOFF_SCHEMA, get_uv_env, validate_against_schema  # noqa: E402
 
 CATEGORY_CONFIG: dict[str, dict[str, Any]] = {
     "ai": {
@@ -443,7 +447,7 @@ def reconcile_articles_readme(
                         block_bullets.append(f"- [{title}]({meta['articles_rel_path']}){badge}")
 
                     block_bullets.sort(
-                        key=lambda b: re.match(r"^\s*-\s*\[([^\]]+)\]", b).group(1).lower()
+                        key=lambda b: (m.group(1).lower() if (m := re.match(r"^\s*-\s*\[([^\]]+)\]", b)) else b.lower())
                     )
                     rebuilt.extend(block_bullets)
                     continue
@@ -947,7 +951,7 @@ def main() -> int:
         )
 
     if not args.dry_run and not args.skip_verify:
-        proc = subprocess.run(["bash", "verify_links.sh"], cwd=str(REPO_ROOT), check=False)
+        proc = subprocess.run(["bash", "verify_links.sh"], cwd=str(REPO_ROOT), env=get_uv_env(), check=False)
         return proc.returncode
     return 0
 

@@ -1,0 +1,11 @@
+{
+  "include": [
+    ".agent/skills"
+  ],
+  "extraPaths": [
+    ".agent/skills/review_article/scripts",
+    ".agent/skills/organize_readme/scripts"
+  ],
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic"
+}

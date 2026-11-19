@@ -154,7 +154,7 @@ flowchart TD
 
     subgraph Reconciler["Single-Writer Reconciler (reconcile_indexes.py)"]
         Org["Single-Writer Engine (Owns README.md, articles/README.md, reviews/README.md, CHANGELOG.md)"]
-        Gate["bash verify_links.sh (Checks 1-7 == Exit 0)"]
+        Gate["bash verify_links.sh (Checks 1-8 == Exit 0)"]
         Org --> Gate
     end
 
@@ -164,6 +164,10 @@ flowchart TD
 ### `.agent/` Directory Structure (Live Control Plane & Target Agents)
 
 ```text
+.gitignore                                             # Python bytecode, venv & uv/linter cache ignore rules [Live]
+pyproject.toml                                         # uv project manifest, PEP 621 deps & pyright settings [Live]
+requirements.txt                                       # pip/uv fallback dependency requirements list [Live]
+pyrightconfig.json                                     # Static extraPaths & basic type-checking config for IDE/Pylance [Live]
 .agent/
 ├── rules/
 │   └── AGENTS.md                                      # Shared invariants (OS-only, kebab-case, date/badge rules) [Live]
@@ -180,12 +184,13 @@ flowchart TD
     ├── organize_readme/
     │   ├── SKILL.md                                   # Single-writer reconciler trigger & link-healing fallback [Live]
     │   └── scripts/
+    │       ├── run_python.sh                          # uv-first / pip-fallback dependency & Python runner [Live]
     │       └── reconcile_indexes.py                   # Deterministic single-writer index, badge & verify_links.sh engine [Live]
     ├── review_article/
-    │   ├── SKILL.md                                   # Thin trigger -> run_review_workflow.py via run_workflow [Live]
+    │   ├── SKILL.md                                   # Thin trigger -> runpy.run_path('...run_review_workflow.py') [Live]
     │   ├── scripts/
-    │   │   ├── schemas.py                             # Dual Before/After & Handoff schemas, anti-inflation clamp & renderer [Live]
-    │   │   └── run_review_workflow.py                 # Stateful multi-turn parallel review_article workflow [Live]
+    │   │   ├── schemas.py                             # Dual Before/After & Handoff schemas, uv/pip helpers & renderer [Live]
+    │   │   └── run_review_workflow.py                 # Standard-Python run_pipeline() + offline mock --self-test [Live]
     │   ├── references/rubric-and-repo-alignment.md    # 12-parameter 0-10 rubric & philosophy checks [Live]
     │   └── resources/report-template.md               # Canonical review report template [Live]
     ├── simplify_article/SKILL.md                      # Scoped refactor -> INDEX_HANDOFF_SCHEMA -> reconcile_indexes.py [Live]

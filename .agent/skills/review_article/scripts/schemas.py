@@ -1,13 +1,76 @@
 #!/usr/bin/env python3
-"""JSON Schemas, deterministic scorecard computation, and Check 7 report rendering
-for the ThoughtsInWords multi-persona review_article pipeline (Option B4 + Option A4).
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
+"""JSON Schemas, dependency/runner helpers, deterministic scorecard computation,
+and Check 7 report rendering for the ThoughtsInWords multi-persona review_article
+pipeline (Option B4 + Option A4 + uv/pip support).
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
+import os
 import re
+import shutil
+import subprocess
+import sys
 from typing import Any
+
+
+def get_uv_env() -> dict[str, str]:
+    """Return environment variables configured for sandbox-safe uv/pip execution."""
+    env = dict(os.environ)
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    env.setdefault("UV_CACHE_DIR", "/tmp/uv-cache")
+    env.setdefault("UV_PYTHON_INSTALL_DIR", "/tmp/uv-python")
+    env.setdefault("UV_TOOL_DIR", "/tmp/uv-tools")
+    env.setdefault("UV_PYTHON_PREFERENCE", "only-system")
+    return env
+
+
+def ensure_dependencies(packages: list[str] | tuple[str, ...] = ()) -> None:
+    """Resolve any missing Python packages via uv pip first, falling back to pip."""
+    if not packages:
+        return
+
+    missing: list[str] = []
+    for raw_pkg in packages:
+        mod_name = re.split(r"[<>=!~;\[]", raw_pkg, maxsplit=1)[0].strip().replace("-", "_")
+        if mod_name and importlib.util.find_spec(mod_name) is None:
+            missing.append(raw_pkg)
+
+    if not missing:
+        return
+
+    env = get_uv_env()
+    uv_bin = shutil.which("uv")
+    if uv_bin:
+        uv_proc = subprocess.run(
+            [uv_bin, "pip", "install", "--quiet", "--python", sys.executable, *missing],
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if uv_proc.returncode == 0:
+            return
+
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", "--quiet", *missing],
+        env=env,
+        check=True,
+    )
+
+
+def build_python_cmd(*script_and_args: str) -> list[str]:
+    """Build a child Python command preferring `uv run --no-project` with direct fallback."""
+    uv_bin = shutil.which("uv")
+    if uv_bin:
+        return [uv_bin, "run", "--no-project", sys.executable, "-B", *script_and_args]
+    return [sys.executable, "-B", *script_and_args]
 
 PERSONA_ORDER = ["Reader Mode", "Subject Expert", "Technical Architect"]
 
@@ -774,7 +837,13 @@ def _run_self_test() -> None:
     for pattern in required_headings:
         assert re.search(pattern, report_md, flags=re.MULTILINE), f"Missing required Check 7 heading: {pattern}"
 
-    print("✅ schemas.py self-test passed (4 schemas validated, anti-inflation clamp verified, math & Check 7 renderer verified).")
+    ensure_dependencies(["json", "re"])
+    ver_cmd = build_python_cmd("--version")
+    assert ver_cmd[-2:] == ["-B", "--version"], f"Unexpected build_python_cmd: {ver_cmd}"
+    ver_proc = subprocess.run(ver_cmd, env=get_uv_env(), capture_output=True, text=True, check=True)
+    assert "Python" in (ver_proc.stdout or ver_proc.stderr)
+
+    print("✅ schemas.py self-test passed (4 schemas, uv/pip helpers, anti-inflation clamp, math & Check 7 renderer verified).")
 
 
 if __name__ == "__main__":

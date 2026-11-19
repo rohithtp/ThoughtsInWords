@@ -1,11 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-python3 - <<'PY'
+if [[ -d "${HOME:-}/.local/bin" && ":${PATH}:" != *":${HOME}/.local/bin:"* ]]; then
+  export PATH="${HOME}/.local/bin:${PATH}"
+fi
+
+export PYTHONDONTWRITEBYTECODE=1
+export UV_CACHE_DIR="${UV_CACHE_DIR:-/tmp/uv-cache}"
+export UV_PYTHON_INSTALL_DIR="${UV_PYTHON_INSTALL_DIR:-/tmp/uv-python}"
+export UV_TOOL_DIR="${UV_TOOL_DIR:-/tmp/uv-tools}"
+export UV_PYTHON_PREFERENCE="${UV_PYTHON_PREFERENCE:-only-system}"
+
+PYTHON_RUNNER=(python3 -B -)
+if command -v uv >/dev/null 2>&1; then
+  PYTHON_RUNNER=(uv run --no-project python3 -B -)
+fi
+
+"${PYTHON_RUNNER[@]}" <<'PY'
 import glob
 import os
+import py_compile
 import re
+import subprocess
 import sys
+import tempfile
 from datetime import datetime
 
 errors = []
@@ -435,6 +453,85 @@ if check7_ok:
     print(
         f"✅ Check 7 passed: reviews/README.md valid and {len(all_reviews)} review report(s) verified "
         f"(bidirectional links & 0-10 scorecards intact)."
+    )
+
+# Check 8: Agent Skills Python Scripts, uv/pip Config, .gitignore & Control-Plane Integrity
+check8_ok = True
+for required_file in (
+    "pyproject.toml",
+    "requirements.txt",
+    "pyrightconfig.json",
+    ".agent/skills/organize_readme/scripts/run_python.sh",
+):
+    if not os.path.isfile(required_file):
+        errors.append(f"[Check 8] Missing required Python/uv configuration file: {required_file}")
+        check8_ok = False
+
+if not os.path.isfile(".gitignore"):
+    errors.append("[Check 8] Missing .gitignore file.")
+    check8_ok = False
+else:
+    gitignore_lines = {ln.strip() for ln in open(".gitignore", encoding="utf-8")}
+    for pattern in ("__pycache__/", "*.py[codz]", ".venv/"):
+        if pattern not in gitignore_lines:
+            errors.append(f"[Check 8] .gitignore missing required Python ignore entry: {pattern}")
+            check8_ok = False
+
+skill_py_files = sorted(glob.glob(".agent/skills/**/*.py", recursive=True))
+with tempfile.TemporaryDirectory() as pyc_tmp:
+    for idx, py_file in enumerate(skill_py_files):
+        try:
+            py_compile.compile(py_file, cfile=os.path.join(pyc_tmp, f"mod_{idx}.pyc"), doraise=True)
+        except py_compile.PyCompileError as exc:
+            errors.append(f"[Check 8] Python compile failure in {py_file}: {exc}")
+            check8_ok = False
+
+no_pyc_env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+runner_sh = ".agent/skills/organize_readme/scripts/run_python.sh"
+for test_script in (
+    ".agent/skills/review_article/scripts/schemas.py",
+    ".agent/skills/review_article/scripts/run_review_workflow.py",
+):
+    if not os.path.isfile(test_script):
+        errors.append(f"[Check 8] Missing required skill self-test script: {test_script}")
+        check8_ok = False
+        continue
+    proc = subprocess.run(
+        ["bash", runner_sh, test_script, "--self-test"],
+        env=no_pyc_env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout).strip()
+        errors.append(f"[Check 8] Self-test failed for {test_script} (exit {proc.returncode}): {detail}")
+        check8_ok = False
+
+control_plane_docs = sorted(
+    glob.glob(".agent/rules/**/*.md", recursive=True)
+    + glob.glob(".agent/skills/**/*.md", recursive=True)
+    + glob.glob("plan/**/*.md", recursive=True)
+)
+control_plane_links = 0
+for doc in control_plane_docs:
+    with open(doc, encoding="utf-8") as fh:
+        cleaned_doc = strip_code(fh.read())
+    doc_dir = os.path.dirname(doc)
+    for raw in re.findall(r"\[[^\]]*\]\(([^)]+)\)", cleaned_doc):
+        target = raw.split("#", 1)[0].strip()
+        if not target or target.startswith(("http://", "https://", "mailto:")) or "<" in target:
+            continue
+        control_plane_links += 1
+        resolved = os.path.normpath(os.path.join(doc_dir, target))
+        if not os.path.exists(resolved):
+            errors.append(f"[Check 8] Broken control-plane/plan link in {doc}: {target} -> {resolved}")
+            check8_ok = False
+
+if check8_ok:
+    print(
+        f"✅ Check 8 passed: uv/pip manifests & .gitignore valid, all {len(skill_py_files)} skill Python scripts "
+        f"compiled & self-tested cleanly, and all {control_plane_links} control-plane/plan links resolve."
     )
 
 print("\n--- Summary ---")

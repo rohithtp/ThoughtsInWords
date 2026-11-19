@@ -29,11 +29,11 @@
    * **Stage 2 & 3 (Scoped Remediation):** Sorts prioritized findings and runs `Article Remediator` (`REMEDIATION_RESULT_SCHEMA`) scoped strictly to `articles/<category>/<slug>.md` (preserving `**Date:**`, adding `**Last Updated:**`, `**Review:**` link, `Scope & Licensing Note`, and bottom `## Changelog`).
    * **Stage 4 (`After` Re-Verification):** Reuses the **same 3 persistent handles** via `parallel()` against `AFTER_SCORECARD_SCHEMA`, computes exact scorecard math and renders `reviews/<category>/<slug>-review.md` in Python.
    * **Stage 5 (Single-Writer Handoff):** Emits `INDEX_HANDOFF_SCHEMA` to [`reconcile_indexes.py`](../.agent/skills/organize_readme/scripts/reconcile_indexes.py).
-3. **Update [`review_article/SKILL.md`](../.agent/skills/review_article/SKILL.md) *(Implemented)*:** Points the skill directly to `run_review_workflow.py` via `run_workflow`.
+3. **Update [`review_article/SKILL.md`](../.agent/skills/review_article/SKILL.md) *(Implemented)*:** Points the skill to `run_review_workflow.py` via `run_workflow`'s `runpy.run_path` bootstrapper (`async def run_pipeline(runtime_env)`), eliminating top-level `await` parser errors, with [`pyrightconfig.json`](../pyrightconfig.json) resolving `schemas` imports statically.
 
 ### Phase 1 Acceptance Criteria
-* `python3 .agent/skills/review_article/scripts/schemas.py --self-test` verifies schema contracts, anti-inflation clamping, arithmetic, and Check 7 heading integrity (`exit 0`).
-* `bash verify_links.sh` Check 7 passes with exit code `0`.
+* `python3 .agent/skills/review_article/scripts/schemas.py --self-test` and `python3 .agent/skills/review_article/scripts/run_review_workflow.py --self-test` verify schema contracts, anti-inflation clamping, arithmetic, 5-stage stateful execution, and Check 7 heading integrity (`exit 0`).
+* `bash verify_links.sh` Checks 1–8 pass with exit code `0`.
 
 ---
 
@@ -53,7 +53,7 @@
 3. **Update [`organize_readme/SKILL.md`](../.agent/skills/organize_readme/SKILL.md) *(Implemented)*:** Configured around `reconcile_indexes.py` handoff and standalone modes with LLM fallback for ambiguous broken cross-links.
 
 ### Phase 2 Acceptance Criteria
-* `python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --dry-run` and live execution pass idempotently (`exit 0`) with zero unintended diffs and `verify_links.sh` Checks 1–7 == `0`.
+* `python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --dry-run` and live execution pass idempotently (`exit 0`) with zero unintended diffs and `verify_links.sh` Checks 1–8 == `0`.
 * All subagents and workflows inherit repository invariants via `.agent/rules/AGENTS.md`.
 
 ---
@@ -72,9 +72,9 @@
    * Restricted writes to target article edits with `INDEX_HANDOFF_SCHEMA` (`"Updated"`) handoff to `reconcile_indexes.py`.
 4. **Add Pre-Push Gate to [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) *(Completed — Option 4)*:**
    * Kept `commit_and_push` as a Skill (`2.0 / 10` conversion ROI—no subagent needed).
-   * Added atomic local staging script [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) (`set -euo pipefail`) that enforces `bash verify_links.sh` (Checks 1–7 == exit `0`) **before** `jj describe -m` and `jj bookmark set <bookmark> -r @` (default `main`), isolating network access strictly to Phase 2 (`jj git push --bookmark <bookmark>`) and routing Check 1–7 failures to [`organize_readme`](../.agent/skills/organize_readme/SKILL.md).
-5. **Sync Documentation *(Implemented)*:** Updated [`.agent/skills/README.md`](../.agent/skills/README.md) and [`plan/`](./README.md) for `.agent/rules/AGENTS.md`, `prepare_commit.sh`, `reconcile_indexes.py`, `schemas.py`, and `run_review_workflow.py`.
+   * Added atomic local staging script [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) (`set -euo pipefail`) that enforces `bash verify_links.sh` (Checks 1–8 == exit `0`) **before** `jj describe -m` and `jj bookmark set <bookmark> -r @` (default `main`), isolating network access strictly to Phase 2 (`jj git push --bookmark <bookmark>`) and routing Check 1–8 failures to [`organize_readme`](../.agent/skills/organize_readme/SKILL.md).
+5. **Sync Documentation & `uv`/`pip` Tooling *(Implemented)*:** Updated [`.agent/skills/README.md`](../.agent/skills/README.md) and [`plan/`](./README.md) for `.agent/rules/AGENTS.md`, [`.gitignore`](../.gitignore), [`pyproject.toml`](../pyproject.toml), [`requirements.txt`](../requirements.txt), [`pyrightconfig.json`](../pyrightconfig.json), [`run_python.sh`](../.agent/skills/organize_readme/scripts/run_python.sh), `prepare_commit.sh`, `reconcile_indexes.py`, `schemas.py`, `run_review_workflow.py`, and Check 8.
 
 ### Phase 3 Acceptance Criteria
-* `schemas.py --self-test`, `reconcile_indexes.py`, AST/syntax checks, and `bash verify_links.sh` (Checks 1–7) all pass with exit code `0`.
+* `run_python.sh` (`uv` → `pip`), `py_compile`, `schemas.py --self-test`, `run_review_workflow.py --self-test`, `reconcile_indexes.py`, and `bash verify_links.sh` (Checks 1–8) all pass with exit code `0`.
 * Batch refactoring via `simplify_article` with `workspace: "share"` merges cleanly via `--handoff '[...]'` to `reconcile_indexes.py` without singleton contention.

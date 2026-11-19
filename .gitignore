@@ -1,1 +1,23 @@
 .aider*
+
+# Python bytecode & build artifacts
+__pycache__/
+*.py[codz]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# uv & pip virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Type checkers, linters & test caches
+.mypy_cache/
+.pyright/
+.ruff_cache/
+.pytest_cache/

@@ -20,11 +20,15 @@ This skill orchestrates a schema-validated, stateful multi-persona verification,
 
 ## Primary Execution Path (`run_workflow`)
 
-Run the deterministic pipeline directly using `run_workflow` with the target `article_path`:
+Run the deterministic pipeline directly using `run_workflow` with the `runpy.run_path` bootstrapper and target `article_path`:
 
 ```python
 run_workflow(
-    ScriptPath="/Users/rohithtp/mine/home/workspaces/articles/ThoughtsInWords/.agent/skills/review_article/scripts/run_review_workflow.py",
+    Script=(
+        "import runpy\n"
+        "mod = runpy.run_path('.agent/skills/review_article/scripts/run_review_workflow.py', init_globals=globals())\n"
+        "await mod['run_pipeline'](globals())\n"
+    ),
     Args={"article_path": "articles/<category>/<slug>.md"},
     Description="Run 5-stage schema-validated multi-persona article review",
 )
@@ -47,13 +51,14 @@ run_workflow(
 4. **Stage 5 — Single-Writer Index Reconciliation & Verification Gate (`INDEX_HANDOFF_SCHEMA`):**
    * Emits a validated `INDEX_HANDOFF_SCHEMA` payload (`action: "Reviewed & Updated"`, including `review_move` scores/delta) to:
      ```bash
-     python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '<json>'
+     bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '<json>'
      ```
-   * Updates `reviews/README.md`, syncs `README.md`, `articles/README.md`, and `articles/CHANGELOG.md` without multi-writer contention, and confirms `bash verify_links.sh` (Checks 1–7) passes with exit code `0`.
+   * Updates `reviews/README.md`, syncs `README.md`, `articles/README.md`, and `articles/CHANGELOG.md` without multi-writer contention, and confirms `bash verify_links.sh` (Checks 1–8) passes with exit code `0`.
 
-## Validation Self-Test
+## Validation Self-Tests
 
-Before modifying schemas or templates, run:
+Before modifying schemas, workflow orchestration, or templates, run (via [`run_python.sh`](../organize_readme/scripts/run_python.sh) `uv` → `pip` runner):
 ```bash
-python3 .agent/skills/review_article/scripts/schemas.py --self-test
+bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/review_article/scripts/schemas.py --self-test
+bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/review_article/scripts/run_review_workflow.py --self-test
 ```

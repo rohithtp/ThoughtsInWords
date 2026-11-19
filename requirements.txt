@@ -1,0 +1,3 @@
+# ThoughtsInWords Base Python Dependencies
+# Resolved automatically via `uv pip install -r requirements.txt` (primary)
+# or `python3 -m pip install -r requirements.txt` (fallback) when packages are listed below.

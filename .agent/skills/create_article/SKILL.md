@@ -44,9 +44,9 @@ When the user asks to "create a new article" or "add a summary of [URL]":
    * Per [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 2**, save to `articles/[category]/[kebab-case-slug].md` using lowercase `kebab-case.md` (no underscores or uppercase characters).
 
 4. **Reconcile Indexes, `[NEW]` Tags & Changelog (Single-Writer Handoff — Option A4)**:
-   * **Write Scope Partition:** Never edit `README.md`, `articles/README.md`, or `articles/CHANGELOG.md` directly. Emit an [`INDEX_HANDOFF_SCHEMA`](../review_article/scripts/schemas.py) payload to [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) (enforcing [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 4**):
+   * **Write Scope Partition:** Never edit `README.md`, `articles/README.md`, or `articles/CHANGELOG.md` directly. Emit an [`INDEX_HANDOFF_SCHEMA`](../review_article/scripts/schemas.py) payload to [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) via [`run_python.sh`](../organize_readme/scripts/run_python.sh) (enforcing [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) **Invariant 4**):
      ```bash
-     python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '{
+     bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '{
        "action": "Added",
        "article_path": "articles/<category>/<kebab-case-slug>.md",
        "title": "Title of Article",
@@ -55,7 +55,7 @@ When the user asks to "create a new article" or "add a summary of [URL]":
        "reciprocal_articles_touched": []
      }'
      ```
-   * [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) inserts the article alphabetically in `articles/README.md`, recomputes the Hybrid Window `[NEW]` cohort (`README.md` + `articles/README.md`), syncs counts, logs `* **Added:**` / `* **Rotated (\`[NEW]\`):**` in `articles/CHANGELOG.md`, and runs `bash verify_links.sh` (Checks 1–7 == exit `0`).
+   * [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py) inserts the article alphabetically in `articles/README.md`, recomputes the Hybrid Window `[NEW]` cohort (`README.md` + `articles/README.md`), syncs counts, logs `* **Added:**` / `* **Rotated (\`[NEW]\`):**` in `articles/CHANGELOG.md`, and runs `bash verify_links.sh` (Checks 1–8 == exit `0`).
 
 5. **Optional Quality Audit**:
    * *(Optional)* Run [`review_article/SKILL.md`](../review_article/SKILL.md) (`run_review_workflow.py`) to perform a schema-validated Reader Mode, Subject Matter Expert, and Technical Architect review and link a `0–10` Before/After report under `reviews/<category>/<slug>-review.md`.
@@ -67,4 +67,4 @@ When the user asks to "create a new article" or "add a summary of [URL]":
 **Action:**
 1. Read URL.
 2. Write `articles/frontend/react-compiler-overview.md` complying with [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) Invariants 1–3 (`**Date:** Month Day, Year`, `Scope & Licensing Note` if tooling-focused, `## Related Articles`, and initial `## Changelog`).
-3. Execute `python3 .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '...'` (updates `README.md`, `articles/README.md`, `articles/CHANGELOG.md`, and runs `bash verify_links.sh` Checks 1–7).
+3. Execute `bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '...'` (updates `README.md`, `articles/README.md`, `articles/CHANGELOG.md`, and runs `bash verify_links.sh` Checks 1–8).
