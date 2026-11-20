@@ -7,6 +7,30 @@ description: Create a new article from a given topic or URL, summarize content, 
 
 This skill guides the agent in creating a new article within the `ThoughtsInWords` repository. It involves reading source material (if provided), creating a markdown file in the appropriate topic directory, adding bidirectional cross-links, and updating the README indexes.
 
+## Primary Hybrid `run_workflow` Execution Path (Option H3)
+
+For isolated URL ingestion, multi-article creation, or automatic pre-handoff invariant verification and optional review chaining, execute [`run_content_workflow.py`](./scripts/run_content_workflow.py) via `run_workflow`:
+
+```python
+run_workflow(
+    Script=(
+        "import runpy\n"
+        "mod = runpy.run_path('.agent/skills/create_article/scripts/run_content_workflow.py', init_globals=globals())\n"
+        "await mod['run_pipeline'](globals())\n"
+    ),
+    Args={
+        "mode": "create",
+        "article_path": "articles/<category>/<kebab-case-slug>.md",
+        "source_url": "https://example.com/article",
+        "chain_review": False,
+    },
+    Description="Run scoped hybrid article creation workflow",
+)
+```
+
+* `run_content_workflow.py` enforces [`CONTENT_MUTATION_RESULT_SCHEMA`](../review_article/scripts/schemas.py) and `verify_article_mutation()` (Invariants 1–3, header metadata, bottom section ordering) before emitting `INDEX_HANDOFF_SCHEMA` (including `reciprocal_articles_touched`) to [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py).
+* Validate the orchestrator locally with `bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/create_article/scripts/run_content_workflow.py --self-test`.
+
 ## Usage
 
 When the user asks to "create a new article" or "add a summary of [URL]":

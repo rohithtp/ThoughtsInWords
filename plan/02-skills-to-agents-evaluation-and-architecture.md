@@ -120,9 +120,28 @@ Each skill is evaluated across 6 architectural conversion parameters (`0.0–10.
 * **Problem:** [`commit_and_push/SKILL.md`](../.agent/skills/commit_and_push/SKILL.md) previously ran `jj describe`, `jj bookmark set main -r @`, and `jj git push` without validating repository health, and [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md) referenced a legacy `view_file` tool name.
 * **Solution:** Retain `commit_and_push` as a Skill (lowest ROI for an autonomous agent at `2.0 / 10`), enforce a two-phase **Pre-Push Verification Gate** (`prepare_commit.sh` runs `bash verify_links.sh` before `jj describe` and `jj bookmark set <bookmark> -r @`; only then runs `jj git push --bookmark <bookmark>`), and make [`simplify_article/SKILL.md`](../.agent/skills/simplify_article/SKILL.md) tool-agnostic. *(Both [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) and the `simplify_article` `view_file` cleanup are now **Implemented**.)*
 
+### Change 7 — Grow to a Pure Hybrid Control Plane (`run_content_workflow.py` + `verify_article_mutation()` + Reciprocal Auto-Expansion) *(Implemented — Option H3)*
+* **Problem:** After Options 4, A4, and B4, `review_article` and `organize_readme` operated as schema-validated Python/workflow engines, while `create_article`, `update_article`, and `simplify_article` remained prompt-only runbooks without pre/post link-retention checks, `reconcile_indexes.py` ignored `reciprocal_articles_touched`, and `run_review_workflow.py` lacked batch `article_paths`, configurable read-only `reviewer_type`, and Stage 3 invariant gating.
+* **Options Evaluated (`0–10` Architectural Matrix):**
+
+| Evaluation Dimension (`0–10`) | Weight | Option H1: Script Patches Only | Option H2: Full Subagent Spawning for Every Skill | **Option H3: Pure Hybrid Control Plane (Thin Skills + `run_content_workflow.py` + `verify_article_mutation()` + Enhanced `reconcile_indexes.py` & Batch `run_review_workflow.py`) (Implemented)** |
+| :--- | :---: | :---: | :---: | :---: |
+| **Determinism & Invariant Enforcement** | `25%` | `8.5` | `7.5` | **`9.8`** |
+| **Context Window Isolation & Batch Scalability** | `20%` | `6.5` | `9.0` | **`9.7`** |
+| **Least-Privilege & Single-Writer Safety** | `20%` | `8.0` | `6.5` | **`9.7`** |
+| **100% Link/Citation Retention Guarantee** | `15%` | `7.0` | `7.0` | **`9.8`** |
+| **Token & Model-Tiering Efficiency** | `10%` | `8.0` | `6.0` | **`9.4`** |
+| **Maintainability & Verification Gate (Check 8)** | `10%` | `8.5` | `7.0` | **`9.6`** |
+| **Weighted Composite Score (`0–10`)** | `100%` | **`7.7`** | **`7.3`** | **`9.7`** |
+
+* **Why Option H3 (`9.7`):**
+  * **Pre/Post Article Mutation & Link-Retention Gate:** Added `CONTENT_MUTATION_RESULT_SCHEMA`, `extract_markdown_links()`, and `verify_article_mutation()` to [`schemas.py`](../.agent/skills/review_article/scripts/schemas.py) so every `"Updated"`, `"Simplified"`, and `"Reviewed & Updated"` edit is deterministically validated for immutable `**Date:**`, `**Last Updated:**`, bottom section ordering (`## Related Articles` → `## References` → `## Changelog`), and **zero dropped links** before handoff.
+  * **Unified Hybrid Content Workflow:** Deployed [`run_content_workflow.py`](../.agent/skills/create_article/scripts/run_content_workflow.py) supporting `mode: "create" | "update" | "simplify"`, single `article_path` (`inherit`) or parallel batch `article_paths` (`share`), `verify_article_mutation()` gating, optional `chain_review=True`, and `--self-test`.
+  * **Reciprocal Auto-Expansion & Least-Privilege Batch Reviews:** Wired `expand_reciprocal_handoffs()` + `--self-test` into [`reconcile_indexes.py`](../.agent/skills/organize_readme/scripts/reconcile_indexes.py), and upgraded [`run_review_workflow.py`](../.agent/skills/review_article/scripts/run_review_workflow.py) with configurable `reviewer_type` (`"research"` / `"self"`), model tiering (`reviewer_model` / `remediator_model`), Stage 3 `verify_article_mutation()`, and batch `article_paths`.
+
 ---
 
-## 4. Target Hybrid Architecture Topology & File Layout
+## 4. Target Pure Hybrid Architecture Topology & File Layout
 
 ```mermaid
 flowchart TD
@@ -132,36 +151,39 @@ flowchart TD
         Inv["Pure Open-Source Mandate | kebab-case.md | Immutable Date | Badge Rules"]
     end
 
-    Coord -->|"Create / Expand / Simplify"| ContentAgents
+    Coord -->|"Create / Expand / Simplify"| ContentWorkflow["run_workflow: run_content_workflow.py"]
     Coord -->|"Review & Rate (0-10)"| ReviewWorkflow["run_workflow: run_review_workflow.py"]
 
-    subgraph ContentAgents["Scoped Content Subagents (Mutate Only Target Article)"]
-        Author["article-author (Write: articles/cat/slug.md)"]
-        Refactor["article-refactor (Write: articles/cat/slug.md)"]
+    subgraph ContentWorkflow["Hybrid Content Workflow (create / update / simplify)"]
+        Snap["Stage 1: Baseline Snapshot (Date, Links)"]
+        ContentAgents["Stage 2: Scoped Content Subagents (inherit or share)"]
+        ArtGate["Stage 3: verify_article_mutation() (100% Link Retention + Invariants 1-3)"]
+        Snap --> ContentAgents --> ArtGate
     end
 
-    subgraph ReviewWorkflow["Multi-Turn Review Workflow (Stage 1 Parallel -> Stage 3 Edit -> Stage 4 Re-Verify)"]
+    subgraph ReviewWorkflow["Multi-Turn Review Workflow (Single or Batch article_paths)"]
         R1["r_reader (Read-Only, Params 1-4)"]
         R2["r_sme (Read-Only, Params 5-8)"]
         R3["r_arch (Read-Only, Params 9-12)"]
-        Remediator["Article Remediator (Write: Target Article Only)"]
+        Remediator["Article Remediator + Stage 3 verify_article_mutation()"]
         R1 & R2 & R3 -->|"BEFORE_SCORECARD_SCHEMA"| Remediator
         Remediator -->|"Updated Article -> AFTER_SCORECARD_SCHEMA + Python Report"| R1 & R2 & R3
     end
 
-    ContentAgents -->|"INDEX_HANDOFF_SCHEMA"| Reconciler
-    ReviewWorkflow -->|"INDEX_HANDOFF_SCHEMA"| Reconciler
+    ArtGate -->|"INDEX_HANDOFF_SCHEMA (+ reciprocal_articles_touched)"| Reconciler
+    ReviewWorkflow -->|"INDEX_HANDOFF_SCHEMA (Single or Batch)"| Reconciler
 
     subgraph Reconciler["Single-Writer Reconciler (reconcile_indexes.py)"]
+        Recip["expand_reciprocal_handoffs() (Auto-Update Sibling Trail)"]
         Org["Single-Writer Engine (Owns README.md, articles/README.md, reviews/README.md, CHANGELOG.md)"]
         Gate["bash verify_links.sh (Checks 1-8 == Exit 0)"]
-        Org --> Gate
+        Recip --> Org --> Gate
     end
 
     Gate -->|"Verified Clean Working Copy"| JJSkill["Skill: commit_and_push (prepare_commit.sh -> jj git push --bookmark)"]
 ```
 
-### `.agent/` Directory Structure (Live Control Plane & Target Agents)
+### `.agent/` Directory Structure (Live Pure Hybrid Control Plane)
 
 ```text
 .gitignore                                             # Python bytecode, venv & uv/linter cache ignore rules [Live]
@@ -171,30 +193,30 @@ pyrightconfig.json                                     # Static extraPaths & bas
 .agent/
 ├── rules/
 │   └── AGENTS.md                                      # Shared invariants (OS-only, kebab-case, date/badge rules) [Live]
-├── agents/                                            # Optional declarative persona definitions (Phase 3 extension)
-│   ├── article-author.md                              # Scoped authoring agent (articles/ only)
-│   └── article-refactor.md                            # Scoped readability/structure agent (articles/ only)
 └── skills/
     ├── README.md                                      # Control plane overview & capability directory [Live]
     ├── commit_and_push/
     │   ├── SKILL.md                                   # Guarded two-phase jj workflow [Live]
     │   └── scripts/
     │       └── prepare_commit.sh                      # Atomic pre-push verify_links.sh gate & jj bookmark stager [Live]
-    ├── create_article/SKILL.md                        # Scoped authoring -> INDEX_HANDOFF_SCHEMA -> reconcile_indexes.py [Live]
+    ├── create_article/
+    │   ├── SKILL.md                                   # Thin router -> run_content_workflow.py (create) & reconcile_indexes.py [Live]
+    │   └── scripts/
+    │       └── run_content_workflow.py                # Unified single/batch hybrid content orchestrator + --self-test [Live]
     ├── organize_readme/
     │   ├── SKILL.md                                   # Single-writer reconciler trigger & link-healing fallback [Live]
     │   └── scripts/
     │       ├── run_python.sh                          # uv-first / pip-fallback dependency & Python runner [Live]
-    │       └── reconcile_indexes.py                   # Deterministic single-writer index, badge & verify_links.sh engine [Live]
+    │       └── reconcile_indexes.py                   # Deterministic single-writer index, reciprocal expansion, badge & --self-test engine [Live]
     ├── review_article/
     │   ├── SKILL.md                                   # Thin trigger -> runpy.run_path('...run_review_workflow.py') [Live]
     │   ├── scripts/
-    │   │   ├── schemas.py                             # Dual Before/After & Handoff schemas, uv/pip helpers & renderer [Live]
-    │   │   └── run_review_workflow.py                 # Standard-Python run_pipeline() + offline mock --self-test [Live]
+    │   │   ├── schemas.py                             # 5 schemas, verify_article_mutation(), uv/pip helpers & Check 7 renderer [Live]
+    │   │   └── run_review_workflow.py                 # Standard-Python single/batch run_pipeline() + offline mock --self-test [Live]
     │   ├── references/rubric-and-repo-alignment.md    # 12-parameter 0-10 rubric & philosophy checks [Live]
     │   └── resources/report-template.md               # Canonical review report template [Live]
-    ├── simplify_article/SKILL.md                      # Scoped refactor -> INDEX_HANDOFF_SCHEMA -> reconcile_indexes.py [Live]
-    └── update_article/SKILL.md                        # Hybrid edit guide -> INDEX_HANDOFF_SCHEMA -> reconcile_indexes.py [Live]
+    ├── simplify_article/SKILL.md                      # Thin router -> run_content_workflow.py (simplify, workspace="share") [Live]
+    └── update_article/SKILL.md                        # Thin router -> run_content_workflow.py (update) & reciprocal handoff [Live]
 ```
 
 **Next Document:** [03 — Phased Migration Execution Plan](./03-phased-migration-execution-plan.md)

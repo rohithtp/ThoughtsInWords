@@ -27,7 +27,9 @@ bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_
 
 * Accepted `action` values: `"Added"`, `"Updated"`, `"Simplified"`, `"Reviewed & Updated"`.
 * For `"Reviewed & Updated"`, include `"review_move": {"report_path": "reviews/<category>/<slug>-review.md", "before_score": 7.5, "after_score": 9.0, "delta": "+1.5", "review_date": "Nov 19, 2026"}`.
+* When `"reciprocal_articles_touched"` is provided, `reconcile_indexes.py` verifies each touched sibling article exists on disk, synthesizes `"Updated"` handoffs for siblings carrying `**Last Updated:**` and `## Changelog`, promotes them into `[UPDATED]` (respecting `[NEW]` exclusivity), and logs their entries in `articles/CHANGELOG.md`.
 * For batch runs (multiple concurrent scoped agents), pass `--handoff '[...]'` or `--handoff-file <path>` once at fan-in to reconcile all changes atomically.
+* Run offline unit verification via `bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --self-test`.
 
 ### 2. Standalone Discovery & Audit Mode
 

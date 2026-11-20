@@ -53,6 +53,7 @@ from schemas import (  # noqa: E402
     get_uv_env,
     render_review_report,
     validate_against_schema,
+    verify_article_mutation,
 )
 
 
@@ -107,234 +108,286 @@ async def run_pipeline(runtime_env: dict[str, Any] | None = None) -> dict[str, A
     parallel_fn: Callable[..., Any] = _get_primitive("parallel", env)
     wf_args: dict[str, Any] = _get_primitive("args", env, default={}) or {}
 
-    raw_article_path = wf_args.get("article_path", "")
-    if not raw_article_path:
+    raw_batch_paths = wf_args.get("article_paths")
+    raw_single_path = wf_args.get("article_path", "")
+    is_batch_arg = bool(raw_batch_paths)
+    if raw_batch_paths:
+        target_paths = [str(p) for p in raw_batch_paths]
+    elif raw_single_path:
+        target_paths = [str(raw_single_path)]
+    else:
         raise ValueError(
-            "Missing required workflow arg 'article_path' (e.g. 'articles/devops/example.md')."
+            "Missing required workflow arg 'article_path' or 'article_paths' "
+            "(e.g. 'articles/devops/example.md')."
         )
-    dry_run = bool(wf_args.get("dry_run", False))
 
-    abs_article_path, article_rel_path, category, slug = _validate_article_path(
-        raw_article_path, repo_root
-    )
-    report_rel_path = f"reviews/{category}/{slug}-review.md"
-    abs_report_path = repo_root / report_rel_path
+    dry_run = bool(wf_args.get("dry_run", False))
+    reviewer_type = str(wf_args.get("reviewer_type") or "self")
+    reviewer_model = wf_args.get("reviewer_model")
+    remediator_model = wf_args.get("remediator_model")
+
     today_dt = datetime.now()
     today_long = _format_long_date(today_dt)
 
-    # Read minimal header metadata from target article for context logging
-    article_head = abs_article_path.read_text(encoding="utf-8")[:1500]
-    title_m = re.search(r"^#\s+(.+?)\s*$", article_head, flags=re.MULTILINE)
-    initial_title = title_m.group(1).strip() if title_m else slug
+    async def _review_single_article(raw_article_path: str) -> tuple[dict[str, Any], dict[str, Any]]:
+        abs_article_path, article_rel_path, category, slug = _validate_article_path(
+            raw_article_path, repo_root
+        )
+        report_rel_path = f"reviews/{category}/{slug}-review.md"
+        abs_report_path = repo_root / report_rel_path
 
-    log_fn(f"Starting Option B4 review pipeline for {article_rel_path} ('{initial_title}')")
+        # Read minimal header metadata from target article for context logging
+        article_head = abs_article_path.read_text(encoding="utf-8")[:1500]
+        title_m = re.search(r"^#\s+(.+?)\s*$", article_head, flags=re.MULTILINE)
+        initial_title = title_m.group(1).strip() if title_m else slug
 
-    # ------------------------------------------------------------------
-    # Stage 1: Persistent Read-Only Reviewer Definitions & Parallel Audit
-    # ------------------------------------------------------------------
-    phase_fn("Stage 1: Parallel Multi-Persona Before Audit")
-
-    read_only_guard = (
-        "CRITICAL READ-ONLY CONSTRAINT: You are an independent read-only auditor. "
-        "Do NOT call write_file, edit_file, or any mutating run_command. "
-        "Read the target article and the rubric/repository files referenced below, "
-        "then submit your structured JSON output strictly via the `finish` tool."
-    )
-
-    reader_standing = (
-        f"You are the Reader Mode Reviewer for ThoughtsInWords (Parameters 1–4).\n"
-        f"{read_only_guard}\n\n"
-        "Prerequisites to read before scoring:\n"
-        f"1. Target article: `{article_rel_path}`\n"
-        "2. Rubric Parameters 1–4: `.agent/skills/review_article/references/rubric-and-repo-alignment.md`\n\n"
-        "Owned Parameters (0.0–10.0, use 0.5 or 1.0 increments):\n"
-        "- param_id 1: Executive Clarity & Hook (`## Summary` & `## Key Points`)\n"
-        "- param_id 2: Narrative Flow & Cognitive Load\n"
-        "- param_id 3: Visual Aids & Scannability\n"
-        "- param_id 4: Accessibility & Actionable Takeaway\n"
-        "Use recommendation IDs formatted strictly as `R-01`, `R-02`, etc."
-    )
-
-    sme_standing = (
-        f"You are the Subject Matter Expert (SME) Reviewer for ThoughtsInWords (Parameters 5–8).\n"
-        f"{read_only_guard}\n\n"
-        "Prerequisites to read before scoring:\n"
-        f"1. Target article: `{article_rel_path}`\n"
-        "2. Governance rules (especially Invariant 1 Pure Open-Source Systems Mandate): `.agent/rules/AGENTS.md`\n"
-        "3. Rubric Parameters 5–8: `.agent/skills/review_article/references/rubric-and-repo-alignment.md`\n\n"
-        "Owned Parameters (0.0–10.0, use 0.5 or 1.0 increments):\n"
-        "- param_id 5: Technical & Domain Accuracy\n"
-        "- param_id 6: Depth of Insight & Edge Cases\n"
-        "- param_id 7: Citations, Specifications & Evidence\n"
-        "- param_id 8: Domain Completeness & Currency\n"
-        "Audit every tool, platform, or framework claim for OSI-approved pure open-source compliance (Invariant 1). "
-        "Set `invariant1_violation: true` on any recommendation fixing proprietary/open-core/SaaS inclusion or missing licensing notes. "
-        "Use recommendation IDs formatted strictly as `S-01`, `S-02`, etc."
-    )
-
-    arch_standing = (
-        f"You are the Technical Architect & Repo Concept Steward for ThoughtsInWords (Parameters 9–12).\n"
-        f"{read_only_guard}\n\n"
-        "Prerequisites to read before scoring:\n"
-        f"1. Target article: `{article_rel_path}`\n"
-        "2. Governance rules (Invariants 1–3): `.agent/rules/AGENTS.md`\n"
-        "3. Rubric Parameters 9–12 & Philosophy Checklist: `.agent/skills/review_article/references/rubric-and-repo-alignment.md`\n"
-        "4. Repository philosophy & digital garden index: `README.md` and `articles/README.md`\n\n"
-        "Owned Parameters (0.0–10.0, use 0.5 or 1.0 increments):\n"
-        "- param_id 9: Architectural Soundness & Trade-Off Rigor (pure open-source NFRs, blast radius, when NOT to use)\n"
-        "- param_id 10: ThoughtsInWords Philosophy Alignment (guard explicitly against the 'Engineer's Philosophy' pitfall of oversimplifying systemic/human problems)\n"
-        "- param_id 11: Digital Garden Interconnectivity (check `articles/README.md` for 2–4 valid relative `.md` cross-links)\n"
-        "- param_id 12: Repository Lifecycle & Standards Compliance (`kebab-case.md`, immutable `**Date:**`, `**Last Updated:**`, `**Review:**`, `Scope & Licensing Note`, bottom section order)\n"
-        "Populate `pure_oss_audit` and `philosophy_alignment_notes`. Use recommendation IDs formatted strictly as `A-01`, `A-02`, etc."
-    )
-
-    r_reader = agent_fn(reader_standing, role="Reader Mode Reviewer (Params 1-4)")
-    r_sme = agent_fn(sme_standing, role="Subject Expert Reviewer (Params 5-8)")
-    r_arch = agent_fn(arch_standing, role="Technical Architect Reviewer (Params 9-12)")
-
-    before_tasks = [
-        (
-            r_reader,
-            f"Perform the Stage 1 (Before) audit of `{article_rel_path}` for persona `'Reader Mode'` (param_ids 1, 2, 3, 4). "
-            "Read the target article and rubric now, then finish with your BEFORE_SCORECARD_SCHEMA payload.",
-        ),
-        (
-            r_sme,
-            f"Perform the Stage 1 (Before) audit of `{article_rel_path}` for persona `'Subject Expert'` (param_ids 5, 6, 7, 8). "
-            "Read the target article, `.agent/rules/AGENTS.md`, and rubric now, then finish with your BEFORE_SCORECARD_SCHEMA payload.",
-        ),
-        (
-            r_arch,
-            f"Perform the Stage 1 (Before) audit of `{article_rel_path}` for persona `'Technical Architect'` (param_ids 9, 10, 11, 12). "
-            "Read the target article, `.agent/rules/AGENTS.md`, `README.md`, `articles/README.md`, and rubric now, then finish with your BEFORE_SCORECARD_SCHEMA payload.",
-        ),
-    ]
-
-    before_payloads = await parallel_fn(
-        before_tasks,
-        lambda item: item[0](item[1], schema=BEFORE_SCORECARD_SCHEMA),
-    )
-    del before_tasks
-
-    # ------------------------------------------------------------------
-    # Stage 2 & 3: Synthesize Recommendations & Remediate Target Article
-    # ------------------------------------------------------------------
-    phase_fn("Stage 2 & 3: Synthesize & Remediate Target Article")
-
-    priority_rank = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
-    merged_recs: list[dict[str, Any]] = []
-    for p in before_payloads:
-        for rec in p["recommendations"]:
-            merged_recs.append({"persona": p["persona"], **rec})
-    merged_recs.sort(key=lambda r: (priority_rank.get(r["priority"], 9), r["id"]))
-
-    log_fn(f"Synthesized {len(merged_recs)} prioritized recommendations across 3 reviewer personas.")
-
-    remediator_prompt = (
-        f"You are the scoped Article Remediator for ThoughtsInWords.\n"
-        f"Target Article: `{article_rel_path}`\n"
-        f"Today's Date: `{today_long}`\n"
-        f"Target Review Report Link: `../../{report_rel_path}`\n\n"
-        "STRICT WRITE SCOPE (Option A4 Single-Writer Partitioning):\n"
-        f"- You MUST edit ONLY `{article_rel_path}`.\n"
-        "- Do NOT edit `README.md`, `articles/README.md`, `articles/CHANGELOG.md`, `reviews/README.md`, or the review report file. Those are handled by Python and `reconcile_indexes.py` in Stages 4–5.\n\n"
-        "Mandatory Governance Rules (`.agent/rules/AGENTS.md`):\n"
-        "1. Invariant 1 (Pure Open-Source Mandate): Replace or omit any proprietary, SaaS, commercial-only, or open-core ('Community Edition') tools in prose, tables, and Mermaid diagrams with pure OSI-approved open-source equivalents. Add the exact `Scope & Licensing Note` callout if covering tooling/systems and missing.\n"
-        "2. Invariant 3 (Immutable Header & Bottom Ordering):\n"
-        "   - NEVER alter or remove the original `**Date:** Month Day, Year`.\n"
-        f"   - Add or update `**Last Updated:** {today_long}` directly beneath `**Date:**`.\n"
-        f"   - Add or update `**Review:** [Expert & Architecture Review Report](../../{report_rel_path})` directly beneath `**Last Updated:**`.\n"
-        "   - Preserve ALL existing valid citations, `## References`, and inline links.\n"
-        "   - Order bottom sections strictly as: `## Related Articles` (2–4 valid relative `.md` links verified against `articles/README.md`) -> `## References` (if present) -> `## Changelog` (at very bottom, prepending `- **Mon DD, YYYY:** Completed multi-persona review (Reader, SME, Technical Architect); applied improvements ([Review Report](../../"
-        f"{report_rel_path})).`).\n\n"
-        "Prioritized Stage 1 Recommendations to Apply:\n"
-        f"```json\n{json.dumps(merged_recs, indent=2)}\n```\n\n"
-        "Ensure all technical additions maintain clean Reader Mode pacing (tables, Mermaid diagrams, concise bullets). "
-        "Return your result strictly via `finish` matching REMEDIATION_RESULT_SCHEMA."
-    )
-
-    remediation = await agent_fn(
-        remediator_prompt,
-        schema=REMEDIATION_RESULT_SCHEMA,
-        role="Article Remediator (Scoped)",
-        workspace="inherit",
-    )
-
-    # ------------------------------------------------------------------
-    # Stage 4: Stateful Multi-Turn After Re-Verification & Report Render
-    # ------------------------------------------------------------------
-    phase_fn("Stage 4: Stateful Multi-Turn After Re-Verification & Report Rendering")
-
-    def _make_after_prompt(persona: str, param_range: str, before_data: dict[str, Any]) -> str:
-        rec_ids = [r["id"] for r in before_data["recommendations"]]
-        return (
-            f"The target article `{article_rel_path}` has now been revised in Stage 3.\n"
-            f"Applied recommendation IDs reported by remediator: {remediation['applied_recommendation_ids']}\n"
-            f"Your Stage 1 recommendation IDs to verify: {rec_ids}\n\n"
-            f"Instructions for persona '{persona}' (Parameters {param_range}):\n"
-            f"1. Re-read `{article_rel_path}` completely (stay strictly read-only).\n"
-            "2. Verify every Stage 1 recommendation you raised and mark its status accurately as `'Applied'` or `'Deferred'`.\n"
-            "3. Re-score ONLY your 4 parameters (0.0–10.0, 0.5/1.0 increments) strictly against the actual text on disk. "
-            "Do NOT inflate scores if recommendations remain `'Deferred'` or unresolved.\n"
-            "4. Submit your AFTER_SCORECARD_SCHEMA payload via `finish`."
+        log_fn(
+            f"Starting Option B4+H3 review pipeline for {article_rel_path} "
+            f"('{initial_title}', reviewer_type='{reviewer_type}')"
         )
 
-    after_tasks = [
-        (r_reader, _make_after_prompt("Reader Mode", "1–4", before_payloads[0])),
-        (r_sme, _make_after_prompt("Subject Expert", "5–8", before_payloads[1])),
-        (r_arch, _make_after_prompt("Technical Architect", "9–12", before_payloads[2])),
-    ]
+        # ------------------------------------------------------------------
+        # Stage 1: Persistent Read-Only Reviewer Definitions & Parallel Audit
+        # ------------------------------------------------------------------
+        phase_fn(f"Stage 1: Parallel Multi-Persona Before Audit ({slug})")
 
-    after_payloads = await parallel_fn(
-        after_tasks,
-        lambda item: item[0](item[1], schema=AFTER_SCORECARD_SCHEMA),
-    )
-    del after_tasks, r_reader, r_sme, r_arch
+        read_only_guard = (
+            "CRITICAL READ-ONLY CONSTRAINT: You are an independent read-only auditor. "
+            "Do NOT call write_file, edit_file, or any mutating run_command. "
+            "Read the target article and the rubric/repository files referenced below, "
+            "then submit your structured JSON output strictly via the `finish` tool."
+        )
 
-    scorecard = compute_scorecard(before_payloads, after_payloads)
-    if scorecard["anti_inflation_clamps"]:
-        log_fn(f"Anti-inflation clamps applied: {json.dumps(scorecard['anti_inflation_clamps'])}")
+        reader_standing = (
+            f"You are the Reader Mode Reviewer for ThoughtsInWords (Parameters 1–4).\n"
+            f"{read_only_guard}\n\n"
+            "Prerequisites to read before scoring:\n"
+            f"1. Target article: `{article_rel_path}`\n"
+            "2. Rubric Parameters 1–4: `.agent/skills/review_article/references/rubric-and-repo-alignment.md`\n\n"
+            "Owned Parameters (0.0–10.0, use 0.5 or 1.0 increments):\n"
+            "- param_id 1: Executive Clarity & Hook (`## Summary` & `## Key Points`)\n"
+            "- param_id 2: Narrative Flow & Cognitive Load\n"
+            "- param_id 3: Visual Aids & Scannability\n"
+            "- param_id 4: Accessibility & Actionable Takeaway\n"
+            "Use recommendation IDs formatted strictly as `R-01`, `R-02`, etc."
+        )
 
-    review_date_long = remediation.get("last_updated") or today_long
-    report_md = render_review_report(
-        article_title=remediation["article_title"],
-        category=category,
-        slug=slug,
-        review_date=review_date_long,
-        remediation=remediation,
-        scorecard=scorecard,
-    )
+        sme_standing = (
+            f"You are the Subject Matter Expert (SME) Reviewer for ThoughtsInWords (Parameters 5–8).\n"
+            f"{read_only_guard}\n\n"
+            "Prerequisites to read before scoring:\n"
+            f"1. Target article: `{article_rel_path}`\n"
+            "2. Governance rules (especially Invariant 1 Pure Open-Source Systems Mandate): `.agent/rules/AGENTS.md`\n"
+            "3. Rubric Parameters 5–8: `.agent/skills/review_article/references/rubric-and-repo-alignment.md`\n\n"
+            "Owned Parameters (0.0–10.0, use 0.5 or 1.0 increments):\n"
+            "- param_id 5: Technical & Domain Accuracy\n"
+            "- param_id 6: Depth of Insight & Edge Cases\n"
+            "- param_id 7: Citations, Specifications & Evidence\n"
+            "- param_id 8: Domain Completeness & Currency\n"
+            "Audit every tool, platform, or framework claim for OSI-approved pure open-source compliance (Invariant 1). "
+            "Set `invariant1_violation: true` on any recommendation fixing proprietary/open-core/SaaS inclusion or missing licensing notes. "
+            "Use recommendation IDs formatted strictly as `S-01`, `S-02`, etc."
+        )
 
-    abs_report_path.parent.mkdir(parents=True, exist_ok=True)
-    abs_report_path.write_text(report_md, encoding="utf-8")
-    log_fn(f"Wrote deterministic Check 7 report to {report_rel_path}")
+        arch_standing = (
+            f"You are the Technical Architect & Repo Concept Steward for ThoughtsInWords (Parameters 9–12).\n"
+            f"{read_only_guard}\n\n"
+            "Prerequisites to read before scoring:\n"
+            f"1. Target article: `{article_rel_path}`\n"
+            "2. Governance rules (Invariants 1–3): `.agent/rules/AGENTS.md`\n"
+            "3. Rubric Parameters 9–12 & Philosophy Checklist: `.agent/skills/review_article/references/rubric-and-repo-alignment.md`\n"
+            "4. Repository philosophy & digital garden index: `README.md` and `articles/README.md`\n\n"
+            "Owned Parameters (0.0–10.0, use 0.5 or 1.0 increments):\n"
+            "- param_id 9: Architectural Soundness & Trade-Off Rigor (pure open-source NFRs, blast radius, when NOT to use)\n"
+            "- param_id 10: ThoughtsInWords Philosophy Alignment (guard explicitly against the 'Engineer's Philosophy' pitfall of oversimplifying systemic/human problems)\n"
+            "- param_id 11: Digital Garden Interconnectivity (check `articles/README.md` for 2–4 valid relative `.md` cross-links)\n"
+            "- param_id 12: Repository Lifecycle & Standards Compliance (`kebab-case.md`, immutable `**Date:**`, `**Last Updated:**`, `**Review:**`, `Scope & Licensing Note`, bottom section order)\n"
+            "Populate `pure_oss_audit` and `philosophy_alignment_notes`. Use recommendation IDs formatted strictly as `A-01`, `A-02`, etc."
+        )
+
+        reviewer_kwargs: dict[str, Any] = {"type_name": reviewer_type}
+        if reviewer_model:
+            reviewer_kwargs["model"] = reviewer_model
+
+        r_reader = agent_fn(reader_standing, role=f"Reader Mode Reviewer ({slug})", **reviewer_kwargs)
+        r_sme = agent_fn(sme_standing, role=f"Subject Expert Reviewer ({slug})", **reviewer_kwargs)
+        r_arch = agent_fn(arch_standing, role=f"Technical Architect Reviewer ({slug})", **reviewer_kwargs)
+
+        before_tasks = [
+            (
+                r_reader,
+                f"Perform the Stage 1 (Before) audit of `{article_rel_path}` for persona `'Reader Mode'` (param_ids 1, 2, 3, 4). "
+                "Read the target article and rubric now, then finish with your BEFORE_SCORECARD_SCHEMA payload.",
+            ),
+            (
+                r_sme,
+                f"Perform the Stage 1 (Before) audit of `{article_rel_path}` for persona `'Subject Expert'` (param_ids 5, 6, 7, 8). "
+                "Read the target article, `.agent/rules/AGENTS.md`, and rubric now, then finish with your BEFORE_SCORECARD_SCHEMA payload.",
+            ),
+            (
+                r_arch,
+                f"Perform the Stage 1 (Before) audit of `{article_rel_path}` for persona `'Technical Architect'` (param_ids 9, 10, 11, 12). "
+                "Read the target article, `.agent/rules/AGENTS.md`, `README.md`, `articles/README.md`, and rubric now, then finish with your BEFORE_SCORECARD_SCHEMA payload.",
+            ),
+        ]
+
+        before_payloads = await parallel_fn(
+            before_tasks,
+            lambda item: item[0](item[1], schema=BEFORE_SCORECARD_SCHEMA),
+        )
+        del before_tasks
+
+        # ------------------------------------------------------------------
+        # Stage 2 & 3: Synthesize Recommendations & Remediate Target Article
+        # ------------------------------------------------------------------
+        phase_fn(f"Stage 2 & 3: Synthesize & Remediate Target Article ({slug})")
+
+        priority_rank = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
+        merged_recs: list[dict[str, Any]] = []
+        for p in before_payloads:
+            for rec in p["recommendations"]:
+                merged_recs.append({"persona": p["persona"], **rec})
+        merged_recs.sort(key=lambda r: (priority_rank.get(r["priority"], 9), r["id"]))
+
+        log_fn(f"Synthesized {len(merged_recs)} prioritized recommendations across 3 reviewer personas for {slug}.")
+
+        before_article_text = abs_article_path.read_text(encoding="utf-8")
+
+        remediator_prompt = (
+            f"You are the scoped Article Remediator for ThoughtsInWords.\n"
+            f"Target Article: `{article_rel_path}`\n"
+            f"Today's Date: `{today_long}`\n"
+            f"Target Review Report Link: `../../{report_rel_path}`\n\n"
+            "STRICT WRITE SCOPE (Option A4 Single-Writer Partitioning):\n"
+            f"- You MUST edit ONLY `{article_rel_path}`.\n"
+            "- Do NOT edit `README.md`, `articles/README.md`, `articles/CHANGELOG.md`, `reviews/README.md`, or the review report file. Those are handled by Python and `reconcile_indexes.py` in Stages 4–5.\n\n"
+            "Mandatory Governance Rules (`.agent/rules/AGENTS.md`):\n"
+            "1. Invariant 1 (Pure Open-Source Mandate): Replace or omit any proprietary, SaaS, commercial-only, or open-core ('Community Edition') tools in prose, tables, and Mermaid diagrams with pure OSI-approved open-source equivalents. Add the exact `Scope & Licensing Note` callout if covering tooling/systems and missing.\n"
+            "2. Invariant 3 (Immutable Header & Bottom Ordering):\n"
+            "   - NEVER alter or remove the original `**Date:** Month Day, Year`.\n"
+            f"   - Add or update `**Last Updated:** {today_long}` directly beneath `**Date:**`.\n"
+            f"   - Add or update `**Review:** [Expert & Architecture Review Report](../../{report_rel_path})` directly beneath `**Last Updated:**`.\n"
+            "   - Preserve ALL existing valid citations, `## References`, and inline links.\n"
+            "   - Order bottom sections strictly as: `## Related Articles` (2–4 valid relative `.md` links verified against `articles/README.md`) -> `## References` (if present) -> `## Changelog` (at very bottom, prepending `- **Mon DD, YYYY:** Completed multi-persona review (Reader, SME, Technical Architect); applied improvements ([Review Report](../../"
+            f"{report_rel_path})).`).\n\n"
+            "Prioritized Stage 1 Recommendations to Apply:\n"
+            f"```json\n{json.dumps(merged_recs, indent=2)}\n```\n\n"
+            "Ensure all technical additions maintain clean Reader Mode pacing (tables, Mermaid diagrams, concise bullets). "
+            "Return your result strictly via `finish` matching REMEDIATION_RESULT_SCHEMA."
+        )
+
+        remediator_kwargs: dict[str, Any] = {
+            "schema": REMEDIATION_RESULT_SCHEMA,
+            "role": f"Article Remediator ({slug})",
+            "workspace": "inherit",
+        }
+        if remediator_model:
+            remediator_kwargs["model"] = remediator_model
+
+        remediation = await agent_fn(remediator_prompt, **remediator_kwargs)
+
+        after_article_text = abs_article_path.read_text(encoding="utf-8")
+        verify_article_mutation(
+            before_article_text,
+            after_article_text,
+            "Reviewed & Updated",
+            enforce_link_retention=False,
+        )
+
+        # ------------------------------------------------------------------
+        # Stage 4: Stateful Multi-Turn After Re-Verification & Report Render
+        # ------------------------------------------------------------------
+        phase_fn(f"Stage 4: Stateful Multi-Turn After Re-Verification & Report Rendering ({slug})")
+
+        def _make_after_prompt(persona: str, param_range: str, before_data: dict[str, Any]) -> str:
+            rec_ids = [r["id"] for r in before_data["recommendations"]]
+            return (
+                f"The target article `{article_rel_path}` has now been revised in Stage 3.\n"
+                f"Applied recommendation IDs reported by remediator: {remediation['applied_recommendation_ids']}\n"
+                f"Your Stage 1 recommendation IDs to verify: {rec_ids}\n\n"
+                f"Instructions for persona '{persona}' (Parameters {param_range}):\n"
+                f"1. Re-read `{article_rel_path}` completely (stay strictly read-only).\n"
+                "2. Verify every Stage 1 recommendation you raised and mark its status accurately as `'Applied'` or `'Deferred'`.\n"
+                "3. Re-score ONLY your 4 parameters (0.0–10.0, 0.5/1.0 increments) strictly against the actual text on disk. "
+                "Do NOT inflate scores if recommendations remain `'Deferred'` or unresolved.\n"
+                "4. Submit your AFTER_SCORECARD_SCHEMA payload via `finish`."
+            )
+
+        after_tasks = [
+            (r_reader, _make_after_prompt("Reader Mode", "1–4", before_payloads[0])),
+            (r_sme, _make_after_prompt("Subject Expert", "5–8", before_payloads[1])),
+            (r_arch, _make_after_prompt("Technical Architect", "9–12", before_payloads[2])),
+        ]
+
+        after_payloads = await parallel_fn(
+            after_tasks,
+            lambda item: item[0](item[1], schema=AFTER_SCORECARD_SCHEMA),
+        )
+        del after_tasks, r_reader, r_sme, r_arch
+
+        scorecard = compute_scorecard(before_payloads, after_payloads)
+        if scorecard["anti_inflation_clamps"]:
+            log_fn(f"Anti-inflation clamps applied ({slug}): {json.dumps(scorecard['anti_inflation_clamps'])}")
+
+        review_date_long = remediation.get("last_updated") or today_long
+        report_md = render_review_report(
+            article_title=remediation["article_title"],
+            category=category,
+            slug=slug,
+            review_date=review_date_long,
+            remediation=remediation,
+            scorecard=scorecard,
+        )
+
+        abs_report_path.parent.mkdir(parents=True, exist_ok=True)
+        abs_report_path.write_text(report_md, encoding="utf-8")
+        log_fn(f"Wrote deterministic Check 7 report to {report_rel_path}")
+
+        try:
+            parsed_review_dt = datetime.strptime(review_date_long.strip(), "%B %d, %Y")
+        except ValueError:
+            parsed_review_dt = today_dt
+
+        handoff_payload = {
+            "action": "Reviewed & Updated",
+            "article_path": article_rel_path,
+            "title": remediation["article_title"],
+            "date": remediation["date"],
+            "last_updated": review_date_long,
+            "changelog_summary": remediation["changelog_summary"],
+            "review_move": {
+                "report_path": report_rel_path,
+                "before_score": scorecard["overall"]["before"],
+                "after_score": scorecard["overall"]["after"],
+                "delta": scorecard["overall"]["delta"],
+                "review_date": _format_short_date(parsed_review_dt),
+            },
+        }
+        validate_against_schema(handoff_payload, INDEX_HANDOFF_SCHEMA, f"handoff[{slug}]")
+
+        article_summary = {
+            "article_path": article_rel_path,
+            "report_path": report_rel_path,
+            "overall_before": scorecard["overall"]["before"],
+            "overall_after": scorecard["overall"]["after"],
+            "overall_delta": scorecard["overall"]["delta"],
+            "persona_summaries": scorecard["persona_summaries"],
+            "anti_inflation_clamps": scorecard["anti_inflation_clamps"],
+        }
+        return article_summary, handoff_payload
+
+    if len(target_paths) == 1:
+        article_outputs = [await _review_single_article(target_paths[0])]
+    else:
+        article_outputs = await parallel_fn(target_paths, _review_single_article)
+
+    summaries = [out[0] for out in article_outputs]
+    handoff_payloads = [out[1] for out in article_outputs]
 
     # ------------------------------------------------------------------
     # Stage 5: Single-Writer Index Reconciliation & Verification Gate
     # ------------------------------------------------------------------
     phase_fn("Stage 5: Single-Writer Index Reconciliation & Verification Gate")
-
-    try:
-        parsed_review_dt = datetime.strptime(review_date_long.strip(), "%B %d, %Y")
-    except ValueError:
-        parsed_review_dt = today_dt
-
-    handoff_payload = {
-        "action": "Reviewed & Updated",
-        "article_path": article_rel_path,
-        "title": remediation["article_title"],
-        "date": remediation["date"],
-        "last_updated": review_date_long,
-        "changelog_summary": remediation["changelog_summary"],
-        "review_move": {
-            "report_path": report_rel_path,
-            "before_score": scorecard["overall"]["before"],
-            "after_score": scorecard["overall"]["after"],
-            "delta": scorecard["overall"]["delta"],
-            "review_date": _format_short_date(parsed_review_dt),
-        },
-    }
-    validate_against_schema(handoff_payload, INDEX_HANDOFF_SCHEMA, "handoff")
 
     if dry_run:
         cmd = build_python_cmd(str(RECONCILER_SCRIPT), "--dry-run")
@@ -347,7 +400,8 @@ async def run_pipeline(runtime_env: dict[str, Any] | None = None) -> dict[str, A
             check=True,
         )
     else:
-        cmd = build_python_cmd(str(RECONCILER_SCRIPT), "--handoff", json.dumps(handoff_payload))
+        handoff_arg = handoff_payloads[0] if len(handoff_payloads) == 1 else handoff_payloads
+        cmd = build_python_cmd(str(RECONCILER_SCRIPT), "--handoff", json.dumps(handoff_arg))
         proc = subprocess.run(
             cmd,
             cwd=str(repo_root),
@@ -357,21 +411,22 @@ async def run_pipeline(runtime_env: dict[str, Any] | None = None) -> dict[str, A
             check=True,
         )
 
-    log_fn(proc.stdout.strip())
+    if proc.stdout.strip():
+        log_fn(proc.stdout.strip())
     if proc.stderr.strip():
         log_fn(f"reconcile_indexes stderr: {proc.stderr.strip()}")
 
-    summary = {
-        "article_path": article_rel_path,
-        "report_path": report_rel_path,
-        "overall_before": scorecard["overall"]["before"],
-        "overall_after": scorecard["overall"]["after"],
-        "overall_delta": scorecard["overall"]["delta"],
-        "persona_summaries": scorecard["persona_summaries"],
-        "anti_inflation_clamps": scorecard["anti_inflation_clamps"],
-    }
-    print(json.dumps(summary, indent=2))
-    return summary
+    final_result: dict[str, Any]
+    if is_batch_arg:
+        final_result = {
+            "processed_count": len(summaries),
+            "results": summaries,
+        }
+    else:
+        final_result = summaries[0]
+
+    print(json.dumps(final_result, indent=2))
+    return final_result
 
 
 def _run_self_test() -> None:
@@ -514,14 +569,35 @@ def _run_self_test() -> None:
                     ],
                 }
 
-        def _mock_agent(prompt: str | None = None, schema: dict[str, Any] | None = None, role: str = "", **_kw: Any) -> Any:
+        def _mock_agent(prompt: str | None = None, schema: dict[str, Any] | None = None, role: str = "", **kw: Any) -> Any:
             if schema is None:
+                if kw.get("type_name") == "research":
+                    assert kw.get("model") == "flash"
                 return _MockHandle(role)
 
             async def _remediate() -> dict[str, Any]:
                 assert schema == REMEDIATION_RESULT_SCHEMA
+                m_target = re.search(r"Target Article:\s*`([^`]+)`", prompt or "")
+                target_rel = m_target.group(1) if m_target else "articles/devops/sample-article.md"
+                target_slug = Path(target_rel).stem
+                target_cat = Path(target_rel).parts[1]
+                (tmp_root / target_rel).write_text(
+                    "# Sample Architecture Article\n\n"
+                    "**Date:** November 18, 2026\n"
+                    "**Last Updated:** November 19, 2026\n"
+                    f"**Review:** [Expert & Architecture Review Report](../../reviews/{target_cat}/{target_slug}-review.md)\n\n"
+                    "> **Scope & Licensing Note:** This article strictly covers pure open-source systems. "
+                    "Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.\n\n"
+                    "Revised body with architecture diagram and failure modes.\n\n"
+                    "## Related Articles\n\n"
+                    "- [Other](other.md) — baseline context.\n\n"
+                    "## Changelog\n\n"
+                    f"- **Nov 19, 2026:** Completed multi-persona review ([Review Report](../../reviews/{target_cat}/{target_slug}-review.md)).\n"
+                    "- **Nov 18, 2026:** Initial publication.\n",
+                    encoding="utf-8",
+                )
                 return {
-                    "article_path": "articles/devops/sample-article.md",
+                    "article_path": target_rel,
                     "article_title": "Sample Architecture Article",
                     "date": "November 18, 2026",
                     "last_updated": "November 19, 2026",
@@ -565,7 +641,41 @@ def _run_self_test() -> None:
         ):
             assert heading in report_text, f"Missing Check 7 heading: {heading}"
 
-        print("✅ run_review_workflow.py self-test passed (all 5 stages, multi-turn handles, schemas & Check 7 report verified).")
+        # Also exercise batch `article_paths` + configurable `reviewer_type` and `reviewer_model`
+        second_article = tmp_root / "articles" / "devops" / "second-article.md"
+        second_article.write_text(
+            "# Sample Architecture Article\n\n**Date:** November 18, 2026\n\nDraft body.\n",
+            encoding="utf-8",
+        )
+        article_path.write_text(
+            "# Sample Architecture Article\n\n**Date:** November 18, 2026\n\nDraft body.\n",
+            encoding="utf-8",
+        )
+        handle_turns.clear()
+        batch_env: dict[str, Any] = {
+            "WORKSPACES": (str(tmp_root),),
+            "args": {
+                "article_paths": [
+                    "articles/devops/sample-article.md",
+                    "articles/devops/second-article.md",
+                ],
+                "reviewer_type": "research",
+                "reviewer_model": "flash",
+                "dry_run": True,
+            },
+            "log": logs_seen.append,
+            "phase": phases_seen.append,
+            "agent": _mock_agent,
+            "parallel": _mock_parallel,
+        }
+        batch_res = asyncio.run(run_pipeline(batch_env))
+        assert batch_res["processed_count"] == 2
+        assert (tmp_root / "reviews" / "devops" / "second-article-review.md").is_file()
+
+        print(
+            "✅ run_review_workflow.py self-test passed "
+            "(all 5 stages, Stage 3 mutation gate, batch article_paths, multi-turn handles, schemas & Check 7 report verified)."
+        )
 
 
 if __name__ == "__main__":

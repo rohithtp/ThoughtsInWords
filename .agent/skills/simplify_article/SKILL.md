@@ -7,6 +7,27 @@ description: Reformat a markdown article to improve readability, simplify struct
 
 This skill guides you through the process of cleaning up and simplifying a markdown article.
 
+## Primary Hybrid `run_workflow` Execution Path (Option H3)
+
+For isolated single or parallel batch simplification (`article_paths`, defaulting to `workspace: "share"` for multi-article batches) with deterministic **100% link-retention diffing**, execute [`run_content_workflow.py`](../create_article/scripts/run_content_workflow.py) via `run_workflow`:
+
+```python
+run_workflow(
+    Script=(
+        "import runpy\n"
+        "mod = runpy.run_path('.agent/skills/create_article/scripts/run_content_workflow.py', init_globals=globals())\n"
+        "await mod['run_pipeline'](globals())\n"
+    ),
+    Args={
+        "mode": "simplify",
+        "article_paths": ["articles/<category>/<slug>.md"],
+    },
+    Description="Run scoped hybrid article simplification with link-retention gate",
+)
+```
+
+* Before index reconciliation runs, `verify_article_mutation()` in [`schemas.py`](../review_article/scripts/schemas.py) compares pre- and post-edit links (`extract_markdown_links()`) and aborts if any citation, link, `**Date:**`, or Invariant 3 section order was dropped.
+
 ## Usage
 When the user asks to "simplify article", "make readable", or "clean up format" for a specific file.
 

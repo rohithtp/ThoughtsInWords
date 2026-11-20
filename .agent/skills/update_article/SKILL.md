@@ -7,6 +7,28 @@ description: Update, expand, or revise an existing article while preserving its 
 
 This skill guides the agent when modifying, expanding, or correcting an existing article in `ThoughtsInWords` so that neither the article-level history nor the repository-level activity trail is lost.
 
+## Primary Hybrid `run_workflow` Execution Path (Option H3)
+
+For isolated revisions, batch cross-link backfills (`article_paths`), or deterministic immutable-date and link-retention checks prior to index reconciliation, execute [`run_content_workflow.py`](../create_article/scripts/run_content_workflow.py) via `run_workflow`:
+
+```python
+run_workflow(
+    Script=(
+        "import runpy\n"
+        "mod = runpy.run_path('.agent/skills/create_article/scripts/run_content_workflow.py', init_globals=globals())\n"
+        "await mod['run_pipeline'](globals())\n"
+    ),
+    Args={
+        "mode": "update",
+        "article_path": "articles/<category>/<slug>.md",
+        "instructions": "Expand failure modes and refresh reciprocal links.",
+    },
+    Description="Run scoped hybrid article update workflow",
+)
+```
+
+* `run_content_workflow.py` snapshots baseline links and `**Date:**`, validates updates against [`CONTENT_MUTATION_RESULT_SCHEMA`](../review_article/scripts/schemas.py) and `verify_article_mutation()`, and reconciles both the target article and `reciprocal_articles_touched` via [`reconcile_indexes.py`](../organize_readme/scripts/reconcile_indexes.py).
+
 ## Usage
 
 When the user asks to "update article", "expand", "revise", or "add a section to" an existing article:

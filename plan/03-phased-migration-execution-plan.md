@@ -11,7 +11,8 @@
 | :--- | :---: | :--- | :--- | :---: |
 | **Phase 1** | `9.5 / 10` | Formalize [`review_article`](../.agent/skills/review_article/SKILL.md) multi-agent pipeline | [`schemas.py`](../.agent/skills/review_article/scripts/schemas.py) (`BEFORE_SCORECARD_SCHEMA` / `AFTER_SCORECARD_SCHEMA`) + [`run_review_workflow.py`](../.agent/skills/review_article/scripts/run_review_workflow.py) *(Implemented — Option B4)* | **Low** |
 | **Phase 2** | `8.5 / 10` | Shared rules & single-writer reconciliation | [`.agent/rules/AGENTS.md`](../.agent/rules/AGENTS.md) + `SKILL.md` deduplication *(Completed — Option 4)*; [`reconcile_indexes.py`](../.agent/skills/organize_readme/scripts/reconcile_indexes.py) + `INDEX_HANDOFF_SCHEMA` *(Implemented — Option A4)* | **Low–Medium** |
-| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | Single-writer content skill partitioning (`create_article`, `update_article`, `simplify_article`) + pre-push [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) *(Implemented — Options 4 + A4)*; optional standalone `.agent/agents/*.md` files *(Optional)* | **Medium** |
+| **Phase 3** | `8.0 / 10` | Scoped content agents & VCS verification gate | Single-writer content skill partitioning (`create_article`, `update_article`, `simplify_article`) + pre-push [`prepare_commit.sh`](../.agent/skills/commit_and_push/scripts/prepare_commit.sh) *(Implemented — Options 4 + A4)* | **Medium** |
+| **Phase 4** | `9.7 / 10` | Grow to Pure Hybrid Control Plane | `verify_article_mutation()` + [`run_content_workflow.py`](../.agent/skills/create_article/scripts/run_content_workflow.py) + `reciprocal_articles_touched` expansion in `reconcile_indexes.py` + batch/least-privilege `run_review_workflow.py` + Check 8 4-engine gates *(Implemented — Option H3)* | **Low** |
 
 ---
 
@@ -78,3 +79,29 @@
 ### Phase 3 Acceptance Criteria
 * `run_python.sh` (`uv` → `pip`), `py_compile`, `schemas.py --self-test`, `run_review_workflow.py --self-test`, `reconcile_indexes.py`, and `bash verify_links.sh` (Checks 1–8) all pass with exit code `0`.
 * Batch refactoring via `simplify_article` with `workspace: "share"` merges cleanly via `--handoff '[...]'` to `reconcile_indexes.py` without singleton contention.
+
+---
+
+## Phase 4: Grow to Pure Hybrid Control Plane *(Implemented — Option H3)*
+
+**Target Outcome:** Eliminate the remaining "half-hybrid" gap so every content and review skill routes through schema-validated `run_workflow` orchestrators, deterministic pre/post article & link-retention checks, and full `reciprocal_articles_touched` trail reconciliation.
+
+### Step-by-Step Tasks
+
+1. **Extend [`schemas.py`](../.agent/skills/review_article/scripts/schemas.py) with Pre/Post Mutation & Link-Retention Gates *(Implemented)*:**
+   * Added `CONTENT_MUTATION_RESULT_SCHEMA`, `extract_markdown_links()`, and `verify_article_mutation()` enforcing immutable `**Date:**`, `**Last Updated:**`, `**Review:**`, bottom section ordering (`## Related Articles` → `## References` → `## Changelog`), and zero dropped links (`enforce_link_retention=True`) on `"Updated"` and `"Simplified"` mutations.
+2. **Deploy Unified [`run_content_workflow.py`](../.agent/skills/create_article/scripts/run_content_workflow.py) *(Implemented)*:**
+   * Supports `mode="create" | "update" | "simplify"`, single (`article_path`, `workspace="inherit"`) or parallel batch (`article_paths` / `items`, `workspace="share"`) execution, optional `model` tiering, deterministic Stage 3 `verify_article_mutation()`, optional `chain_review=True`, and offline `--self-test`.
+3. **Wire `reciprocal_articles_touched` & `--self-test` in [`reconcile_indexes.py`](../.agent/skills/organize_readme/scripts/reconcile_indexes.py) *(Implemented)*:**
+   * Added `expand_reciprocal_handoffs()` to verify sibling articles exist, synthesize `"Updated"` handoffs for updated siblings, promote them into `[UPDATED]` (preserving `[NEW]` exclusivity), log entries in `articles/CHANGELOG.md`, and verify behavior in `--self-test`.
+4. **Upgrade [`run_review_workflow.py`](../.agent/skills/review_article/scripts/run_review_workflow.py) *(Implemented)*:**
+   * Added configurable `reviewer_type` (supporting `"research"` or `"self"`), `reviewer_model` / `remediator_model` tiering, Stage 3 `verify_article_mutation()` validation, and parallel batch `article_paths` with single atomic Stage 5 reconciliation.
+5. **Update Tooling, Check 8, Skill Routers & `plan/` *(Implemented)*:**
+   * Added `.agent/skills/create_article/scripts` to `extraPaths` in [`pyrightconfig.json`](../pyrightconfig.json) and [`pyproject.toml`](../pyproject.toml), expanded [`verify_links.sh`](../verify_links.sh) Check 8 across all 4 `--self-test` Python engines, updated all `SKILL.md` specifications and [`.agent/skills/README.md`](../.agent/skills/README.md), and aligned `plan/`.
+
+### Phase 4 Acceptance Criteria
+* `bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/review_article/scripts/schemas.py --self-test` exits `0`.
+* `bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/review_article/scripts/run_review_workflow.py --self-test` exits `0`.
+* `bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/create_article/scripts/run_content_workflow.py --self-test` exits `0`.
+* `bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --self-test` exits `0`.
+* `bash verify_links.sh` passes Checks 1–8 with exit code `0` across all 4 compiled/self-tested Python engines and 100% resolved control-plane/plan links.

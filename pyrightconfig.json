@@ -4,7 +4,8 @@
   ],
   "extraPaths": [
     ".agent/skills/review_article/scripts",
-    ".agent/skills/organize_readme/scripts"
+    ".agent/skills/organize_readme/scripts",
+    ".agent/skills/create_article/scripts"
   ],
   "pythonVersion": "3.11",
   "typeCheckingMode": "basic"

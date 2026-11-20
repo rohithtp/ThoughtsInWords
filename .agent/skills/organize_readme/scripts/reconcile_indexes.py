@@ -866,6 +866,39 @@ def load_handoffs(handoff_arg: str | None, handoff_file: str | None) -> list[dic
     return raw_items
 
 
+def expand_reciprocal_handoffs(
+    handoffs: list[dict[str, Any]],
+    articles: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Expand reciprocal_articles_touched into validated Updated handoffs when metadata is complete."""
+    expanded = list(handoffs)
+    seen_paths = {h["article_path"] for h in expanded}
+
+    for h in handoffs:
+        for raw_recip in h.get("reciprocal_articles_touched") or []:
+            recip_path = os.path.normpath(str(raw_recip).strip()).replace(os.sep, "/")
+            if recip_path in seen_paths:
+                continue
+            if recip_path not in articles:
+                raise ValueError(
+                    f"Claimed reciprocal_articles_touched path does not exist in articles/: {recip_path!r}"
+                )
+            meta = articles[recip_path]
+            if meta["last_updated"] is not None and meta["has_valid_changelog"]:
+                synthesized = {
+                    "action": "Updated",
+                    "article_path": recip_path,
+                    "title": meta["title"],
+                    "date": format_long_date(meta["date"]) if meta["date"] else h["date"],
+                    "last_updated": format_long_date(meta["last_updated"]),
+                    "changelog_summary": meta["latest_cl_note"] or f"Added reciprocal cross-link to {h['title']}",
+                }
+                validate_against_schema(synthesized, INDEX_HANDOFF_SCHEMA, f"reciprocal[{recip_path}]")
+                expanded.append(synthesized)
+                seen_paths.add(recip_path)
+    return expanded
+
+
 def write_if_changed(path: Path, new_text: str, dry_run: bool) -> bool:
     old_text = path.read_text(encoding="utf-8") if path.exists() else ""
     if new_text == old_text:
@@ -878,16 +911,124 @@ def write_if_changed(path: Path, new_text: str, dry_run: bool) -> bool:
     return True
 
 
+def _run_self_test() -> None:
+    """Verify reciprocal_articles_touched expansion, cohort exclusivity, and changelog output."""
+    synthetic_articles: dict[str, dict[str, Any]] = {
+        "articles/devops/new-one.md": {
+            "rel_path": "articles/devops/new-one.md",
+            "articles_rel_path": "devops/new-one.md",
+            "category": "devops",
+            "title": "New One",
+            "date": date(2026, 11, 20),
+            "last_updated": None,
+            "has_valid_changelog": True,
+            "latest_cl_note": "Initial publication",
+        },
+        "articles/devops/new-two.md": {
+            "rel_path": "articles/devops/new-two.md",
+            "articles_rel_path": "devops/new-two.md",
+            "category": "devops",
+            "title": "New Two",
+            "date": date(2026, 11, 19),
+            "last_updated": None,
+            "has_valid_changelog": True,
+            "latest_cl_note": "Initial publication",
+        },
+        "articles/devops/new-three.md": {
+            "rel_path": "articles/devops/new-three.md",
+            "articles_rel_path": "devops/new-three.md",
+            "category": "devops",
+            "title": "New Three",
+            "date": date(2026, 11, 18),
+            "last_updated": None,
+            "has_valid_changelog": True,
+            "latest_cl_note": "Initial publication",
+        },
+        "articles/devops/recip-target.md": {
+            "rel_path": "articles/devops/recip-target.md",
+            "articles_rel_path": "devops/recip-target.md",
+            "category": "devops",
+            "title": "Reciprocal Target",
+            "date": date(2026, 10, 1),
+            "last_updated": date(2026, 11, 20),
+            "has_valid_changelog": True,
+            "latest_cl_note": "Added reciprocal cross-link to New One",
+        },
+    }
+    base_handoffs = [
+        {
+            "action": "Added",
+            "article_path": "articles/devops/new-one.md",
+            "title": "New One",
+            "date": "November 20, 2026",
+            "changelog_summary": "Created New One",
+            "reciprocal_articles_touched": ["articles/devops/recip-target.md"],
+        }
+    ]
+    expanded = expand_reciprocal_handoffs(base_handoffs, synthetic_articles)
+    assert len(expanded) == 2
+    assert expanded[1]["action"] == "Updated"
+    assert expanded[1]["article_path"] == "articles/devops/recip-target.md"
+
+    existing_state = {
+        "current_new_set": {"articles/devops/new-two.md", "articles/devops/new-three.md"},
+        "current_updated_set": set(),
+        "display_titles": {},
+        "root_new_pos": {},
+        "root_updated_pos": {},
+        "root_updated_summaries": {},
+    }
+    cohorts = compute_badge_cohorts(synthetic_articles, existing_state, expanded)
+    assert "articles/devops/new-one.md" in cohorts["new_cohort_set"]
+    assert "articles/devops/recip-target.md" in cohorts["updated_cohort_set"]
+    assert "articles/devops/recip-target.md" not in cohorts["new_cohort_set"]
+
+    changelog_sample = "# Changelog\n\n---\n\n## November 2026\n\n### November 18, 2026\n\n* **Added:** [New Three](devops/new-three.md) — Initial.\n"
+    cl_out = reconcile_changelog(
+        changelog_sample,
+        synthetic_articles,
+        cohorts,
+        expanded,
+        {p: meta["title"] for p, meta in synthetic_articles.items()},
+    )
+    assert "* **Added:** [New One](devops/new-one.md)" in cl_out
+    assert "* **Updated:** [Reciprocal Target](devops/recip-target.md)" in cl_out
+
+    try:
+        expand_reciprocal_handoffs(
+            [{
+                "action": "Added",
+                "article_path": "articles/devops/new-one.md",
+                "title": "New One",
+                "date": "November 20, 2026",
+                "changelog_summary": "Created",
+                "reciprocal_articles_touched": ["articles/devops/non-existent.md"],
+            }],
+            synthetic_articles,
+        )
+        raise AssertionError("Expected ValueError for non-existent reciprocal article path")
+    except ValueError:
+        pass
+
+    print("✅ reconcile_indexes.py self-test passed (reciprocal handoff expansion, badge exclusivity & changelog verified).")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Single-writer index, badge, review & changelog reconciler.")
     parser.add_argument("--handoff", help="JSON string of one INDEX_HANDOFF_SCHEMA object or array.")
     parser.add_argument("--handoff-file", help="Path to JSON file containing handoff payload(s).")
     parser.add_argument("--dry-run", action="store_true", help="Preview mutations without writing files.")
     parser.add_argument("--skip-verify", action="store_true", help="Skip running bash verify_links.sh.")
+    parser.add_argument("--self-test", action="store_true", help="Run offline unit self-test.")
     args = parser.parse_args()
+
+    if args.self_test:
+        _run_self_test()
+        return 0
 
     handoffs = load_handoffs(args.handoff, args.handoff_file)
     articles = scan_articles(REPO_ROOT)
+    handoffs = expand_reciprocal_handoffs(handoffs, articles)
 
     root_readme_path = REPO_ROOT / "README.md"
     articles_readme_path = REPO_ROOT / "articles" / "README.md"

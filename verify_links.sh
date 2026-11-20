@@ -491,6 +491,8 @@ runner_sh = ".agent/skills/organize_readme/scripts/run_python.sh"
 for test_script in (
     ".agent/skills/review_article/scripts/schemas.py",
     ".agent/skills/review_article/scripts/run_review_workflow.py",
+    ".agent/skills/create_article/scripts/run_content_workflow.py",
+    ".agent/skills/organize_readme/scripts/reconcile_indexes.py",
 ):
     if not os.path.isfile(test_script):
         errors.append(f"[Check 8] Missing required skill self-test script: {test_script}")

@@ -20,7 +20,7 @@ This skill orchestrates a schema-validated, stateful multi-persona verification,
 
 ## Primary Execution Path (`run_workflow`)
 
-Run the deterministic pipeline directly using `run_workflow` with the `runpy.run_path` bootstrapper and target `article_path`:
+Run the deterministic pipeline directly using `run_workflow` with the `runpy.run_path` bootstrapper and target `article_path` (or `article_paths` for parallel batch reviews, with optional `reviewer_type`, `reviewer_model`, and `remediator_model`):
 
 ```python
 run_workflow(
@@ -37,19 +37,19 @@ run_workflow(
 ### Pipeline Stages Executed by `run_review_workflow.py`
 
 1. **Stage 1 — Stateful Read-Only "Before" Audit (`parallel` + `BEFORE_SCORECARD_SCHEMA`):**
-   * Creates three persistent read-only reviewer handles (`r_reader` Params 1–4, `r_sme` Params 5–8, `r_arch` Params 9–12) and invokes them concurrently via `parallel()`.
+   * Creates three persistent read-only reviewer handles (`r_reader` Params 1–4, `r_sme` Params 5–8, `r_arch` Params 9–12; supports `reviewer_type` such as `"research"` or `"self"` and optional `reviewer_model` tiering) and invokes them concurrently via `parallel()`.
    * Each reviewer evaluates [`rubric-and-repo-alignment.md`](./references/rubric-and-repo-alignment.md), [`.agent/rules/AGENTS.md`](../../rules/AGENTS.md) (including **Invariant 1** Pure Open-Source Systems Mandate), `README.md` philosophy alignment (guarding against the *Engineer's Philosophy* pitfall), and `articles/README.md` cross-links, returning strict `BEFORE_SCORECARD_SCHEMA` JSON with `R-XX` / `S-XX` / `A-XX` recommendation IDs.
 
-2. **Stage 2 & 3 — Scoped Synthesis & Article Remediation (`REMEDIATION_RESULT_SCHEMA`):**
-   * Python sorts all Stage 1 recommendations by priority (`Critical`, `High`, `Medium`, `Low`) and launches a scoped `Article Remediator` turn.
-   * **Single-Writer Partitioning (Option A4):** The remediator mutates **only** `articles/<category>/<slug>.md`—preserving immutable `**Date:**`, updating `**Last Updated:**`, adding `**Review:** [Expert & Architecture Review Report](../../reviews/<category>/<slug>-review.md)`, applying prioritized fixes, enforcing `Scope & Licensing Note`, preserving `## References` and links, ordering bottom sections per **Invariant 3**, and prepending to `## Changelog`.
+2. **Stage 2 & 3 — Scoped Synthesis & Article Remediation (`REMEDIATION_RESULT_SCHEMA` + `verify_article_mutation`):**
+   * Python sorts all Stage 1 recommendations by priority (`Critical`, `High`, `Medium`, `Low`) and launches a scoped `Article Remediator` turn (supporting optional `remediator_model`).
+   * **Single-Writer Partitioning (Option A4 + H3 Gate):** The remediator mutates **only** `articles/<category>/<slug>.md`—preserving immutable `**Date:**`, updating `**Last Updated:**`, adding `**Review:** [Expert & Architecture Review Report](../../reviews/<category>/<slug>-review.md)`, applying prioritized fixes, enforcing `Scope & Licensing Note`, preserving `## References` and links, ordering bottom sections per **Invariant 3**, and prepending to `## Changelog`. Immediately after Stage 3, Python executes `verify_article_mutation()` in [`schemas.py`](./scripts/schemas.py) before Stage 4 runs.
 
 3. **Stage 4 — Multi-Turn "After" Re-Verification & Deterministic Report Rendering (`AFTER_SCORECARD_SCHEMA`):**
    * Sends the revised article back to the **same three persistent handles** (`r_reader`, `r_sme`, `r_arch`) via `parallel()` so Stage 4 verification retains full memory of Stage 1 deductions and validates every `R-XX` / `S-XX` / `A-XX` item (`Applied` vs. `Deferred`).
    * `compute_scorecard()` in [`schemas.py`](./scripts/schemas.py) enforces anti-inflation clamping (holding `After <= Before` if all recommendations for a parameter remained `Deferred`), computes exact Persona Sub-Averages, Overall Composite Scores, and Deltas in Python, and `render_review_report()` writes `reviews/<category>/<slug>-review.md` matching [`report-template.md`](./resources/report-template.md).
 
 4. **Stage 5 — Single-Writer Index Reconciliation & Verification Gate (`INDEX_HANDOFF_SCHEMA`):**
-   * Emits a validated `INDEX_HANDOFF_SCHEMA` payload (`action: "Reviewed & Updated"`, including `review_move` scores/delta) to:
+   * Emits validated `INDEX_HANDOFF_SCHEMA` payload(s) (`action: "Reviewed & Updated"`, including `review_move` scores/delta; aggregated atomically for `article_paths` batches) to:
      ```bash
      bash .agent/skills/organize_readme/scripts/run_python.sh .agent/skills/organize_readme/scripts/reconcile_indexes.py --handoff '<json>'
      ```

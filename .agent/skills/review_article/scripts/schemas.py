@@ -17,6 +17,7 @@ import re
 import shutil
 import subprocess
 import sys
+from datetime import datetime
 from typing import Any
 
 
@@ -289,9 +290,149 @@ INDEX_HANDOFF_SCHEMA: dict[str, Any] = {
     },
 }
 
+CONTENT_MUTATION_RESULT_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "required": ["action", "article_path", "title", "date", "changelog_summary"],
+    "properties": {
+        "action": {
+            "type": "string",
+            "enum": ["Added", "Updated", "Simplified"],
+        },
+        "article_path": {
+            "type": "string",
+            "pattern": "^articles/[a-z0-9-]+/[a-z0-9-]+\\.md$",
+        },
+        "title": {"type": "string"},
+        "date": {"type": "string"},
+        "last_updated": {"type": "string"},
+        "changelog_summary": {"type": "string"},
+        "reciprocal_articles_touched": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "pattern": "^articles/[a-z0-9-]+/[a-z0-9-]+\\.md$",
+            },
+        },
+    },
+}
+
 
 class SchemaValidationError(ValueError):
     """Raised when a payload violates its JSON Schema contract."""
+
+
+def extract_markdown_links(markdown_text: str) -> set[str]:
+    """Return all non-empty Markdown link targets outside fenced and inline code blocks."""
+    cleaned = re.sub(r"```.*?```", "", markdown_text, flags=re.DOTALL)
+    cleaned = re.sub(r"`[^`\n]+`", "", cleaned)
+    links: set[str] = set()
+    for raw in re.findall(r"\[[^\]]*\]\(([^)]+)\)", cleaned):
+        target = raw.strip()
+        if target:
+            links.add(target)
+    return links
+
+
+def verify_article_mutation(
+    before_text: str | None,
+    after_text: str,
+    action: str,
+    enforce_link_retention: bool = True,
+) -> dict[str, Any]:
+    """Deterministically enforce Invariants 2-3 and zero-loss link retention on an article edit."""
+    head_after = after_text[:2000]
+    title_m = re.search(r"^#\s+(.+?)\s*$", head_after, flags=re.MULTILINE)
+    if not title_m:
+        raise SchemaValidationError("Article is missing a top-level '# Title' heading.")
+    after_title = title_m.group(1).strip()
+
+    after_date_m = re.search(r"^\*\*Date:\*\*\s*(.+?)\s*$", head_after, flags=re.MULTILINE)
+    if not after_date_m:
+        raise SchemaValidationError("Article is missing required '**Date:** Month Day, Year' header.")
+    after_date = after_date_m.group(1).strip()
+    try:
+        datetime.strptime(after_date, "%B %d, %Y")
+    except ValueError as exc:
+        raise SchemaValidationError(
+            f"Invalid '**Date:**' format {after_date!r}; expected 'Month Day, Year'."
+        ) from exc
+
+    if before_text is not None:
+        head_before = before_text[:2000]
+        before_date_m = re.search(r"^\*\*Date:\*\*\s*(.+?)\s*$", head_before, flags=re.MULTILINE)
+        if before_date_m:
+            before_date = before_date_m.group(1).strip()
+            if after_date != before_date:
+                raise SchemaValidationError(
+                    f"Immutable '**Date:**' was altered: expected {before_date!r}, got {after_date!r}."
+                )
+
+    lu_m = re.search(r"^\*\*Last Updated:\*\*\s*(.+?)\s*$", head_after, flags=re.MULTILINE)
+    after_last_updated = lu_m.group(1).strip() if lu_m else None
+    if action in {"Updated", "Simplified", "Reviewed & Updated"}:
+        if not after_last_updated:
+            raise SchemaValidationError(
+                f"Action {action!r} requires '**Last Updated:** Month Day, Year' directly beneath '**Date:**'."
+            )
+        try:
+            datetime.strptime(after_last_updated, "%B %d, %Y")
+        except ValueError as exc:
+            raise SchemaValidationError(
+                f"Invalid '**Last Updated:**' format {after_last_updated!r}; expected 'Month Day, Year'."
+            ) from exc
+
+    if action == "Reviewed & Updated":
+        review_m = re.search(
+            r"^\*\*Review:\*\*\s*\[[^\]]+\]\([^)]+-review\.md\)\s*$",
+            head_after,
+            flags=re.MULTILINE,
+        )
+        if not review_m:
+            raise SchemaValidationError(
+                "Action 'Reviewed & Updated' requires '**Review:** [Expert & Architecture Review Report](../../reviews/<category>/<slug>-review.md)'."
+            )
+
+    # Verify Invariant 3 bottom section ordering outside fenced code blocks.
+    cleaned_for_headings = re.sub(r"```.*?```", "", after_text, flags=re.DOTALL)
+    cl_m = re.search(r"^## Changelog\s*$", cleaned_for_headings, flags=re.MULTILINE)
+    if not cl_m:
+        raise SchemaValidationError("Article is missing required '## Changelog' section at the bottom.")
+
+    after_cl = cleaned_for_headings[cl_m.end():]
+    trailing_h2 = re.search(r"^##\s+(.+)$", after_cl, flags=re.MULTILINE)
+    if trailing_h2:
+        raise SchemaValidationError(
+            f"'## Changelog' must be the bottom-most section, found '## {trailing_h2.group(1).strip()}' after it."
+        )
+
+    if not re.search(r"^\s*[-*]\s+\*\*[^*]+:\*\*\s+.+$", after_cl, flags=re.MULTILINE):
+        raise SchemaValidationError("'## Changelog' must contain at least one '- **Mon DD, YYYY:** <summary>' entry.")
+
+    rel_m = re.search(r"^## Related Articles\s*$", cleaned_for_headings, flags=re.MULTILINE)
+    ref_m = re.search(r"^## References\s*$", cleaned_for_headings, flags=re.MULTILINE)
+    if rel_m and rel_m.start() > cl_m.start():
+        raise SchemaValidationError("'## Related Articles' must precede '## Changelog'.")
+    if ref_m and ref_m.start() > cl_m.start():
+        raise SchemaValidationError("'## References' must precede '## Changelog'.")
+    if rel_m and ref_m and rel_m.start() > ref_m.start():
+        raise SchemaValidationError("'## Related Articles' must precede '## References' per Invariant 3.")
+
+    after_links = extract_markdown_links(after_text)
+    if before_text is not None and enforce_link_retention and action in {"Simplified", "Updated"}:
+        before_links = extract_markdown_links(before_text)
+        dropped = sorted(before_links - after_links)
+        if dropped:
+            raise SchemaValidationError(
+                f"Zero-loss link retention violated ({action}): dropped links {dropped}"
+            )
+
+    return {
+        "title": after_title,
+        "date": after_date,
+        "last_updated": after_last_updated,
+        "retained_links_count": len(after_links),
+        "dropped_links": [],
+    }
 
 
 def validate_against_schema(
@@ -837,13 +978,71 @@ def _run_self_test() -> None:
     for pattern in required_headings:
         assert re.search(pattern, report_md, flags=re.MULTILINE), f"Missing required Check 7 heading: {pattern}"
 
+    content_mutation_sample = {
+        "action": "Updated",
+        "article_path": "articles/devops/sample-article.md",
+        "title": "Sample Architecture Article",
+        "date": "November 18, 2026",
+        "last_updated": "November 20, 2026",
+        "changelog_summary": "Expanded failure-mode trade-offs and reciprocal links.",
+        "reciprocal_articles_touched": ["articles/devops/sibling-article.md"],
+    }
+    validate_against_schema(content_mutation_sample, CONTENT_MUTATION_RESULT_SCHEMA, "content_mutation")
+
+    before_md = (
+        "# Sample Architecture Article\n\n"
+        "**Date:** November 18, 2026\n\n"
+        "Body with [RFC 9110](https://example.org/rfc9110) and [Sibling](sibling-article.md).\n\n"
+        "## Related Articles\n\n"
+        "- [Sibling](sibling-article.md) — context.\n\n"
+        "## References\n\n"
+        "- [RFC 9110](https://example.org/rfc9110)\n\n"
+        "## Changelog\n\n"
+        "- **Nov 18, 2026:** Initial publication.\n"
+    )
+    after_md_ok = (
+        "# Sample Architecture Article\n\n"
+        "**Date:** November 18, 2026\n"
+        "**Last Updated:** November 20, 2026\n\n"
+        "Body with [RFC 9110](https://example.org/rfc9110) and [Sibling](sibling-article.md).\n\n"
+        "## Related Articles\n\n"
+        "- [Sibling](sibling-article.md) — context.\n\n"
+        "## References\n\n"
+        "- [RFC 9110](https://example.org/rfc9110)\n\n"
+        "## Changelog\n\n"
+        "- **Nov 20, 2026:** Simplified structure.\n"
+        "- **Nov 18, 2026:** Initial publication.\n"
+    )
+    assert extract_markdown_links(before_md) == {"https://example.org/rfc9110", "sibling-article.md"}
+    gate_res = verify_article_mutation(before_md, after_md_ok, "Simplified", enforce_link_retention=True)
+    assert gate_res["retained_links_count"] == 2 and gate_res["dropped_links"] == []
+
+    # Negative check 1: altered immutable **Date:** must raise SchemaValidationError
+    bad_date_md = after_md_ok.replace("**Date:** November 18, 2026", "**Date:** November 19, 2026")
+    try:
+        verify_article_mutation(before_md, bad_date_md, "Updated")
+        raise AssertionError("Expected SchemaValidationError when immutable **Date:** was altered")
+    except SchemaValidationError:
+        pass
+
+    # Negative check 2: dropped citation/link must raise SchemaValidationError
+    dropped_link_md = after_md_ok.replace("[RFC 9110](https://example.org/rfc9110)", "RFC 9110")
+    try:
+        verify_article_mutation(before_md, dropped_link_md, "Simplified", enforce_link_retention=True)
+        raise AssertionError("Expected SchemaValidationError when link was dropped")
+    except SchemaValidationError:
+        pass
+
     ensure_dependencies(["json", "re"])
     ver_cmd = build_python_cmd("--version")
     assert ver_cmd[-2:] == ["-B", "--version"], f"Unexpected build_python_cmd: {ver_cmd}"
     ver_proc = subprocess.run(ver_cmd, env=get_uv_env(), capture_output=True, text=True, check=True)
     assert "Python" in (ver_proc.stdout or ver_proc.stderr)
 
-    print("✅ schemas.py self-test passed (4 schemas, uv/pip helpers, anti-inflation clamp, math & Check 7 renderer verified).")
+    print(
+        "✅ schemas.py self-test passed (5 schemas, link-retention & Invariant 3 mutation gate, "
+        "uv/pip helpers, anti-inflation clamp, math & Check 7 renderer verified)."
+    )
 
 
 if __name__ == "__main__":
