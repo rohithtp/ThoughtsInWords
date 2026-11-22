@@ -31,7 +31,7 @@ articles/
 │   └── Platform & Scaling
 ├── distributed-systems/   # Distributed systems & messaging (5)
 ├── environment/           # Climate & planetary systems (2)
-├── frontend/              # Web development, mobile & frameworks (16)
+├── frontend/              # Web development, mobile & frameworks (17)
 ├── licensing/             # Open source licensing (1)
 ├── philosophy/            # Tech philosophy, thinking & wellness (22)
 │   ├── Career & Growth
@@ -60,7 +60,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 2. Create a new markdown file using `kebab-case.md` (e.g., `my-topic.md`) and include a `## Related Articles` footer.
 3. Link it in the index below using title-first format and update the category count.
 
-## Category Directory (114 Articles)
+## Category Directory (115 Articles)
 
 | Category | Articles | Subsections |
 | :--- | :---: | :--- |
@@ -70,7 +70,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 | [DevOps & Infrastructure](#devops--infrastructure) | 22 | APIs & Specs (7), Auth (4), Git (4), Ops (2), Platform (5) |
 | [Distributed Systems](#distributed-systems) | 5 | — |
 | [Environment](#environment) | 2 | — |
-| [Frontend](#frontend) | 16 | — |
+| [Frontend](#frontend) | 17 | — |
 | [Licensing](#licensing) | 1 | — |
 | [Philosophy](#philosophy) | 22 | Career (3), Critical Thinking (6), Info & Thought (6), Wellness (4), Programming (3) |
 | [Testing](#testing) | 2 | — |
@@ -194,6 +194,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Architectural Risk Assessment: Public Font CDNs in Airgapped Environments](frontend/airgapped-font-cdn-anti-pattern.md)
 - [Basecoat Alternatives: Framework-Agnostic Component Libraries](frontend/basecoat-alternatives.md)
 - [Building Production-Grade Video and Voice Systems with Expo Development Builds](frontend/expo-video-voice-production-builds.md)
+- [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](frontend/cors-corb-and-orb-browser-isolation.md) [NEW]
 - [Cross-Platform Mobile Frameworks: An Open-Source Comparison](frontend/cross-platform-mobile-frameworks-comparison.md)
 - [Expo and Verifiable Credential Wallets: Why Dev Builds Replace Expo Go](frontend/expo-dev-builds-for-vc-wallets.md)
 - [Meet Ripple: The TypeScript UI Framework for the AI Era](frontend/ripple-framework-summary.md)
@@ -224,7 +225,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](philosophy/energy-resolving-into-stillness.md) [NEW]
 - [Postmortem: An Emotional Retrospective](philosophy/postmortem-emotional-retrospective.md)
 - [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md)
-- [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md) [NEW]
+- [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md)
 
 #### Information & Thought
 

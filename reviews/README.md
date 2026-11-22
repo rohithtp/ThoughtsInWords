@@ -29,4 +29,5 @@ All 12 parameters (4 per persona) are rated on a `0.0–10.0` scale **Before** a
 
 | Article | Category | Review Report | Before Score | After Score | Delta | Date |
 | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
+| [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](../articles/frontend/cors-corb-and-orb-browser-isolation.md) | `frontend` | [Review Report](frontend/cors-corb-and-orb-browser-isolation-review.md) | `8.0` | `9.2` | `+1.2` | Nov 22, 2026 |
 | [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](../articles/devops/design-first-partner-api-openapi-architecture.md) | `devops` | [Review Report](devops/design-first-partner-api-openapi-architecture-review.md) | `7.5` | `9.0` | `+1.5` | Nov 17, 2026 |

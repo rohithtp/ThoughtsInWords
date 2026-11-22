@@ -12,6 +12,12 @@ This log permanently records additions, substantive updates, simplifications, an
 
 ## November 2026
 
+
+### November 22, 2026
+* **Reviewed & Updated:** [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](frontend/cors-corb-and-orb-browser-isolation.md) — Added credentialed CORS/Vary: Origin rules, ORB 206/nosniff edge cases, CORP/COOP/COEP & Site Isolation, DevTools triage matrix, NGINX Open Source headers, and architectural trade-offs ([Review Report](../reviews/frontend/cors-corb-and-orb-browser-isolation-review.md)). *(Retains active `[NEW]` badge.)*
+* **Simplified:** [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](frontend/cors-corb-and-orb-browser-isolation.md) — Simplified structure and readability while preserving all references.
+* **Added:** [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](frontend/cors-corb-and-orb-browser-isolation.md) — how the Same-Origin Policy (SOP), CORS, CORB, and Opaque Response Blocking (ORB) defend against unauthorized cross-origin reads and Spectre side-channel memory leaks across the browser stack.
+* **Rotated (`[NEW]`):** [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md) rotated out of the 5-article `Recent Additions` cap.
 ### November 18, 2026
 * **Added:** [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](philosophy/energy-resolving-into-stillness.md) — internal mechanics of kinetic force vs. unshakable stillness, the illusion of duality, and transmutation into effortless potency (*Shanta*).
 * **Rotated (`[NEW]`):** [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md) rotated out of the 5-article `Recent Additions` cap.
