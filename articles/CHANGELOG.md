@@ -13,6 +13,9 @@ This log permanently records additions, substantive updates, simplifications, an
 ## November 2026
 
 
+
+### November 23, 2026
+* **Reviewed & Updated:** [Go 1.26: Key Changes and Features](tools/go-1-26-changes.md) — Completed multi-persona review; expanded new(expr) escape analysis, Green Tea GC locality pipeline, RFC 9180 / FIPS 203 cryptography, architectural trade-offs, and upgrade checklist ([Review Report](../reviews/tools/go-1-26-changes-review.md)).
 ### November 22, 2026
 * **Reviewed & Updated:** [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](frontend/cors-corb-and-orb-browser-isolation.md) — Added credentialed CORS/Vary: Origin rules, ORB 206/nosniff edge cases, CORP/COOP/COEP & Site Isolation, DevTools triage matrix, NGINX Open Source headers, and architectural trade-offs ([Review Report](../reviews/frontend/cors-corb-and-orb-browser-isolation-review.md)). *(Retains active `[NEW]` badge.)*
 * **Simplified:** [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](frontend/cors-corb-and-orb-browser-isolation.md) — Simplified structure and readability while preserving all references.

@@ -260,7 +260,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Burp Proxy Alternatives: Open Source and Free Libraries](tools/burp-proxy-alternatives.md)
 - [Comparison of Open Source Alternatives to Taskade](tools/taskade-open-source-alternatives.md)
 - [From Source to Sandbox: Decoupling the Modern Open-Source Code Editor](tools/decoupling-modern-code-editor.md)
-- [Go 1.26: Key Changes and Features](tools/go-1-26-changes.md)
+- [Go 1.26: Key Changes and Features](tools/go-1-26-changes.md) [UPDATED]
 - [Mac OS Shells: A Dive into Open Source Power](tools/mac-os-shells-open-source.md)
 - [PodPDF: Free & Open Source Markdown-to-PDF Generator (Bun & Puppeteer)](tools/podpdf-usage-guide.md)
 - [The GPM Anchor: Using Google Password Manager as a Cross-Device Sync Bridge](tools/google-password-manager-sync-strategy.md)
