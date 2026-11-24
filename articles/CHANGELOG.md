@@ -14,6 +14,9 @@ This log permanently records additions, substantive updates, simplifications, an
 
 
 
+
+### November 24, 2026
+* **Reviewed & Updated:** [Why I Chose WezTerm over Alacritty and Kitty](tools/wezterm-choice.md) — Completed multi-persona review (Reader, SME, Technical Architect); added Invariant 1 Scope & Licensing Note and OSI license accuracy, corrected Alacritty/Kitty/GPU technical claims, added multiplexing failure-domain architecture with Mermaid diagram, NFR comparison tables, protocols/security boundaries, 2026 nightly packaging and starter ~/.wezterm.lua, anti-use-cases, human constraints, decision checklist, Related Articles, References, and Changelog ([Review Report](../reviews/tools/wezterm-choice-review.md)).
 ### November 23, 2026
 * **Reviewed & Updated:** [Go 1.26: Key Changes and Features](tools/go-1-26-changes.md) — Completed multi-persona review; expanded new(expr) escape analysis, Green Tea GC locality pipeline, RFC 9180 / FIPS 203 cryptography, architectural trade-offs, and upgrade checklist ([Review Report](../reviews/tools/go-1-26-changes-review.md)).
 ### November 22, 2026

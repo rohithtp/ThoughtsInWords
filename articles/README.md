@@ -265,7 +265,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [PodPDF: Free & Open Source Markdown-to-PDF Generator (Bun & Puppeteer)](tools/podpdf-usage-guide.md)
 - [The GPM Anchor: Using Google Password Manager as a Cross-Device Sync Bridge](tools/google-password-manager-sync-strategy.md)
 - [Top Online Markdown Editors for Uploading to Scribd](tools/markdown-editors-for-scribd-upload.md)
-- [Why I Chose WezTerm over Alacritty and Kitty](tools/wezterm-choice.md)
+- [Why I Chose WezTerm over Alacritty and Kitty](tools/wezterm-choice.md) [UPDATED]
 - [Why Neovim Is the Future of Text Editing](tools/neovim-guide.md)
 
 ### Travel
