@@ -43,15 +43,13 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 
 ## Explore the Digital Garden
 
-* **[Browse Full Article Index (115 Articles)](./articles/README.md)**
+* **[Browse Full Article Index (116 Articles)](./articles/README.md)**
 * **[Browse Garden Activity Log & Changelog](./articles/CHANGELOG.md)**
 * **[Browse Expert & Architecture Review Reports](./reviews/README.md)**
 * **Recent Additions (7-Day Window, Min 3 / Max 5):**
+  * [Java Evolution (JDK 1.0 to Java 27): Version Milestones, LTS Support, and Modern JVM Architecture](./articles/tools/java-evolution-versions-and-lts-timeline.md) *(Nov 24, 2026)* `[NEW]`
   * [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](./articles/frontend/cors-corb-and-orb-browser-isolation.md) *(Nov 22, 2026)* `[NEW]`
   * [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](./articles/philosophy/energy-resolving-into-stillness.md) *(Nov 18, 2026)* `[NEW]`
-  * [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](./articles/devops/design-first-partner-api-openapi-architecture.md) *(Nov 16, 2026)* `[NEW]`
-  * [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](./articles/ai/local-llm-lifecycle-ollama-model-management.md) *(Nov 15, 2026)* `[NEW]`
-  * [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](./articles/distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md) *(Nov 15, 2026)* `[NEW]`
 * **Recently Updated (Revision Trail, Max 5):**
   * [Why I Chose WezTerm over Alacritty and Kitty](./articles/tools/wezterm-choice.md) *(Updated Nov 24, 2026 — Completed multi-persona review (Reader, SME, Technical Architect); added Invariant 1 Scope & Licensing Note and OSI license accuracy, corrected Alacritty/Kitty/GPU technical claims, added multiplexing failure-domain architecture with Mermaid diagram, NFR comparison tables, protocols/security boundaries, 2026 nightly packaging and starter ~/.wezterm.lua, anti-use-cases, human constraints, decision checklist, Related Articles, References, and Changelog)* `[UPDATED]`
   * [Go 1.26: Key Changes and Features](./articles/tools/go-1-26-changes.md) *(Updated Nov 23, 2026 — Completed multi-persona review; expanded new(expr) escape analysis, Green Tea GC locality pipeline, RFC 9180 / FIPS 203 cryptography, architectural trade-offs, and upgrade checklist)* `[UPDATED]`
@@ -71,5 +69,5 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 | [Licensing](./articles/README.md#licensing) | 1 | Unlicense vs. CC0 open-source licensing |
 | [Philosophy](./articles/README.md#philosophy) | 22 | Career growth, critical thinking, information development, programming philosophy |
 | [Testing](./articles/README.md#testing) | 2 | Self-healing tests and reuse vs. functional steps |
-| [Tools](./articles/README.md#tools) | 11 | Editors, shells, terminals, Go 1.26, proxy & productivity tools |
+| [Tools](./articles/README.md#tools) | 12 | Editors, shells, terminals, Go 1.26, proxy & productivity tools |
 | [Travel](./articles/README.md#travel) | 3 | Travel guides, wellness retreats, visa & rail booking tools |

@@ -40,7 +40,7 @@ articles/
 │   ├── Personal & Wellness
 │   └── Programming Philosophy
 ├── testing/               # QA & testing strategies (2)
-├── tools/                 # Productivity & developer tools (11)
+├── tools/                 # Productivity & developer tools (12)
 └── travel/                # Travel guides & experiences (3)
 ```
 
@@ -60,7 +60,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 2. Create a new markdown file using `kebab-case.md` (e.g., `my-topic.md`) and include a `## Related Articles` footer.
 3. Link it in the index below using title-first format and update the category count.
 
-## Category Directory (115 Articles)
+## Category Directory (116 Articles)
 
 | Category | Articles | Subsections |
 | :--- | :---: | :--- |
@@ -74,7 +74,7 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 | [Licensing](#licensing) | 1 | — |
 | [Philosophy](#philosophy) | 22 | Career (3), Critical Thinking (6), Info & Thought (6), Wellness (4), Programming (3) |
 | [Testing](#testing) | 2 | — |
-| [Tools](#tools) | 11 | — |
+| [Tools](#tools) | 12 | — |
 | [Travel](#travel) | 3 | — |
 
 ## Cross-Cutting Reading Trails
@@ -98,7 +98,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Generative UI for Agents](ai/generative-ui-for-agents.md)
 - [How to Connect Google Stitch to Your Workflow: A Step-by-Step Guide](ai/how-to-connect-google-stitch.md)
 - [Human in the Loop (HITL) AI](ai/human-in-the-loop.md)
-- [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](ai/local-llm-lifecycle-ollama-model-management.md) [NEW]
+- [Local LLM Lifecycle: Mastering Model Management and Updates in Ollama](ai/local-llm-lifecycle-ollama-model-management.md)
 - [MCP: The Future of the Model Context Protocol and Its Alternatives](ai/mcp-future-and-alternatives.md)
 - [Tools in AI: The Rise of MCP and the Future of Agentic Systems](ai/tools-in-ai-mcp-and-future.md)
 - [Vercel AI SDK 6 Overview](ai/vercel-ai-sdk-6.md)
@@ -140,7 +140,7 @@ Topics that span multiple folders can be explored through these curated paths:
 
 - [API Health and Future Capabilities: Non-Functional Requirements for APIs](devops/api-health-and-nfr.md)
 - [API History and Future: From System Calls to AI-Native Meshes](devops/api-history-and-future.md)
-- [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md) [NEW]
+- [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md)
 - [Holy Grail: A Journey in Standardization of Strategies for Resource Bundle Consumption](devops/holy-grail-resource-bundle-standardization.md)
 - [OpenAPI Specification v3.2.0: Highlights and Changes](devops/openapi-spec-v3-2-0-highlights.md) [UPDATED]
 - [OpenFeature API Specification: A Vendor-Agnostic Standard for Feature Flags](devops/openfeature-api-spec.md)
@@ -178,7 +178,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Lightweight Apache Kafka Alternatives](distributed-systems/lightweight-apache-kafka-alternatives.md)
 - [Mitigating Man-in-the-Middle (MITM) Attacks in Heterogeneous Distributed Applications (React + Python)](distributed-systems/mitm-in-heterogeneous-distributed-applications.md)
 - [The Anatomy of a Distributed Lock and How It Differs from Physical Clocks](distributed-systems/anatomy-of-distributed-lock.md)
-- [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md) [NEW]
+- [The Quick-Commerce Architecture Divide: When Physical Delivery Outpaces Eventual Consistency](distributed-systems/quick-commerce-eventual-consistency-architecture-gap.md)
 - [The Saga Pattern: Managing Distributed Transactions and Eventual Consistency in Microservices](distributed-systems/saga-pattern-distributed-transactions.md)
 
 ### Environment
@@ -261,6 +261,7 @@ Topics that span multiple folders can be explored through these curated paths:
 - [Comparison of Open Source Alternatives to Taskade](tools/taskade-open-source-alternatives.md)
 - [From Source to Sandbox: Decoupling the Modern Open-Source Code Editor](tools/decoupling-modern-code-editor.md)
 - [Go 1.26: Key Changes and Features](tools/go-1-26-changes.md) [UPDATED]
+- [Java Evolution (JDK 1.0 to Java 27): Version Milestones, LTS Support, and Modern JVM Architecture](tools/java-evolution-versions-and-lts-timeline.md) [NEW]
 - [Mac OS Shells: A Dive into Open Source Power](tools/mac-os-shells-open-source.md)
 - [PodPDF: Free & Open Source Markdown-to-PDF Generator (Bun & Puppeteer)](tools/podpdf-usage-guide.md)
 - [The GPM Anchor: Using Google Password Manager as a Cross-Device Sync Bridge](tools/google-password-manager-sync-strategy.md)
