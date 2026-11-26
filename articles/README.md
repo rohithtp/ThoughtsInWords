@@ -23,7 +23,7 @@ articles/
 │   └── Strategy & Impact
 ├── cloud-native/          # Cloud-native architecture & isolation (5)
 ├── design/                # UI/UX & software design (8)
-├── devops/                # Infrastructure, APIs, Auth, Git, Platform (22)
+├── devops/                # Infrastructure, APIs, Auth, Git, Platform (23)
 │   ├── APIs & Specifications
 │   ├── Authentication & Authorization
 │   ├── Git & Version Control
@@ -60,14 +60,14 @@ Unlike a traditional blog where posts are static and ordered by date, ThoughtsIn
 2. Create a new markdown file using `kebab-case.md` (e.g., `my-topic.md`) and include a `## Related Articles` footer.
 3. Link it in the index below using title-first format and update the category count.
 
-## Category Directory (116 Articles)
+## Category Directory (117 Articles)
 
 | Category | Articles | Subsections |
 | :--- | :---: | :--- |
 | [AI](#ai) | 17 | Agents & Tooling (8), Strategy & Impact (9) |
 | [Cloud Native](#cloud-native) | 5 | — |
 | [Design](#design) | 8 | — |
-| [DevOps & Infrastructure](#devops--infrastructure) | 22 | APIs & Specs (7), Auth (4), Git (4), Ops (2), Platform (5) |
+| [DevOps & Infrastructure](#devops--infrastructure) | 23 | APIs & Specs (8), Auth (4), Git (4), Ops (2), Platform (5) |
 | [Distributed Systems](#distributed-systems) | 5 | — |
 | [Environment](#environment) | 2 | — |
 | [Frontend](#frontend) | 17 | — |
@@ -140,7 +140,8 @@ Topics that span multiple folders can be explored through these curated paths:
 
 - [API Health and Future Capabilities: Non-Functional Requirements for APIs](devops/api-health-and-nfr.md)
 - [API History and Future: From System Calls to AI-Native Meshes](devops/api-history-and-future.md)
-- [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md)
+- [Architecting High-Throughput API Gateways for Device Certification and Innovation Sandboxes](devops/high-throughput-api-gateways-device-certification-sandboxes.md) [NEW]
+- [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](devops/design-first-partner-api-openapi-architecture.md) [UPDATED]
 - [Holy Grail: A Journey in Standardization of Strategies for Resource Bundle Consumption](devops/holy-grail-resource-bundle-standardization.md)
 - [OpenAPI Specification v3.2.0: Highlights and Changes](devops/openapi-spec-v3-2-0-highlights.md) [UPDATED]
 - [OpenFeature API Specification: A Vendor-Agnostic Standard for Feature Flags](devops/openfeature-api-spec.md)
@@ -222,7 +223,7 @@ Topics that span multiple folders can be explored through these curated paths:
 
 - [Critical Thinking: Managing Emotions for Objective Results](philosophy/critical-thinking-managing-emotions.md)
 - [Critical Thinking: Navigating Emotional Multitudes](philosophy/critical-thinking-emotional-multitudes.md)
-- [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](philosophy/energy-resolving-into-stillness.md) [NEW]
+- [Energy Resolving into Stillness: State Transitions Within a Single Consciousness](philosophy/energy-resolving-into-stillness.md)
 - [Postmortem: An Emotional Retrospective](philosophy/postmortem-emotional-retrospective.md)
 - [The Slow Navigator: Guardrails Against Stalls, Swerves, and Cognitive Sabotage](philosophy/the-slow-navigator-framework.md)
 - [The Split Inside the Human Mind](philosophy/the-split-inside-the-human-mind.md)

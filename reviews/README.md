@@ -29,8 +29,9 @@ All 12 parameters (4 per persona) are rated on a `0.0–10.0` scale **Before** a
 
 | Article | Category | Review Report | Before Score | After Score | Delta | Date |
 | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
+| [Architecting High-Throughput API Gateways for Device Certification and Innovation Sandboxes](../articles/devops/high-throughput-api-gateways-device-certification-sandboxes.md) | `devops` | [Review Report](devops/high-throughput-api-gateways-device-certification-sandboxes-review.md) | `6.6` | `9.1` | `+2.5` | Nov 26, 2026 |
 | [Java Evolution (JDK 1.0 to Java 27): Version Milestones, LTS Support, and Modern JVM Architecture](../articles/tools/java-evolution-versions-and-lts-timeline.md) | `tools` | [Review Report](tools/java-evolution-versions-and-lts-timeline-review.md) | `7.1` | `9.2` | `+2.1` | Nov 24, 2026 |
 | [Why I Chose WezTerm over Alacritty and Kitty](../articles/tools/wezterm-choice.md) | `tools` | [Review Report](tools/wezterm-choice-review.md) | `2.8` | `8.9` | `+6.1` | Nov 24, 2026 |
 | [Go 1.26: Key Changes and Features](../articles/tools/go-1-26-changes.md) | `tools` | [Review Report](tools/go-1-26-changes-review.md) | `5.5` | `9.2` | `+3.7` | Nov 23, 2026 |
 | [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](../articles/frontend/cors-corb-and-orb-browser-isolation.md) | `frontend` | [Review Report](frontend/cors-corb-and-orb-browser-isolation-review.md) | `8.0` | `9.2` | `+1.2` | Nov 22, 2026 |
-| [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](../articles/devops/design-first-partner-api-openapi-architecture.md) | `devops` | [Review Report](devops/design-first-partner-api-openapi-architecture-review.md) | `7.5` | `9.0` | `+1.5` | Nov 17, 2026 |
+| [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](../articles/devops/design-first-partner-api-openapi-architecture.md) | `devops` | [Review Report](devops/design-first-partner-api-openapi-architecture-review.md) | `7.2` | `9.2` | `+2.0` | Nov 26, 2026 |
