@@ -1,7 +1,7 @@
 # Architecting High-Throughput API Gateways for Device Certification and Innovation Sandboxes
 
 **Date:** November 26, 2026
-**Last Updated:** November 26, 2026
+**Last Updated:** November 28, 2026
 **Review:** [Expert & Architecture Review Report](../../reviews/devops/high-throughput-api-gateways-device-certification-sandboxes-review.md)
 
 > **Scope & Licensing Note:** This article strictly covers pure open-source systems. Premium, proprietary/vendor-locked, and community-edition (open-core) systems are currently not included.
@@ -358,6 +358,7 @@ Systems fail at organizational seams just as often as they fail at network seams
 
 ## Related Articles
 
+- [East-West API Gateways and Hexagonal Architecture: Decoupling Mock-to-Live Traffic Graduation](east-west-api-gateway-hexagonal-architecture-mock-to-live.md) — pairing hexagonal outbound ports/adapters with internal east-west gateways (`Envoy`, `Apache APISIX`, Kubernetes Gateway API) for contract-driven mocking and progressive mock-to-live cutovers.
 - [Design-First Partner APIs: Treating Your OpenAPI Specification as an Independent Product](design-first-partner-api-openapi-architecture.md) — treating OpenAPI specs as an independent product with pure open-source edge contract validation (`Envoy` / `Apache APISIX`) and mock sandboxes.
 - [Lightweight Apache Kafka Alternatives](../distributed-systems/lightweight-apache-kafka-alternatives.md) — evaluating lightweight pure open-source messaging and streaming alternatives (such as NATS JetStream) when full Kafka operational overhead is unnecessary.
 - [Sandbox and Ephemeral Identity Primitives](../cloud-native/sandbox-ephemeral-identity-primitive.md) — pairing isolated execution sandboxes with short-lived SPIFFE/SPIRE and OIDC workload identities.
@@ -409,5 +410,6 @@ Systems fail at organizational seams just as often as they fail at network seams
 
 ## Changelog
 
+- **Nov 28, 2026:** Added reciprocal cross-link to the East-West API Gateways and Hexagonal Architecture guide.
 - **Nov 26, 2026:** Completed multi-persona review (Reader, SME, Technical Architect); applied improvements ([Review Report](../../reviews/devops/high-throughput-api-gateways-device-certification-sandboxes-review.md)).
 - **Nov 26, 2026:** Initial publication.

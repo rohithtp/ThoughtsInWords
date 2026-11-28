@@ -29,6 +29,7 @@ All 12 parameters (4 per persona) are rated on a `0.0–10.0` scale **Before** a
 
 | Article | Category | Review Report | Before Score | After Score | Delta | Date |
 | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
+| [East-West API Gateways and Hexagonal Architecture: Decoupling Mock-to-Live Traffic Graduation](../articles/devops/east-west-api-gateway-hexagonal-architecture-mock-to-live.md) | `devops` | [Review Report](devops/east-west-api-gateway-hexagonal-architecture-mock-to-live-review.md) | `7.6` | `9.4` | `+1.8` | Nov 28, 2026 |
 | [Architecting High-Throughput API Gateways for Device Certification and Innovation Sandboxes](../articles/devops/high-throughput-api-gateways-device-certification-sandboxes.md) | `devops` | [Review Report](devops/high-throughput-api-gateways-device-certification-sandboxes-review.md) | `6.6` | `9.1` | `+2.5` | Nov 26, 2026 |
 | [Java Evolution (JDK 1.0 to Java 27): Version Milestones, LTS Support, and Modern JVM Architecture](../articles/tools/java-evolution-versions-and-lts-timeline.md) | `tools` | [Review Report](tools/java-evolution-versions-and-lts-timeline-review.md) | `7.1` | `9.2` | `+2.1` | Nov 24, 2026 |
 | [Why I Chose WezTerm over Alacritty and Kitty](../articles/tools/wezterm-choice.md) | `tools` | [Review Report](tools/wezterm-choice-review.md) | `2.8` | `8.9` | `+6.1` | Nov 24, 2026 |

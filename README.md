@@ -43,10 +43,11 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 
 ## Explore the Digital Garden
 
-* **[Browse Full Article Index (117 Articles)](./articles/README.md)**
+* **[Browse Full Article Index (118 Articles)](./articles/README.md)**
 * **[Browse Garden Activity Log & Changelog](./articles/CHANGELOG.md)**
 * **[Browse Expert & Architecture Review Reports](./reviews/README.md)**
 * **Recent Additions (7-Day Window, Min 3 / Max 5):**
+  * [East-West API Gateways and Hexagonal Architecture: Decoupling Mock-to-Live Traffic Graduation](./articles/devops/east-west-api-gateway-hexagonal-architecture-mock-to-live.md) *(Nov 28, 2026)* `[NEW]`
   * [Architecting High-Throughput API Gateways for Device Certification and Innovation Sandboxes](./articles/devops/high-throughput-api-gateways-device-certification-sandboxes.md) *(Nov 26, 2026)* `[NEW]`
   * [Java Evolution (JDK 1.0 to Java 27): Version Milestones, LTS Support, and Modern JVM Architecture](./articles/tools/java-evolution-versions-and-lts-timeline.md) *(Nov 24, 2026)* `[NEW]`
   * [CORS, CORB, and ORB: How Modern Browsers Enforce Cross-Origin Isolation](./articles/frontend/cors-corb-and-orb-browser-isolation.md) *(Nov 22, 2026)* `[NEW]`
@@ -63,7 +64,7 @@ The philosophy of *ThoughtsInWords* is one of **Radical Responsibility.** It sug
 | [AI](./articles/README.md#ai) | 17 | Agents, MCP, Generative UI, GPU sizing, and AI strategy |
 | [Cloud Native](./articles/README.md#cloud-native) | 5 | Air-gapped workflows, multi-tenant isolation, ephemeral sandboxes |
 | [Design](./articles/README.md#design) | 8 | UI/UX evolution, national SSO, disposable cores, utility architecture |
-| [DevOps & Infrastructure](./articles/README.md#devops--infrastructure) | 23 | API specs, OAuth/OIDC/ABAC, Git/JJ, observability, Kubernetes & scaling |
+| [DevOps & Infrastructure](./articles/README.md#devops--infrastructure) | 24 | API specs, OAuth/OIDC/ABAC, Git/JJ, observability, Kubernetes & scaling |
 | [Distributed Systems](./articles/README.md#distributed-systems) | 5 | Distributed locks, Kafka alternatives, MITM mitigation, Sagas |
 | [Environment](./articles/README.md#environment) | 2 | Atmospheric water generation and planetary magnetospheres |
 | [Frontend](./articles/README.md#frontend) | 17 | React, Expo, static search, air-gapped fonts, TypeScript, UI frameworks |
